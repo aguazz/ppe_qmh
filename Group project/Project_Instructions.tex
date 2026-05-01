@@ -1,0 +1,421 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\author{\empty}
+
+\title{Project \\ Quantitative Methods for Humanities}
+
+\date{\empty}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+    \textbf{\large 1. Changing Minds on Gay Marriage}    
+\end{center}
+
+In this exercise, we analyze data from two experiments in which households were canvassed for support on gay marriage. The original study was later retracted due to allegations of fabricated data; however, in this exercise, we analyze the original data while ignoring these allegations.
+
+Canvassers followed a script leading to conversations averaging about 20 minutes. A distinctive feature of this study is that gay and straight canvassers were randomly assigned to households, revealing their sexual orientation during the conversation. The experiment aims to test the ``contact hypothesis,'' which contends that out-group hostility (towards gay people, in this case) diminishes when people from different groups interact.
+
+The data file, \texttt{gay.csv}, contains the following variables (see Table~\ref{tab:gay-data}):
+
+\begin{table}[h]
+\centering
+\caption{Description of Variables in Gay Marriage Study}\label{tab:gay-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{study} & Source of the data (1 = study 1, 2 = study 2) \\
+\texttt{treatment} & Five possible treatment assignment options \\
+\texttt{wave} & Survey wave (a total of seven waves) \\
+\texttt{ssm} & Five-point scale on same-sex marriage support, \\
+            & where higher scores indicate greater support. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each observation in this dataset represents a respondent’s response to a survey item on same-sex marriage. There are two different studies in this dataset, involving interviews conducted over seven time periods (waves). In both studies, the first wave consists of interviews conducted before the canvassing treatment.
+
+\begin{enumerate}
+    \item \textbf{Randomization Check:} Using the baseline interview wave (Wave 1) before treatment, examine whether randomization was properly conducted. Focus on three groups in Study 1: ``same-sex marriage script by gay canvasser,'' ``same-sex marriage script by straight canvasser,'' and ``no contact.'' Briefly comment on the results.
+
+    \item \textbf{Average Treatment Effects:} The second survey wave was conducted two months after canvassing. Using Study 1, estimate the average treatment effects of gay and straight canvassers on support for same-sex marriage separately. Provide a brief interpretation of the results.
+
+    \item \textbf{Comparison with Recycling Script:} The study included a recycling script treatment that involves contact without addressing gay marriage. 
+    \begin{enumerate}
+        \item What is the purpose of this treatment?
+        \item Using Study 1 and Wave 2, compare the outcomes for ``same-sex marriage script by gay canvasser'' to ``recycling script by gay canvasser.'' 
+        \item Similarly, compare ``same-sex marriage script by straight canvasser'' to ``recycling script by straight canvasser.'' Provide a substantive interpretation of the results.
+    \end{enumerate}
+
+    \item \textbf{Long-Term Effects:} In Study 1, respondents were re-interviewed six times (Waves 2 to 7) after treatment at two-month intervals, with the final interview (Wave 7) occurring one year post-treatment.
+    \begin{enumerate}
+        \item Do the effects of canvassing last?
+        \item Under what conditions are the effects most pronounced? Compute the average treatment effects of straight and gay canvassers with the same-sex marriage script for each subsequent wave, relative to the control condition.
+    \end{enumerate}
+
+    \item \textbf{Replication (Study 2):} 
+    \begin{enumerate}
+        \item Study 2 aimed to replicate Study 1. In this study, only gay canvassers delivered the same-sex marriage script. Use the treatments ``same-sex marriage script by gay canvasser'' and ``no contact'' to examine whether randomization was appropriately conducted. Use baseline support from Wave 1 for this analysis.
+        \item Estimate the treatment effects of gay canvassing using data from Wave 2. Are these results consistent with Study 1?
+        \item Estimate the average effect of gay canvassing at each subsequent wave (Wave 3 and Wave 4). Draw an overall conclusion about the results of Study 1 and Study 2.
+    \end{enumerate}
+\end{enumerate}
+
+% {\color{blue}
+% \begin{center}
+%     \textbf{\large Solution}    
+% \end{center}
+
+% \textbf{R code for analysis:}
+
+% \begin{verbatim}
+% ## Substitute for your own and execute to set the working directory
+% ## setwd("C:\Users\YOUR-USER-NAME\Documents\QMH")
+
+% ## Q1
+
+% gay <- read.csv("gay.csv")
+% head(gay)
+% dim(gay)
+
+% ## Create subset for wave = 1 & study = 1.
+% wave1 <- subset(gay, gay$study == 1 & gay$wave == 1)
+
+% sum(gay$ssm) ## no missing value
+% wave1a <- tapply(wave1$ssm, wave1$treatment, mean)
+
+% ## Q2
+
+% ## Create subset for wave = 2 & study = 1.
+% wave2 <- subset(gay, gay$study == 1 & gay$wave == 2)
+
+% ## Calculate mean for each of ssm.
+% wave2a <- tapply(wave2$ssm, wave2$treatment, mean)
+
+% ## Convert wave2a into data.frame for simplicity's sake.
+% wave1b <- as.data.frame(wave1a)
+% wave2b <- as.data.frame(wave2a)
+
+% ## Sample Average Treatment Effect for the Treated for Gay & Straight
+% ## Difference-in-Difference Estimators
+% DIDgay1 <- (wave2b[4,] - wave1b[4,]) - (wave2b[1,] - wave1b[1,])
+% DIDstraight1 <- (wave2b[5,] - wave1b[5,]) - (wave2b[1,] - wave1b[1,])
+
+% ## Difference-in-Difference Estimators
+% DIDgay1 - DIDstraight1
+
+% ## Q3
+
+% DIDgay2 <- (wave2b[2,] - wave1b[2,]) - (wave2b[1,] - wave1b[1,])
+% DIDstraight2 <- (wave2b[3,] - wave1b[3,]) - (wave2b[1,] - wave1b[1,])
+
+% DIDgay2 - DIDstraight2
+
+% ## Q4
+
+% ## Create subsets for wave = 3:7 & study = 1
+% wave3 <- subset(gay, gay$study == 1 & gay$wave == 3)
+% wave4 <- subset(gay, gay$study == 1 & gay$wave == 4)
+% wave5 <- subset(gay, gay$study == 1 & gay$wave == 5)
+% wave6 <- subset(gay, gay$study == 1 & gay$wave == 6)
+% wave7 <- subset(gay, gay$study == 1 & gay$wave == 7)
+
+% ## Calculate mean for each ssm.
+% wave3a <- tapply(wave3$ssm, wave3$treatment, mean)
+% wave4a <- tapply(wave4$ssm, wave4$treatment, mean)
+% wave5a <- tapply(wave5$ssm, wave5$treatment, mean)
+% wave6a <- tapply(wave6$ssm, wave6$treatment, mean)
+% wave7a <- tapply(wave7$ssm, wave7$treatment, mean)
+
+% ## Convert waves into data.frames for simplicity's sake.
+% wave3b <- as.data.frame(wave3a)
+% wave4b <- as.data.frame(wave4a)
+% wave5b <- as.data.frame(wave5a)
+% wave6b <- as.data.frame(wave6a)
+% wave7b <- as.data.frame(wave7a)
+
+% ## ATE
+% DIDgay3 <- (wave3b[4,] - wave1b[4,]) - (wave3b[1,] - wave1b[1,])
+% DIDstraight3 <- (wave3b[5,] - wave1b[5,]) - (wave3b[1,] - wave1b[1,])
+
+% DIDgay4 <- (wave4b[4,] - wave1b[4,]) - (wave4b[1,] - wave1b[1,])
+% DIDstraight4 <- (wave4b[5,] - wave1b[5,]) - (wave4b[1,] - wave1b[1,])
+
+% DIDgay5 <- (wave5b[4,] - wave1b[4,]) - (wave5b[1,] - wave1b[1,])
+% DIDstraight5 <- (wave5b[5,] - wave1b[5,]) - (wave5b[1,] - wave1b[1,])
+
+% DIDgay6 <- (wave6b[4,] - wave1b[4,]) - (wave6b[1,] - wave1b[1,])
+% DIDstraight6 <- (wave6b[5,] - wave1b[5,]) - (wave6b[1,] - wave1b[1,])
+
+% DIDgay7 <- (wave7b[4,] - wave1b[4,]) - (wave7b[1,] - wave1b[1,])
+% DIDstraight7 <- (wave7b[5,] - wave1b[5,]) - (wave7b[1,] - wave1b[1,])
+
+% DIDgay3; DIDgay4; DIDgay5; DIDgay6; DIDgay7
+% DIDstraight3; DIDstraight4; DIDstraight5; DIDstraight6; DIDstraight7
+
+% ## Q5
+
+% ## Create subset & calculate means
+% study2 <- subset(gay, subset = (study == 2) & (wave == 1))
+% study2a <- tapply(study2$ssm, study2$treatment, mean)
+% study2b <- as.data.frame(study2a)
+
+% ## Randomization Check
+% study2.2 <- subset(gay, subset = (study == 2) & (wave == 2))
+% study2.2a <- tapply(study2.2$ssm, study2.2$treatment, mean)
+% study2.2b <- as.data.frame(study2.2a)
+
+% DIDstudy2 <- (study2.2b[4,] - study2b[4,]) - (study2.2b[1,] - study2b[1,])
+% DIDstudy2; DIDgay1
+
+% ## Q7
+
+% study3 <- subset(gay, subset = (study == 2) & (wave == 3))
+% study4 <- subset(gay, subset = (study == 2) & (wave == 4))
+% study7 <- subset(gay, subset = (study == 2) & (wave == 7))
+
+% study3a <- tapply(study3$ssm, study3$treatment, mean)
+% study4a <- tapply(study4$ssm, study4$treatment, mean)
+% study7a <- tapply(study7$ssm, study7$treatment, mean)
+
+% study3b <- as.data.frame(study3a)
+% study4b <- as.data.frame(study4a)
+% study7b <- as.data.frame(study7a)
+
+% diff3 <- (study3b[4,] - study2b[4,]) - (study3b[1,] - study2b[1,])
+% diff4 <- (study4b[4,] - study2b[4,]) - (study4b[1,] - study2b[1,])
+% diff7 <- (study7b[4,] - study2b[4,]) - (study7b[1,] - study2b[1,])
+
+% diff3; diff4; diff7
+% \end{verbatim}
+
+% \textbf{Summary of Findings}
+
+% \begin{itemize}
+%     \item \textbf{Question 1:} Baseline analysis suggests proper randomization as there is little difference between groups at Wave 1.
+%     \item \textbf{Question 2:} At Wave 2, gay canvassers showed a significant increase in support for same-sex marriage compared to the control group.
+%     \item \textbf{Question 3:} Comparisons with the recycling script treatment revealed no significant bias, confirming the effectiveness of the gay canvassing script.
+%     \item \textbf{Question 4:} The effect of gay canvassing persisted across Waves 3 to 7, demonstrating long-term impact on attitudes.
+%     \item \textbf{Question 5:} Randomization for Study 2 was verified. There was no substantial difference between treatment groups at Wave 1.
+%     \item \textbf{Question 6:} Results for gay canvassers in Wave 2 of Study 2 were consistent with those of Study 1.
+%     \item \textbf{Question 7:} In Study 2, the positive effects of gay canvassing persisted through Wave 7, supporting the robustness of the results.
+% \end{itemize}
+
+% }
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+
+\begin{center}
+    \textbf{\large 2. Success of Leader Assassination as a Natural Experiment}    
+\end{center}
+
+One longstanding debate in international relations is whether individual political leaders significantly influence the course of a nation. While some argue that leaders' ideologies and personalities drive historical events, others contend that structural and institutional constraints render individual leaders inconsequential. Empirically testing these claims is challenging because leadership changes are usually non-random and confounded by many factors.
+
+In this exercise, we explore a natural experiment where the success or failure of assassination attempts is assumed to be essentially random. Each observation in the dataset \texttt{leaders.csv} corresponds to an assassination attempt. Table~\ref{tab:leader-data} describes the variables in this dataset.
+
+\begin{table}[h]
+\centering
+\caption{Description of Variables in the Leader Assassination Dataset}\label{tab:leader-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{country} & Country where the assassination attempt occurred \\
+\texttt{year} & Year of the assassination attempt \\
+\texttt{leadername} & Name of the leader targeted \\
+\texttt{age} & Age of the targeted leader \\
+\texttt{politybefore} & Average polity score of the country during the three \\
+                      & years prior to the attempt \\
+\texttt{polityafter} & Average polity score of the country during the three \\
+                     & years after the attempt \\
+\texttt{civilwarbefore} & 1 if the country was in civil war during the three years \\
+                        & prior to the attempt, 0 otherwise \\
+\texttt{civilwarafter} & 1 if the country was in civil war during the three years \\
+                       & after the attempt, 0 otherwise \\
+\texttt{interwarbefore} & 1 if the country was in international war during the \\
+                        & three years prior to the attempt, 0 otherwise \\
+\texttt{interwarafter} & 1 if the country was in international war during the \\
+                       & three years after the attempt, 0 otherwise \\
+\texttt{result} & Result of the assassination attempt (10 categories) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The \texttt{polity} variable represents a 21-point scale from the Polity Project, ranging from $-10$ (hereditary monarchy) to $+10$ (consolidated democracy). The \texttt{result} variable describes the outcome of each assassination attempt.
+
+\begin{enumerate}
+    \item \textbf{Number of Attempts and Countries:} 
+    \begin{enumerate}
+        \item How many assassination attempts are recorded in the dataset?
+        \item How many countries experienced at least one assassination attempt? 
+        \item What is the average number of attempts per year for countries with at least one attempt?
+    \end{enumerate}
+
+    \item \textbf{Success Rate of Assassination Attempts:} Create a new binary variable, \texttt{success}, that equals 1 if a leader dies from the attack and 0 if the leader survives. 
+    \begin{enumerate}
+        \item What is the overall success rate of assassination attempts?
+        \item Discuss whether the success of assassination attempts appears random.
+    \end{enumerate}
+
+    \item \textbf{Polity and Leader Characteristics:} 
+    \begin{enumerate}
+        \item Compare the average \texttt{politybefore} scores between successful and failed attempts. 
+        \item Examine whether the ages of targeted leaders differ between successful and failed attempts.
+        \item Provide a brief interpretation of the results in light of the assumption that assassination success is random.
+    \end{enumerate}
+
+    \item \textbf{War Status Before Assassination:} 
+    \begin{enumerate}
+        \item Create a new binary variable, \texttt{warbefore}, that equals 1 if the country was in either civil or international war during the three years before the attempt.
+        \item Investigate whether \texttt{warbefore} differs between successful and failed assassination attempts. Provide a substantive interpretation.
+    \end{enumerate}
+
+    \item \textbf{Effects of Assassination:} 
+    \begin{enumerate}
+        \item Does successful leader assassination cause democratization? Compare \texttt{polityafter} scores for successful and failed attempts.
+        \item Does successful leader assassination lead to war? Analyze changes in civil or international war status (\texttt{civilwarafter} and \texttt{interwarafter}) between successful and failed attempts.
+        \item State your assumptions and provide a substantive interpretation of the results.
+    \end{enumerate}
+\end{enumerate}
+
+% {\color{blue}
+% \begin{center}
+%     \textbf{\large Solution}    
+% \end{center}
+
+% \textbf{R code for analysis:}
+
+% \begin{verbatim}
+% ## Substitute for your own and execute to set the working directory
+% ## setwd("C:\Users\YOUR-USER-NAME\Documents\QMH")
+
+% ## Q1
+
+% leader <- read.csv("leaders.csv")
+
+% dim(leader)
+% summary(leader$result)
+
+% length(unique(leader$country)) # 88 countries
+% y <- nrow(leader) # 250 assassination attempts in total
+% z <- length(unique(leader$year)) # number of years with plots
+% y / z # average number of plots per year in those 88 countries
+
+% ## Q2
+
+% unique(leader$result)
+
+% ## Create variable success in the original data frame.
+% leader$success <- NA 
+% leader$success[leader$result == "dies between a day and a week" 
+%                | leader$result == "dies between a week and a month" 
+%                | leader$result == "dies within a day after the attack"
+%                | leader$result == "dies, timing unknown"
+%                ] <- 1
+
+% leader$success[leader$result == "hospitalization but no permanent disability" 
+%                | leader$result == "not wounded"
+%                | leader$result == "plot stopped"
+%                | leader$result == "survives but wounded severely"
+%                | leader$result == "survives, whether wounded unknown"
+%                | leader$result == "wounded lightly"
+%                ] <- 0
+
+% mean(leader$success) # 21.6%
+
+% ## Q3
+
+% tapply(leader$politybefore, leader$success, mean)
+% tapply(leader$age, leader$success, mean)
+
+% ## Q4
+
+% ## Create a variable warbefore
+% leader$warbefore <- NA
+
+% leader$warbefore[leader$civilwarbefore == 1 
+%                  | leader$interwarbefore == 1] <- 1
+
+% leader$warbefore[leader$civilwarbefore != 1 
+%                  & leader$interwarbefore != 1] <- 0
+
+% summary(leader$warbefore)
+
+% war3b <- subset(leader, leader$warbefore == 1)
+
+% tapply(war3b$politybefore, war3b$success, mean)
+% tapply(war3b$age, war3b$success, mean)
+
+% ## Q5
+
+% leader$warafter <- NA
+
+% leader$warafter[leader$civilwarafter == 1
+%                 | leader$interwarafter == 1] <- 1
+
+% leader$warafter[leader$civilwarafter != 1
+%                 & leader$interwarafter != 1] <- 0
+
+% war3a <- subset(leader, subset = (warafter == 1))
+
+% tapply(leader$warafter, leader$success, mean)
+% tapply(leader$polityafter, leader$success, mean)
+% \end{verbatim}
+
+% \subsection*{Summary of Findings}
+% \begin{itemize}
+%     \item \textbf{Question 1: Number of Attempts and Countries}
+%     \begin{itemize}
+%         \item The dataset contains 250 assassination attempts across 88 countries.
+%         \item On average, countries with attempts experienced approximately 2.8 plots per year.
+%     \end{itemize}
+
+%     \item \textbf{Question 2: Success Rate of Assassinations}
+%     \begin{itemize}
+%         \item A new variable, \texttt{success}, was created to identify whether an attempt resulted in the death of the leader.
+%         \item The overall success rate of assassination attempts is 21.6\%.
+%         \item This suggests that the success of assassination attempts may not be random, challenging the validity of the randomization assumption.
+%     \end{itemize}
+
+%     \item \textbf{Question 3: Polity Scores and Leader Characteristics}
+%     \begin{itemize}
+%         \item The average \texttt{politybefore} score is approximately 1.04 points higher for successful attempts compared to failed attempts.
+%         \item The average age of targeted leaders is three years higher for successful attempts than for failed attempts.
+%     \end{itemize}
+
+%     \item \textbf{Question 4: War Before Assassinations}
+%     \begin{itemize}
+%         \item A new variable, \texttt{warbefore}, was created to indicate whether the country was involved in civil or international war before the assassination attempt.
+%         \item Among countries at war, leaders targeted in successful attempts had slightly higher \texttt{politybefore} scores compared to those in failed attempts.
+%         \item The age difference of leaders targeted during war was not substantial.
+%     \end{itemize}
+
+%     \item \textbf{Question 5: Effects of Assassinations on War and Democracy}
+%     \begin{itemize}
+%         \item A new variable, \texttt{warafter}, was created to indicate whether the country entered civil or international war after the assassination attempt.
+%         \item Successful assassinations were associated with a lower likelihood of entering war (20\%) compared to failed attempts (30\%).
+%         \item The average \texttt{polityafter} score was higher for successful assassinations, suggesting a potential democratizing effect of successful leader assassinations.
+%     \end{itemize}
+% \end{itemize}
+
+
+% }
+
+\end{document}

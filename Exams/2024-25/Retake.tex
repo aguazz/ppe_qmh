@@ -1,0 +1,317 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+\printanswers % Uncomment to show answers
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % math fonts and symbols
+\usepackage{bbm} % Math blackboard font
+\usepackage{enumitem} % For reference enumerations lists
+\usepackage{textcomp} % some symbols (like copyright)
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry} % Margins setup
+\usepackage{xcolor} % Colors
+\usepackage{graphicx}
+\usepackage{booktabs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}} % natural number set
+\newcommand{\R}{\mathbb{R}} % real number set
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}} % Ensure numeric superscripts
+\renewcommand{\thefootnote}{\arabic{footnote}} % Ensure numeric labels
+\makeatother
+\setcounter{footnote}{1}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule % the `\vrule` is as high and deep as a strut
+    \hspace{-\arraycolsep}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Defining information
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Retake Exam}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2024/25}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{June 24, 2025}
+\newcommand{\university}{CUNEF Universidad}
+% Setting header and footer
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering 
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+    
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+            
+        \end{enumerate}
+    }}
+    
+\end{center}
+%--- Instructions ---%
+
+    The Minimum Legal Drinking Age (MLDA) in the United States has long been a source of debate. While it is currently set at 21 to limit alcohol-related harm, some argue that it encourages riskier behaviors, like binge drinking at the time youngsters turn 21. Supporters of this position advocate lowering the MLDA to 18, suggesting this could promote safer and more responsible alcohol consumption. 
+    
+    To better understand the effects of the MLDA, you decide to collect and examine data on mortality rates related to age.
+
+%--- Questions ---%
+
+\begin{questions}
+
+% Question 1
+\question[3]
+As a first step, you collect data on individuals just before and just after their 21st birthday (what you call the near-21 population). You divide them into two groups:
+\begin{itemize}
+    \item \textbf{$21^-$}: individuals whose 21st birthday is within the next 30 days;
+    \item \textbf{$21^+$}: individuals who turned 21 within the last 30 days.
+\end{itemize}
+The table below reports death rates for the year 2000, measured per 100,000 near-21 individuals:
+\vspace{-0.2cm}
+
+\begin{table}[ht]
+    \centering
+    \caption{Death rates near age 21 (USA, 2000)}
+    \label{tab:deaths}
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{Age group} & \textbf{People} & \textbf{MVA deaths} & \textbf{Disease deaths} \\
+        \midrule
+        $21^-$ & 47,619 & 28 & 20 \\
+        $21^+$ & 52,381 & 40 & 22 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{enumerate}[label=(\alph*)]
+    \item If you randomly select an individual from this population, what is the probability that she:
+    \begin{enumerate}[label=(a.\roman*)]
+        \item belongs to the $21^+$ group;
+        \item died from a disease (denote this event as D);
+        \item died in a motor vehicle accident (MVA);
+        \item was in the $21^+$ group, given that she died in a motor vehicle accident.
+    \end{enumerate}
+    
+    \item Are the following pairs of events independent? Justify your answers.
+    \begin{enumerate}[label=(b.\roman*)]
+        \item Being in the $21^+$ group and dying of disease;
+        \item Being in the $21^+$ group and dying in a motor vehicle accident.
+    \end{enumerate}
+    
+    \item Based on your results, does turning 21 seem to affect the likelihood of dying from disease or from a motor vehicle accident? Briefly explain.
+\end{enumerate}
+
+
+% Solution 1
+\begin{solution}[0cm]
+
+\begin{enumerate}[label=(\alph*)]
+    \item All values are out of 100,000 individuals near age 21. Hence,
+
+    \begin{enumerate}[label=(a.\roman*)]
+        \item $P(21^+) = \frac{52{,}381}{100{,}000} \approx 0.5238$
+        
+        \item $P(D) = \frac{20 + 22}{100{,}000} = \frac{42}{100{,}000} = 0.00042$
+        
+        \item $P(MVA) = \frac{28 + 40}{100{,}000} = \frac{68}{100{,}000} = 0.00068$
+        
+        \item $P(21^+ \mid MVA) = \frac{40}{68} \approx 0.5882$
+    \end{enumerate}
+
+    \item We check independence using: $P(A \cap B) = P(A) \cdot P(B)$
+    
+    \begin{enumerate}[label=(b.\roman*)]
+        \item $P(21^+ \cap D) = \frac{22}{100{,}000} = 0.00022$ \\
+        $P(21^+) \cdot P(D) = 0.5238 \cdot 0.00042 \approx 0.00022$ \\
+        $\Rightarrow$ Events are approximately independent.
+        
+        \item $P(21^+ \cap MVA) = \frac{40}{100{,}000} = 0.00040$ \\
+        $P(21^+) \cdot P(MVA) = 0.5238 \cdot 0.00068 \approx 0.00036$ \\
+        $\Rightarrow$ The difference suggests mild dependence, possibly due to increased risk after turning 21.
+    \end{enumerate}
+
+    \item Comparing death rates before and after turning 21:
+
+    \begin{itemize}
+        \item MVA death rate: $40/52{,}381 \approx 0.000763$ vs. $28/47{,}619 \approx 0.000588$
+        \item Disease death rate: $22/52{,}381 \approx 0.000420$ vs. $20/47{,}619 \approx 0.000420$
+    \end{itemize}
+
+    The change in disease death rates is almost non, while MVA death rates change more substantially. This may indicate that turning 21 (and gaining legal access to alcohol) slightly increases the risk of fatal motor vehicle accidents.
+
+\end{enumerate}
+
+\end{solution}
+
+% Question 2
+\question[3.5]
+Next, you analyze a dataset covering young adults aged 19 to 22 from 1997 to 2005. It includes:
+
+\begin{itemize}
+    \item \texttt{age}: Age in years, measured in $\approx$30-day increments (i.e., each value agreagates individuals whose age is within about $\pm$15 days of that point);
+    \item \texttt{mrate}: Mortality rate per 100,000 individuals (all causes).
+\end{itemize}
+
+To examine how mortality changes around the legal drinking age, you estimate the model
+$$
+\texttt{mrate} = \beta_0 + \beta_1\,\texttt{age} + u,
+$$
+separately for individuals just below and just above age 21:
+
+\begin{enumerate}[label=\arabic*.]
+    \item For $\texttt{age} < 21$:  
+    $\widehat{\texttt{mrate}} = 76.2515 + 0.8270\,\texttt{age},\quad R^2 = 0.0406$
+    
+    \item For $\texttt{age} > 21$:  
+    $\widehat{\texttt{mrate}} = 159.5847 - 2.7764\,\texttt{age},\quad R^2 = 0.3658$
+\end{enumerate}
+
+\vspace{0.5em}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Compare the models' fit. Which better explains variation in mortality?
+    
+    \item Use both models to estimate mortality at age 21.
+    
+    \item Compute the Regression Discontinuity (RD) estimate for the causal effect of turning 21. Interpret it.
+    
+    \item Under what assumptions is the RD estimate a valid causal effect?
+    
+    \item Would it be advisable to use the RD method to estimate the causal effect at age 18? Why?
+\end{enumerate}
+
+% Solution 2
+\begin{solution}
+
+\begin{enumerate}[label=(\alph*)]
+    \item The $R^2$ value for the model using data from individuals younger than 21 is $0.0406$, meaning only about 4.1\% of the variation in mortality is explained by age. For those older than 21, the $R^2$ is $0.3658$, which means the model explains around 36.6\% of the variation.  
+    \\
+    $\Rightarrow$ The model for individuals older than 21 has a substantially better fit and explains mortality variation more effectively.
+
+    \item We evaluate both regression equations at $\texttt{age} = 21$:
+
+    \begin{itemize}
+        \item For $\texttt{age} < 21$:  
+        $\widehat{\texttt{mrate}} = 76.2515 + 0.8270 \cdot 21 = 93.6185$
+        
+        \item For $\texttt{age} > 21$:  
+        $\widehat{\texttt{mrate}} = 159.5847 - 2.7764 \cdot 21 = 101.2863$
+    \end{itemize}
+    
+    \item The RD estimate is the difference in predicted mortality at age 21 when approaching from above and below:
+    $$
+    RD = \widehat{\texttt{mrate}}^{+} - \widehat{\texttt{mrate}}^{-} = 101.2863 - 93.6185 = \boxed{7.6678}
+    $$
+    $\Rightarrow$ The estimated causal effect of turning 21 (i.e., gaining legal access to alcohol) is an increase of approximately 7.67 deaths per 100,000 individuals.
+
+    \item Provided the linear model is a good approximation near the threshold, the RD estimate would be a valid causal effect if other variables affecting mortality remains similar near age 21.
+
+    \item A key limitation of the RD method is that the estimation may not be reliable away from age 21. 
+    The same method of taking the difference between predictions may be misleading at age 18, which is far from this threshold, since  the linear relation could fail beyond the range of the training data.
+\end{enumerate}
+
+\end{solution}
+
+% Question 3
+\question[3.5] 
+You realize that modern data cannot help you to assess the effect of lowering the MLDA, since all U.S. states had set the drinking age at 21 by 1988. To estimate this counterfactual, you turn to data from 1974–1975, when policies still varied across states.
+
+In 1975, Alabama lowered its MLDA from 21 to 19, while neighboring Arkansas kept it at 21. You collect the following mortality data for individuals aged 19-20, measured as death rates per 100,000:
+\vspace{-0.2cm}
+
+\begin{table}[ht]
+    \centering
+    \caption{Death rates for individuals aged 19-20, by state and year}
+    \label{tab:deaths_1975}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{State} & \textbf{1974 death rate} & \textbf{1975 death rate} \\
+        \midrule
+        Alabama & 143.0983 & 147.9411 \\
+        Arkansas & 119.6193 & 148.9463 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Identify the treatment and outcome variables.
+
+    \item Compute the Difference-in-Means (DiM) estimator by only relying on 1975 data.
+
+    % \item Under which assumption the DiM estimator could be reliable to asses the causal effect? Do you belief it holds in this scenario?
+    
+    \item Why might comparing Alabama and Arkansas in 1975 lead to a biased estimate of the MLDA effect?
+    
+    \item Compute the Before-and-After (BA) estimator for Alabama. Interpret.
+    
+    \item What assumption must hold for the BA estimate to reflect a causal effect?
+    
+    \item Compute the Difference-in-Differences (DiD) estimate. Does this change your conclusion?
+    
+    \item What is the key assumption needed for the DiD estimator to be valid?
+\end{enumerate}
+
+% Solution
+\begin{solution}
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Treatment variable:} Whether someone aged 19-20 can legally drink or cannot.
+    \\
+    \textbf{Outcome variable:} Whether someone aged 19-20 dies or lives at a specific year.
+
+    \item DiM estimator by only using 1975 data:
+    $$
+    \text{DiM} = \text{Death}_{1975}^{AL} - \text{Death}_{1975}^{AR} = 147.9411 - 148.9463 = \boxed{-1.0052}
+    $$
+    
+    \item A simple difference in death rates between Alabama and Arkansas in 1975 may reflect pre-existing differences unrelated to MLDA (e.g., demographics, driving behavior, or health care access). Thus, it does not isolate the effect of the policy change.
+
+    \item Before-and-After estimator for Alabama:
+    $$
+    \text{BA} = \text{Death}_{1975}^{AL} - \text{Death}_{1974}^{AL} = 147.9411 - 143.0983 = \boxed{4.8428}
+    $$
+    $\Rightarrow$ The BA estimate suggests an increase of 4.84 deaths per 100,000 after lowering the MLDA.
+
+    \item The BA estimator is valid if \textbf{nothing else changed in Alabama between 1974 and 1975 that could affect mortality} for young adults aged 19-20, apart from the MLDA reform (i.e., no time-dependent confounders).
+
+    \item First compute the change in Arkansas to adjust for the time-trend effect:
+    $$
+    \Delta_{AR} = 148.9463 - 119.6193 = 29.327
+    $$
+    Then the DiD estimate:
+    $$
+    \text{DiD} = \text{BA} - \Delta_{AR} = (147.9411 - 143.0983) - (148.9463 - 119.6193) = 4.8428 - 29.327 = \boxed{-24.4842}
+    $$
+    Hence, since the mortality in Alabama increased significantly less than it did in Arkansas, the updating of the BA estimate by the time-trend effect suggest that lowering the MLDA may have reduced mortality, which dramatically changes the result suggested by the BA design.
+
+    \item The DiD estimator is valid under the \textbf{parallel trends assumption}: in the absence of treatment, Alabama and Arkansas would have experienced similar changes in mortality over time. In other words, the only systematic difference in the outcome trend between the two states is due to the MLDA policy change.
+
+\end{enumerate}
+
+\end{solution}
+
+\end{questions}
+
+\end{document}

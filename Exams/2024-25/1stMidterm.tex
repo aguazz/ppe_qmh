@@ -1,0 +1,263 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+\printanswers % Uncomment to show answers
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % math fonts and symbols
+\usepackage{bbm} % Math blackboard font
+\usepackage{enumitem} % For reference enumerations lists
+\usepackage{textcomp} % some symbols (like copyright)
+\usepackage[top = 2cm, bottom = 2cm, right = 1.2cm, left = 1.2cm, paper = a4paper, headheight = 6cm]{geometry} % Margins setup
+\usepackage{xcolor} % Colors
+\usepackage{graphicx}
+\usepackage{booktabs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}} % natural number set
+\newcommand{\R}{\mathbb{R}} % real number set
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}} % Ensure numeric superscripts
+\renewcommand{\thefootnote}{\arabic{footnote}} % Ensure numeric labels
+\makeatother
+\setcounter{footnote}{1}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule % the `\vrule` is as high and deep as a strut
+    \hspace{-\arraycolsep}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Defining information
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{1st Midterm}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2024/25}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{Apr 8, 2025}
+\newcommand{\university}{CUNEF Universidad}
+% Setting header and footer
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 50 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering 
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+    
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+            
+        \end{enumerate}
+    }}
+    
+\end{center}
+%--- Instructions ---%
+
+    In the mid-19th century, cholera devastated London. The prevailing explanation at the time attributed the disease to foul-smelling air. Dr. John Snow, however, proposed a radical alternative: that cholera was a waterborne disease, spread through contaminated drinking water. In the absence of modern microbiology, confirming this hypothesis was challenging. Snow responded with one of the earliest recorded \textit{natural experiments} in the history of causal inference.
+    
+    His study took advantage of a crucial change in 1852, when the Lambeth Water Company (LWC) relocated its intake upstream of London on the River Thames (resulting in much cleaner water), while the Southwark \& Vauxhall Company (SVC) continued to draw water from a more polluted downstream source. Snow compared\footnote{Snow, John. 1855. \textit{On the Mode of Communication of Cholera} (J. Churchill, 2nd Ed, London), pp. 1–162.} the populations served by LWC and SVC in 1849 and 1854. 
+    Table \ref{tab:cholera-deaths-pop} presents the comparison data.
+    \vspace{-0.5em}
+    
+    \begin{table}[ht]
+    \centering
+    \caption{Cholera deaths and population by water company and year}
+    \label{tab:cholera-deaths-pop}
+    \begin{tabular}{l cc cc}
+        \toprule
+        \textbf{Water company} & \multicolumn{2}{c}{\textbf{1849}} & \multicolumn{2}{c}{\textbf{1854}} \\
+        \cmidrule(lr){2-3} \cmidrule(lr){4-5}
+         & Deaths & Population & Deaths & Population \\
+        \midrule
+        SVC & 2,261 & 591,945 & 2,458 & 614,500 \\
+        LWC & 162  & 45,686  & 37   & 52,857  \\
+        \bottomrule
+    \end{tabular}
+    \end{table}
+    \vspace{-0.5em}
+
+
+%--- Questions ---%
+
+\begin{questions}
+
+% Question 1
+\question[2.5]
+Answer the following questions:
+\begin{enumerate}[label=(\alph*)]
+    \item What was the probability for a randomly selected person in 1849:
+    \begin{enumerate}[label=(\roman*)]
+        \item to be supplied by LWC;
+        \item to die of cholera.
+    \end{enumerate}
+    \item Are the two events defined in \textit{(i)} and \textit{(ii)} independent from each other?
+    \item For someone who died of cholera in 1849, what is the probability that it was due to the SVC supply?
+\end{enumerate}
+    
+% Solution 1
+\begin{solution}[0cm]
+    We are given the following data for 1849:
+    \begin{itemize}
+        \item[\tiny$\bullet$] \textbf{SVC:} Population = 591,945, Cholera deaths = 2,261.
+        \item[\tiny$\bullet$] \textbf{LWC:} Population = 45,686, Cholera deaths = 162.
+    \end{itemize}
+    
+    The total population is:
+    \[
+    N = 591{,}945 + 45{,}686 = 637{,}631,
+    \]
+    and the total number of cholera deaths is:
+    \[
+    D = 2{,}261 + 162 = 2{,}423.
+    \]
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item 
+        \begin{enumerate}[label=(\roman*)]
+            \item Probability that a randomly selected person was supplied by LWC:
+            \[
+            P(\text{LWC}) = \frac{45{,}686}{637{,}631} \approx \boxed{0.0716}.
+            \]
+            
+            \item Probability that a randomly selected person died of cholera:
+            \[
+            P(\text{Cholera death}) = \frac{2{,}423}{637{,}631} \approx \boxed{0.00380}.
+            \]
+        \end{enumerate}
+        
+        \item The joint probability is:
+        \[
+        P(\text{LWC} \cap \text{Cholera death}) = \frac{162}{637{,}631} \approx 0.000254,
+        \]
+        while the product of the probabilities is,
+        \[
+        P(\text{LWC}) \cdot P(\text{Cholera death}) \approx 0.0716 \times 0.00380 \approx 0.000272.
+        \]
+        Since 
+        $$
+        P(\text{LWC} \cap \text{Cholera death}) \approx 0.000254 \neq 0.000272 \approx P(\text{LWC}) \cdot P(\text{Cholera death}),
+        $$
+        the two events are \textbf{not independent}.
+        
+        \item The probability that a person who died of cholera was supplied by SVC is:
+        \[
+        P(\text{SVC} \mid \text{Cholera death}) = \frac{\text{Cholera deaths in SVC}}{\text{Total Cholera Deaths}} = \frac{2{,}261}{2{,}423} \approx \boxed{0.933}.
+        \]
+    \end{enumerate}
+
+\end{solution}
+
+% Question 2
+\question[4]
+Suppose for this part that you only have access to 1854's data.
+\begin{enumerate}[label=(\alph*)]
+    \item Identify and define the treatment variable and the outcome variable in Snow’s investigation.
+    \item Let \(Y_i(0)\) represent individual \(i\)'s cholera outcome with contaminated water (SVC) and \(Y_i(1)\) with clean water (LWC, treatment). Define the individual treatment effect. Why this quantity cannot be estimated? What measure of causal effect can be estimated instead?
+    \item What would be the treatment and control groups?
+    \item Would you say that the No Interference Assumption (NIA) is met in this study? Why? If not, comment on possible violations.
+    \item Make the same analysis for the No Hidden Variants Assumption (NHVA).
+    \item Would you say that the assignment mechanism to the treatment and control groups is random?
+    \item Compute the Difference-in-Means (DiM) estimator of the causal effect\footnote{Recall that the average of a binary variable is equivalent to a proportion}.
+    \item Is this estimation unbiased? If you believe it is not, mention potential sources of bias.
+\end{enumerate}
+
+%% Solution 2
+\begin{solution}[0cm]
+
+    \begin{enumerate}[label=(\alph*)]
+        \item The \textbf{treatment variable} is a binary indicator equal to 1 if an individual received water from LWC (the cleaner source) and 0 otherwise. The \textbf{outcome variable} is binary, equal to 1 if an individual died from cholera in 1854 and 0 if not.
+        
+        \item The individual treatment effect is defined as \(Y_i(1) - Y_i(0)\). This quantity cannot be estimated because for each individual we only observe one of the two potential outcomes (either \(Y_i(1)\) or \(Y_i(0)\)), but never both. This is known as the \emph{fundamental problem of causal inference}. Instead, we estimate an average measure of the causal effect, namely the \textbf{Average Treatment Effect (ATE)}: \(E[Y_i(1) - Y_i(0)]\), which, under appropriate assumptions, can be approximated by the difference in the mean outcomes between the treatment and control groups.
+        
+        \item The \textbf{treatment group (LWC)} consists of all individuals served by LWC (clean water), while the \textbf{control group (SVC)} consists of all individuals served by SVC (contaminated water).
+        
+        \item The NIA requires that one individual's treatment status does not affect another individual's outcome. In this context, it might be \textbf{violated} if, for example, individuals from one group interact with those in the other (e.g., through work or social visits), potentially transmitting cholera across groups.
+        
+        \item The NHVA assumes that the treatment is uniformly defined. Here, the treatment is receiving water from LWC’s cleaner source. It is reasonable to assume that this is \textbf{satisfied} since the water quality difference is clearly defined.
+        
+        \item The assignment of water companies to individuals is based on geographic service areas rather than by random allocation. Thus, the assignment mechanism is \textbf{not random}.
+        
+        \item Since the outcome is binary, its average in a group is equivalent to the death rate. At the individual level, we compute the death rate in each group:
+        \begin{align*}
+            \text{Death rate}_{\text{SVC}} &= \frac{2,458}{614,500} \approx 0.00400, \\
+            \text{Death rate}_{\text{LWC}} &= \frac{37}{52,857} \approx 0.00070.
+        \end{align*}
+        The difference in means estimator is then:
+        \[
+        \mathrm{DiM} = \text{Death rate}_{\text{LWC}} - \text{Death rate}_{\text{SVC}} \approx 0.00070 - 0.00400 = \boxed{-0.00330}.
+        \]
+        
+        \item The estimator is \textbf{not necessarily unbiased} because the assignment to water companies is non-random. Differences in factors such as socio-economic conditions, population density, or sanitation infrastructure between the groups could confound the estimated effect.
+    \end{enumerate}
+    
+\end{solution}
+
+% Question 3
+\question[3.5]
+Upon a closer look at the study, you decide that quasi-experimental methods will work better than experimental ones. Perform the following analysis:
+\begin{enumerate}[label=(\alph*)]
+  \item Compute a Before-and-After\footnote{Hint: identify the pre-treatment and post-treatment groups.} (BA) estimator of the causal effect of water quality on cholera deaths.
+  \item Would you say this is an unbiased estimator?\footnote{Hint: think about the effect of time.} 
+  \item You now decide to rely on a Difference-in-Differences (DiD) estimator. Obtain this estimator as the BA estimator you obtained earlier minus the time effect adjustment.
+  \item What is the main assumption that must hold for this DiD comparison to yield an unbiased estimate of the effect of clean water on cholera mortality? Is it reasonable to assume this in the study?  
+\end{enumerate}
+
+%% Solution 3
+\begin{solution}[0cm]
+    Remember that, because the outcome variable ``death by cholera'' is binary in this study, its average is the same as the death rate.
+    
+    \begin{enumerate}[label=(\alph*)]
+    \item For the treated group (LWC), compute the death rates before and after the treatment:
+    \begin{align*}
+        \text{Death rate}_{\text{LWC, pre}} &= \frac{162}{45,686} \approx 0.00354, \\    
+        \text{Death rate}_{\text{LWC, post}} &= \frac{37}{52,857} \approx 0.00070.
+    \end{align*}
+    The BA estimator for the treated group is:
+    \[
+    \mathrm{BA}_\text{LWC} = \text{Death rate}_{\text{LWC, post}} - \text{Death rate}_{\text{LWC, pre}} \approx 0.00070 - 0.00354 = \boxed{-0.00284}.
+    \]
+    
+    \item The BA estimator may be \textbf{biased} because it does not account for time effects that influence both groups. For instance, improvements in public health between 1849 and 1854 could affect the cholera mortality rate independent of water quality.
+    
+    \item To obtain the DiD estimator, we first compute the BA estimator for the control group (SVC):
+    \begin{align*}
+        \text{Death rate}_{\text{SVC, pre}} &= \frac{2261}{591,945} \approx 0.00382, \\
+        \text{Death rate}_{\text{SVC, post}} &= \frac{2458}{614,500} \approx 0.003998.
+    \end{align*}
+    The change in the control group is:
+    \[
+    \mathrm{BA}_\text{SVC} = 0.003998 - 0.00382 \approx 0.00018.
+    \]
+    The DiD estimator is then:
+    \[
+    \mathrm{DiD} = \mathrm{BA}_\text{LWC} - \mathrm{BA}_\text{SVC} \approx -0.00284 - 0.00018 = \boxed{-0.00302}.
+    \]
+    
+    \item The key assumption for the DiD estimator to yield an unbiased estimate is the \emph{parallel trends assumption}: in the absence of treatment, the treated and control groups would have experienced the same change in outcomes over time. In Snow's study, this assumption may be \emph{reasonable} given that the populations served by LWC and SVC are geographically proximate and likely share many similar characteristics. However, unobserved factors such as differences in local public health initiatives or sanitation practices could potentially violate this assumption.
+    \end{enumerate}
+    
+\end{solution}
+
+\end{questions}	
+
+\end{document}

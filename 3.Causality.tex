@@ -1,0 +1,1017 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{simplemetropolis} % Load your custom style
+\input{preamble}
+% Title, subtitle, author, and date
+\title{Quantitative Methods for Humanities}
+\subtitle{Causality}
+\author{}
+\date{2025/2026}
+
+\begin{document}
+
+% Title page with custom background
+{
+    \usebackgroundtemplate{\includegraphics[width=\paperwidth,height=\paperheight]{img/title_page.png}}
+    \begin{frame}[plain]
+        % Logo in the upper left corner
+        \vspace{-1cm} % Space between the logo and title
+        {\hspace{-0.45cm} \includegraphics[width=2.5cm]{img/logoCUNEF.png}} % Adjust the width as needed
+
+        \vspace{1cm} % Space between the logo and title
+        {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+        \vspace{-0.05cm} % Reduced space between title and separator
+        \usebeamertemplate{title separator}
+        \vspace{-0.05cm} % Reduced space between separator and subtitle
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+        \vfill
+        {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\par}
+    \end{frame}
+}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Causality
+%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}{Required R skills}
+    
+% \end{frame}
+
+\section{{\Large Introduction to Causality} \\ {\Large a Historical Approach}}
+
+\begin{frame}{Why study causality?}
+
+\begin{itemize}
+    \item The notion of \textbf{cause and effect} is central in many disciplines: 
+    \begin{itemize}
+        \item[$\bullet$] \textbf{Economics:} Does an increase in the minimum wage cause unemployment to rise?
+        \item[$\bullet$] \textbf{Politics:} Would universal health care improve the health and finances of the poor?
+        \item[$\bullet$] \textbf{Philosophy:} Does belief in God cause moral behavior?
+        \item[$\bullet$] \textbf{Health:} What is the impact of the use of social media in the feeling of loneliness?
+        \item[$\bullet$] \textbf{Environmental:} Is deforestation worsening global warming?
+    \end{itemize}
+\end{itemize}
+\vspace{0.3cm}
+
+\begin{center}
+        \begin{tcolorbox}[enhanced,sharp corners,
+            width=8.8cm,
+            colback=white,
+            overlay={
+                % Upper left corner (quotation mark)
+                \node[anchor=north west,fill=white,draw=white,circle,inner sep=1pt] 
+                at ([xshift=-0.17cm,yshift=0.2cm]frame.north west) {\faQuoteLeft};
+                % Lower right corner (quotation mark)
+                \node[anchor=south east,fill=white,draw=white,circle,inner sep=1pt] 
+                at ([xshift=0.17cm,yshift=-0.2cm]frame.south east) {\faQuoteRight};
+            }
+            ]
+            We do not have knowledge of a thing until we have grasped its why, that is to say, its cause. \\
+            \vspace{0cm}
+
+            {\small - \href{https://plato.stanford.edu/archives/spr2019/entries/aristotle-causality}{Aristotle}, Physics}
+        \end{tcolorbox}
+        \end{center}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+
+\begin{center}
+    But what do we mean when we say \textit{cause and effect}? Or, in other words    
+\end{center}
+\vspace{0.3cm}
+
+\begin{center}
+    \alert{\Huge What is Causality?}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{What is causality?}
+
+\begin{center}
+    David Hume’s\footnote{\scriptsize Scottish philosopher, historian, and economist regarded as the father or modern causality theory.} \textbf{conditions of causality\footnote{\scriptsize David Hume (1757) An Enquiry Concerning Human Understanding.}}
+\end{center}
+
+
+\hspace{0.7cm} \textcolor{firebrick3}{Regularity:}  A cause is something that is regularly followed by an effect \\
+\hspace{0.7cm} \textcolor{deepskyblue3}{Temporality:}  The cause must occur before the effect in time. \\
+\hspace{0.7cm} \textcolor{darkolivegreen3}{Necessity:}  If there is no cause there is no effect
+
+\vspace{0.3cm}
+
+\begin{center}
+\begin{tcolorbox}[enhanced,sharp corners,
+    width=14.5cm,
+    colback=white,
+    overlay={
+        % Upper left corner (quotation mark)
+        \node[anchor=north west,fill=white,draw=white,circle,inner sep=1pt] 
+        at ([xshift=-0.17cm,yshift=0.2cm]frame.north west) {\faQuoteLeft};
+        % Lower right corner (quotation mark)
+        \node[anchor=south east,fill=white,draw=white,circle,inner sep=1pt] 
+        at ([xshift=0.17cm,yshift=-0.2cm]frame.south east) {\faQuoteRight};
+    }
+    ]
+    % An object followed by another, and where [...], if the first object had not been, the second never had existed. \\
+    We may define a cause to be \textcolor{deepskyblue3}{an object followed by another}, and where \textcolor{firebrick3}{all the objects, similar to the first, are followed by objects similar to the second}, [...] \textcolor{darkolivegreen3}{if the first object had not been, the second never had existed} \\
+    \vspace{0cm}
+
+    {\small - David Hume, An Enquiry Concerning Human Understanding}
+\end{tcolorbox}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{What is (regularity) causality}
+\vspace{-0.2cm}
+
+\begin{center}
+    Hume's \textbf{Regularity Theory of Causality}\footnote{\scriptsize David Hume (1739) A Treatise of Human Nature}$^,$\footnote{    
+\scriptsize John Stuart Mill (1843) A System of Logic, Ratiocinative and Inductive: Being a Connected View of the Principles of Evidence, and the Methods of Scientific Investigation}
+\end{center}
+
+    \textbf{Principle:} Focuses on Hume's regularity condition. \\
+    \textbf{Method:} Empirical observation. \\
+    \textbf{Regular Causality:} An event $C$ (cause) always precedes an event $E$ (effect). \\
+\vspace{0.6cm}
+
+\begin{center}
+    \textbf{Example:} Sunrise and daylight
+\end{center}
+
+\textbf{Regularity:} Every time the sun rises ($C$) daylight ($E$) follows. \\
+\textbf{Causality:} Therefore sunrise causes daylight.
+        
+\end{frame}
+
+\begin{frame}{What is (counterfactual) causality?}
+\vspace{-0.4cm}
+
+\begin{center}
+    David Lewis's \textbf{Counterfactual Causality}\footnote{\scriptsize David K. Lewis (1973) Counterfactuals. The Journal of Symbolic Logic. % Harvard University Press
+    }
+\end{center}
+
+\textbf{Principle:} Focuses on Hume's necessity condition. \\
+\textbf{Actual World:} %The world as it truly exists, 
+Events $C$ (presumed cause) and \(E\) (presumed effect) have occurred. \\
+\textbf{Possible No-$\pmb{C}$ World:} Hypothetical %, logically coherent 
+version of the actual world, where $C$ has not occur %differing only in specific aspects. 
+\\
+\textbf{Closest No-$\pmb{C}$ Possible World}: The change required to eliminate $C$ is minimal. %, that is, the world remains as similar as possible to the actual world in all other respects. 
+\\
+\textbf{Counterfactual Causality:} If $E$ does not occur in the closest possible world.
+\vspace{0.4cm}
+
+\begin{center}
+    \textbf{Example:} A rock breaks a window
+\end{center}
+
+\textbf{Actual World:} %The world as it truly exists, 
+The rock is thrown ($C$) and the window shatters ($E$)\\
+\textbf{Possible No-$\pmb{C}$ World:} The person holding the rock decides not to throw it. \\
+\textbf{Closest No-$\pmb{C}$ Possible World}: No other object impacts the window. \\
+\textbf{Counterfactual Causality:} The window does not break.
+
+\end{frame}
+
+\begin{frame}{Issues with deterministic causality}
+    
+    \begin{center}
+    \textbf{The regularity and counterfactual approaches}, as originally posed, \textbf{sometimes fail}    
+    \end{center}
+    
+    \vspace{0.6cm}
+
+\begin{minipage}{0.42\textwidth}
+    \vspace{-0.05cm}
+    
+    \begin{center}
+        \textbf{Example:} Common cause
+    \end{center}
+    \vspace{-0.2cm}
+    
+    \textbf{Regularity approach:} Increased ice cream sales cause more drownings because they are regularly observed together in summer.
+    \vspace{0.15cm}
+    
+    \begin{center}
+        \textbf{Example:} Probabilistic nature
+    \end{center}
+    \vspace{-0.2cm}
+    
+    \textbf{Regularity approach:} A drug killing a patient is not a causal effect as it is not regularly observed.
+\end{minipage}\hspace{0.51cm}
+\begin{minipage}{0.54\textwidth}
+    \begin{center}
+    \textbf{Example:} Overdetermination
+\end{center}
+\vspace{-0.1cm}
+
+\textbf{Premises:}
+{
+\setlength{\leftmargini}{0.5cm} % Temporarily adjust left margin
+\begin{itemize}
+    \item[$\bullet$] A prisoner is executed ($E$) by two soldiers.
+    \item[$\bullet$] Soldiers ($C_1$) and ($C_2$) fire simultaneously, and either shot is sufficient to kill.
+\end{itemize}
+
+\vspace{0.05cm}
+
+\textbf{Counterfactual approach:}
+\begin{itemize}
+    \item[$\bullet$] \textbf{Analysis:} If $C_1$ hadn’t fired, $C_2$ would still have killed the prisoner, and vice versa.
+    \item[$\bullet$] \textbf{Result:} Neither $C_1$ nor $C_2$ cause $E$. %satisfies counterfactual dependence since $E$ happens regardless of either.
+\end{itemize}
+}
+   
+\end{minipage}
+
+    
+    
+\end{frame}
+
+\begin{frame}{What is (probabilistic) causality?}
+\vspace{-0.4cm}
+
+\begin{center}
+    Hans Reichenbach's \textbf{Probabilistic Causality}\footnote{\scriptsize Hans Reichenbach (1956) The Direction of Time. The Philosophical Quarterly.
+    } \\    
+\end{center}
+
+\textbf{Premises:} 
+\begin{itemize}
+    \item[$\bullet$] Causes not always produce effects \\
+    (e.g., smoking does not always cause lung cancer).
+    \item[$\bullet$] Effects may have multiple causes \\
+    (e.g., lung cancer can result from smoking, pollution, or genetic predisposition).
+\end{itemize}
+
+\textbf{Probabilistic Causation:} Event $C$ causes event $E$ if it increases its probability \\
+ {
+\setlength{\leftmargini}{4.69cm}
+\begin{itemize}
+    \item[$\bullet$] i.e., $\Pr[E\ |\ C] \geq \Pr[E]$
+    \item[$\bullet$] e.g., Smoking raises lung cancer risk
+\end{itemize}
+}
+
+\textbf{Screening off effect:} A common cause explains the correlation between two events
+e.g., Smoking causes both yellow fingers and lung cancer, but yellow fingers does not cause lung cancer or vice versa and.
+
+\end{frame}
+
+\begin{frame}{When causality goes wrong}
+
+    \textbf{Getting causality wrong} might have severe consequences
+    \begin{itemize}
+        \item Cannabis and ``gateway drug effect''\footnote{\scriptsize William. Noel and Judy Wang (2018) Is Cannabis a Gateway Drug? Key Findings and Literature Review.}
+        \item Vaccines and autism\footnote{\scriptsize Michael Davidson (2017) Vaccination as a cause of autism—myths and controversies.}
+        \item Death penalty and homicide rates\footnote{\scriptsize National Research Council (2012) Deterrence and the Death Penalty}
+    \end{itemize}
+    \vspace{0.35cm}
+\begin{center}
+\begin{tcolorbox}[enhanced,sharp corners,
+    width=6.8cm,
+    colback=white,
+    overlay={
+        % Upper left corner (quotation mark)
+        \node[anchor=north west,fill=white,draw=white,circle,inner sep=1pt] 
+        at ([xshift=-0.17cm,yshift=0.2cm]frame.north west) {\faQuoteLeft};
+        % Lower right corner (quotation mark)
+        \node[anchor=south east,fill=white,draw=white,circle,inner sep=1pt] 
+        at ([xshift=0.17cm,yshift=-0.2cm]frame.south east) {\faQuoteRight};
+    }
+    ]
+    % An object followed by another, and where [...], if the first object had not been, the second never had existed. \\
+    A fool can throw a stone in a pond \\
+    that $100$ wise men cannot get out. \\
+    \vspace{0cm}
+
+    {\small - Saul Bellow}
+\end{tcolorbox}
+\end{center}
+    
+\end{frame}
+
+\section{\Large{Understanding Causality. A modern approach}}
+
+\begin{frame}{An illustrative case study}
+
+To illustrate the goal of \textbf{causal inference} and lay the ground to introduce the \textbf{ potential outcome framework}, we ask ourselves the following questions%\footnote{\scriptsize Marianne Bertrand and Sendhil Mullainathan (2004) Are Emily and Greg more employable than Lakisha and Jamal? A field experiment on labor market discrimination.}
+:
+\vspace{0.2cm}
+
+\begin{itemize}
+    \item Does racial discrimination exist in the labor market?
+    \item Is this a discrimination due to race perse, or should it be attributed to other factors such as racial gaps in educational attainment?
+\end{itemize}
+\vspace{0.3cm}
+
+To answer, imagine that we have a dataset of $n\in\N$ résumés sent to employers with the following variables
+\begin{itemize}
+    \item[$\bullet$] perceived race of the job applicant (white-sounding or black-sounding name)
+    \item[$\bullet$] whether a callback was made by the employer (yes or no).
+    \item[$\bullet$] education level, gender, and other \textit{pretreatment variables}.
+\end{itemize}
+
+% \begin{center}
+%     \Large  \href{url}{Case Study!} ADD URL
+% \end{center}
+
+\end{frame}
+
+\begin{frame}{Treatment and outcome.}
+
+% Before rigorously studding causality we need to introduce some definitions
+\vspace{-0.4cm}
+
+
+\begin{itemize}
+    \item \textbf{Treatment Variable ($T$):}\footnote{{\scriptsize \textbf{Alternative names:} exposure, intervention, independent, cause variable.}} Independent (typically binary) variable that is 
+    deliberately \textcolor{firebrick3}{manipulated} %in an experiment 
+    to observe its effect on the outcome. \textcolor{deepskyblue3}{(e.g., résumé applicant's name)}
+    \begin{itemize}
+        \item[$\bullet$] $T = 1$ if the treatment is applied \textcolor{deepskyblue3}{(e.g., black-sounding name)}
+        \vspace{0.1cm}
+        
+        \item[$\bullet$] $T = 0$ if the is not applied \textcolor{deepskyblue3}{(e.g., white-sounding name)}
+    \end{itemize}
+    
+    \item \textbf{Outcome Variable ($Y$):}\footnote{{\scriptsize \textbf{Alternative names:} response, dependent, effect variable.}} Dependent variable that is measured to determine the effect of the treatment. \textcolor{deepskyblue3}{(e.g., $Y = 1$ if the employer calls back, $Y=0$ otherwise)}
+
+    % \item \textbf{Pretreatment variables:}\footnote{{\scriptsize \textbf{Alternative names:} confounders, common causes.}} Variables measured before the treatment or intervention is applied, which may influence both the treatment assignment and the outcome. (e.g., age, education, gender,...)
+\end{itemize}
+
+\end{frame}
+
+% \begin{frame}{No causation without manipulation}
+
+% \begin{coolblock}{No Causation without Manipulation}
+%     Guiding principle in causal inference that emphasizes the importance of the treatment or intervention to be manipulable in order to establish a causal relationship.
+% \end{coolblock}
+
+% \begin{itemize}
+%     \item \textbf{Immutable characteristics:} attributes or traits of objects that cannot be changed or manipulated \textcolor{deepskyblue3}{(e.g., race, gender, height)}
+%     \vspace{0.1cm}
+    
+%     \item \textbf{Perceived characteristic:} a common workaround of immutable characteristics it to manipulate how others perceive them \textcolor{deepskyblue3}{(e.g., altering names or photos)}
+% \end{itemize}
+    
+% \end{frame}
+
+\begin{frame}{Sample. Control and treatment groups}
+    
+  \begin{itemize} 
+    \item \textbf{Individual metrics:} There are $n \in \N$ total individuals in the study, each associated to the treatment $T_i$ and outcome $Y_i$, for $i = 1,\dots, n$.
+    
+    \item \textbf{Treatment group:} Set of individuals who \textbf{received the treatment}, \\ 
+    % \begin{align*}
+    %     S_T = \lrc{i : T_i = 1}\ \ \text{(treatment group)},\quad 
+    %     n_T = \# \{T_i = 1\} \ \ \text{(treatment group size)}.
+    % \end{align*}
+    \textcolor{deepskyblue3}{e.g., set of employers who were sent black-sounding names.}
+
+    \item \textbf{Control group:} Set of individuals who \textbf{do not received the treatment}, \\
+    % \begin{align*}
+    %     S_C = \lrc{i : T_i = 0}\ \ \text{(control group)},\quad 
+    %     n_C = \# \{T_i = 0\} \ \ \text{(control group size)}.
+    % \end{align*}
+    \textcolor{deepskyblue3}{e.g., set of employers who were sent white-sounding names.}
+
+\end{itemize}
+    
+\end{frame}
+
+\section{\Large The stable unit treatment value assumption}
+
+\begin{frame}{The stable unit treatment value assumption (SUTVA)}
+
+The \textbf{Stable Unit Treatment Value Assumption (SUTVA)} is a key assumption in causal inference, particularly in the Potential Outcome Framework.
+
+    \begin{coolblock}{SUTVA}
+        The SUTVA states:
+        \begin{itemize}
+            \item \textbf{No Interference/Spillovers Assumption (NI):} the potential outcomes for any unit do not vary with the treatments assigned to other units.
+            
+            \item \textbf{No Hidden Variants (NHV):} for each unit, there are no different forms or versions of each treatment level, which lead to different potential outcomes.
+        \end{itemize}
+    \end{coolblock}
+    \vspace{0.4cm}
+
+    % \textbf{SUTVA means} that the random variables $\lrc{Y_1(T_1)}_{i=1}^n$ are independent and identically distributed to $Y(T)$:
+    % \begin{align*}
+    %     Y_i(T_i) &\perp Y_j(T_j),\quad \text{ for } i \neq j. \\
+    %     Y_i(T_i) &\sim Y(T),\quad\hspace{0.15cm} \text{ for } i = 1,\dots,n.
+    % \end{align*}
+\end{frame}
+
+\begin{frame}{The SUTVA: no interference/spillovers}
+
+\begin{itemize}
+    % \item Let $Y_i(T_i)$ be de outcome of individual $i$ given its treatment $T_i$
+    % \item Let $Y_i(T_1,\dots, T_n)$ be the outcome of individual $i$ given its treatment $T_i$ and the treatment administered to all other units, $T_j$ with $j\neq i$.
+    \item \textbf{Mathematical interpretation:} mathematically, it meas that
+    % $$
+    % Y_i(T_i) = Y_i(T_1, \dots, Y_n),
+    % $$
+    % or 
+    % $$
+    % Y_i \perp \lrc{T_i : i\neq j},
+    % $$
+    % or
+    $$
+    \Pr[Y_i \leq y\ |\ T_1, \dots, T_n] = \Pr[Y_i \leq y\ |\ T_i].
+    $$
+\end{itemize}
+
+\textbf{Example:}
+\begin{itemize}
+    \item \textbf{Scenario:} Comparing callback rates for résumés with black-sounding names (treatment) vs. white-sounding names (control).
+    \item \textbf{Compliance case:} an individual’s callback decision does not depend on the name on other résumés.
+    \item \textbf{Non-compliance case:} an employer who receives several résumés with white-sounding names may become more biased and less likely to call presumably back applicants.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{What would happen without the NI assumption. Accounting for interaction}
+
+    \begin{itemize}
+        \item \textbf{Without NI:} You may need to account for cross interaction
+        \item \textbf{Example:} Suppose that 
+        \begin{itemize}
+            \item[$\bullet$] The résumés are sent in pairs to the same employer. 
+            \item[$\bullet$] You want to estimate the callback average difference between sending black-black vs white-black sounding names.
+        \end{itemize}
+        $$
+        \Esp[Y_1 | T_1 = 1, T_2 = 1] - \Esp[Y_1 | T_1 = 1, T_2 = 0].
+        $$
+        \item \textbf{Drawbacks:} 
+        \begin{itemize}
+            \item[$\bullet$] The conclusion is less general.
+            \item[$\bullet$] Requires higher dimensional data.
+        \end{itemize}
+    \end{itemize}
+      
+\end{frame}
+
+\begin{frame}{What would happen without the NI assumption. Layering }
+
+    \begin{itemize}
+        \item \textbf{Without NI:} You may need to consider groups where NI hold
+        \item \textbf{Example:} You want to test if reduced class sizes causes improved student performance in mathematics. 
+        \begin{itemize}
+            \item[$\bullet$] \textbf{Problem:} It is not sensible to assume that there is no interference among students within the same school or classroom.
+            \item[$\bullet$] \textbf{Solution:} Assume NI between different school/classrooms. 
+        \end{itemize}
+        
+        \item \textbf{Drawbacks:} 
+        \begin{itemize}
+            \item[$\bullet$] The conclusion is less general.
+            \item[$\bullet$] Requires higher data sizes.
+        \end{itemize}
+    \end{itemize}
+      
+\end{frame}
+
+\begin{frame}{The SUTVA: no hidden variants}
+
+\begin{itemize}
+    \item \textbf{Interpretation:} Under the NHV assumption, the possible implementations of the treatment are irrelevant for the outcome of one individual. That is, \textbf{the outcome depends only on the treatment level} ($0$ or $1$ for binary treatments) and not on how this treatment was implemented. 
+    \item \textbf{Mathematical interpretation:} mathematically, this assumption means that the outcome is a (random) function of the treatment
+    $$
+    Y_i = Y_i(T_i).
+    $$
+    For binary treatments: 
+    $$
+    Y_i =
+    \begin{cases}
+        Y_i(0), & \text{if } T_i = 0 \\
+        Y_i(1), & \text{if } T_i = 1
+    \end{cases}.
+    $$
+\end{itemize}
+
+\end{frame}
+    
+\begin{frame}{The SUTVA: no hidden variants. An example}
+
+\begin{itemize}
+    \item \textbf{Scenario:} Comparing callback rates for résumés with black-sounding names (treatment) vs. white-sounding names (control).
+    \item \textbf{Compliance case:} All résumés in the treatment group and control group are identical, only varying the name. 
+    
+    \item \textbf{Non-compliance case:} Some résumés with black-sounding names are different in format \textcolor{deepskyblue3}{(e.g., adding extra details, changing the style)}, or vary significantly in education levels, which might lead to different outcomes.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{What would happen without the NHV assumption?}
+
+\begin{itemize}
+    \item The NHV assumption allows to identify the observed outcome as the outcome under or without the treatment. 
+
+    \item Without the NHV assumption we just observe outcome attached to the specific version of the treatment that was applied.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\hspace{0.3cm}
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{center}
+    \textbf{With the NHV assumption} 
+\end{center}
+\vspace{-0.4cm}
+
+\begin{table}[h!]
+\centering
+% \caption{\textbf{Potential Outcome Framework and Fundamental Problem of Causal Inference.}}
+\renewcommand{\arraystretch}{1.3} % Adjust row spacing
+\setlength{\tabcolsep}{10pt}      % Adjust column spacing
+\begin{tabular}{ccc}
+$T_i$ & $Y_i(1)$ & $Y_i(0)$ \\
+\hline
+$1$ & $Y_i$ & \textit{?} \\
+% \hline
+$0$ & \textit{?} & $Y_i$ \\
+% \hline
+\end{tabular}
+\end{table}
+
+\end{minipage}
+\hspace{0.2cm}
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{center}
+    \textbf{Without the NHV assumption} 
+\end{center}
+\vspace{-0.4cm}
+
+\begin{table}[h!]
+\centering
+% \caption{\textbf{Potential Outcome Framework and Fundamental Problem of Causal Inference.}}
+\renewcommand{\arraystretch}{1.3} % Adjust row spacing
+\setlength{\tabcolsep}{10pt}      % Adjust column spacing
+\begin{tabular}{ccc}
+$T_i$ & $Y_i$ \\
+\hline
+$1$ & $Y_i$ \\
+% \hline
+$0$ & $Y_i$ \\
+% \hline
+\end{tabular}
+\end{table}
+    
+\end{minipage}
+
+\begin{center}
+    \textbf{NHV allows to introduce factuals and counterfactuals} in a simple and powerful way!
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Potential outcomes, factual and counterfactual. Under NHV}
+\vspace{-0.4cm}
+
+\begin{center}
+    \textbf{Under the NHV assumption:}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Potential Outcomes:}
+    \begin{itemize}
+        \item[$\bullet$] $\pmb{Y(1)}$\textbf{:} Outcome under treatment. \textcolor{deepskyblue3}{(e.g, callback if  black-named applicant)}
+        \vspace{0.1cm}
+        
+        \item[$\bullet$] $\pmb{Y(0)}$\textbf{:} Outcome without treatment. \textcolor{deepskyblue3}{(e.g., callback if white-named applicant)}
+    \end{itemize}
+
+    \item \textbf{Factual outcome:} Observable outcome (what happened). 
+    $$Y(T)$$
+    
+    \item \textbf{Counterfactual outcome:} Unobservable outcome (what would have happened if the treatment were different). 
+    $$\quad Y(1-T)\quad \text{(for binary treatments)}.$$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Potential outcomes, factual and counterfactual. Without NHV}
+\vspace{-0.4cm}
+
+\begin{center}
+    \textbf{Without the NHV assumption:}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Potential Outcomes:}
+    \begin{itemize}
+        \item[$\bullet$] $\pmb{Y(1, j)}$\textbf{:} Outcome under variation $j$ of the treatment, for $j = 1,\dots,v$.
+        \vspace{0.1cm}
+        
+        \item[$\bullet$] $\pmb{Y(0, j)}$\textbf{:} Outcome without variation $j$ of the treatment, for $j = 1,\dots, v$.
+    \end{itemize}
+
+    \item \textbf{Factual outcome:} Observable outcome (what happened). 
+    $$Y(T, j)$$
+    
+    \item \textbf{Counterfactual outcome:} Unobservable outcome (what would have happened). 
+    $$\quad Y(1-T, j)\quad \text{(for binary treatments)}.$$
+\end{itemize}
+
+\textbf{Conclusion:} You will need increasingly higher sample size as the number of variants increases. Impracticable for infinite number of variants.
+
+\end{frame}
+
+% \begin{frame}{We will assume SUTVA}
+
+%     \centering
+%     Unless otherwise stated \\
+%     \vspace{0.3cm}
+    
+%     {\Large \textbf{we will assume that the SUTVA holds true}} \\
+%     \vspace{0.3cm}
+    
+%     in the remaining of the course    
+    
+% \end{frame}
+
+\section{\Large{The Potential Outcome Framework}}
+
+\begin{frame}{The Potential Outcome Framework. Introduction and origins}
+
+\begin{coolblock}{The Potential Outcome Framework\footnote{\scriptsize Donald B Rubin (2006) Causal Inference Using Potential Outcomes: Design, Modeling, Decisions.}}
+    The \textbf{Potential Outcome Framework} (POF), also known as the Rubin Causal Model, is a widely used approach in \textbf{causal inference} that helps to understand and estimate \textbf{causal effects}, based on the idea of comparing \textbf{potential outcomes}.
+\end{coolblock}
+\vspace{0.2cm}
+
+\textbf{Rubin's definition of causal effect:} ``Intuitively, the causal effect of one treatment, $E$, over another, $C$, is the difference between \textbf{what would have happened if} the unit had been exposed to $E$ and what would have happened if the unit had been exposed to $C$'' 
+\vspace{0.3cm}
+
+\textbf{Rubin's example of potential outcomes:} ``If an hour ago I had taken two aspirins instead of just a glass of water, my headache would now be gone, or because an hour ago I took two aspirins instead of just a glass of water, my headache is now gone.''
+
+\end{frame}
+
+\begin{frame}{Individual causal effect and the fundamental problem of causal inference}
+
+%  where $Y_i(1)$ represents the outcome that would be realized under the treatment condition ($T_i = 1$) and $Y_i(0)$ denotes the outcome that would be realized under the control condition ($T_i = 0$).
+
+\begin{itemize}
+    \item \textbf{Individual treatment (causal) effect:} difference between the two potential outcomes: $$\mathrm{TE} = Y(1) - Y(0).$$
+\end{itemize}
+
+\begin{coolblock}{Fundamental Problem of Causal Inference\footnote{\scriptsize Paul W. Holland (1985) Statistics and Causal Inference.} (FPCI)}
+    We observe only one of the two potential outcomes (the factual outcome), so we never get to observe the effect of the treatment on the outcome.
+\end{coolblock}
+\vspace{0.2cm}
+
+\begin{itemize}
+    \item \textbf{Individual causal inference:} The FPCI states that it is impossible to estimate the individual causal effect. You only have one non-observable observation for this phenomenon!
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{An example}
+
+% Before rigorously studying causality we need to introduce some definitions
+
+\begin{table}[h!]
+\centering
+\caption{\textbf{Potential Outcome Framework and Fundamental Problem of Causal Inference.}}
+\label{tab:potential_outcome}
+\renewcommand{\arraystretch}{1.3} % Adjust row spacing
+\setlength{\tabcolsep}{10pt}      % Adjust column spacing
+\begin{tabular}{cccccc}
+\toprule
+\textit{Résumé} & \textit{Black-sounding} & \multicolumn{2}{c}{\textit{Callback}} & \textit{Age} & \textit{Education} \\
+$i$ & name $T_i$ & $Y_i(1)$ & $Y_i(0)$ &  &  \\
+\midrule
+1 & 1 & 1 & ? & 20 & college \\
+2 & 0 & ? & 0 & 55 & high school \\
+3 & 0 & ? & 1 & 40 & graduate school \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+$n$ & 1 & 0 & ? & 62 & college \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Average causal effect}
+
+\begin{itemize}
+    \item \textbf{Average causal inference:} Despite the FPCI, it is possible to estimate the causal effect on average terms.
+
+    \item \textbf{Average treatment (causal) effect:} Aggregated measure of the treatment effect across all the individuals in a population. Defined as the expectation of the individual treatment effect: 
+    $$
+    \mathrm{ATE} = \Esp[\mathrm{TE}] = \Esp[Y(1) - Y(0)].
+    $$
+\end{itemize}
+
+\begin{coolblock}{The Sample Average Treatment Effect (SATE)}
+    The \textbf{sample average treatment effect} is the sample average of individual-level causal effects:
+    $$
+    \mathrm{SATE} = \oline{\mathrm{TE}} = \frac{1}{n}\sum_{i=1}^n \mathrm{TE}_i = \frac{1}{n}\sum_{i=1}^n \lrp{Y_i (1) - Y_i(0)} = \oline{Y(1)} - \oline{Y(0)},
+    $$
+    where $n$ is the sample size and the subindex $i$ represents the $i$th observation.
+\end{coolblock}
+    
+\end{frame}
+
+% \begin{frame}{ATE and SATE as differences in averages}
+
+% \textbf{Result:} The average response can be seen as a difference of the averages between the groups with and without the treatment.
+% \vspace{0.2cm}
+
+% \begin{itemize}
+%     \item Let $\mathrm{ATE}_0 = \Esp[Y(0)]$ and $\mathrm{ATE}_1 = \Esp[Y(1)]$ be the \textbf{average response without and under the treatment}. Then
+%     \begin{align*}
+%         \mathrm{ATE} = \mathrm{ATE}_1 - \mathrm{ATE}_0.
+%     \end{align*}
+
+%     \item Let $\mathrm{SATE}_0 = n^{-1}\sum_{i=1}^nY_i(0)$ and $\mathrm{SATE}_1 = n^{-1}\sum_{i=1}^nY_i(0)$ be the \textbf{sample average response without and under the treatment}. Then
+%     \begin{align*}
+%         \mathrm{SATE} = \mathrm{SATE}_1 - \mathrm{SATE}_0.
+%     \end{align*}
+% \end{itemize}
+% % \textbf{Solution:} 
+% % \begin{align*}
+% %     SATE &= \frac{1}{n}\sum_{i=1}^n \lrp{Y_i (1) - Y_i(0)} \\
+% %     &= \frac{1}{n}\sum_{i=1}^n Y_i (1) - \frac{1}{n}\sum_{i=1}^n Y_i(0) = S\mathrm{ATE}_0 + S\mathrm{ATE}_1.
+% % \end{align*}
+% \vspace{0.2cm}
+
+% \begin{center}
+%     Prove it!    
+% \end{center}
+
+% \end{frame}
+
+\begin{frame}{Non observability of SATE}
+
+\begin{center}
+    \textbf{Problem:} The sample average response cannot be directly observed.
+\end{center}
+\vspace{0.2cm}
+
+    \begin{align*}
+        \oline{Y(0)} &= \frac{1}{n}\sum_{i=1}^n\underbrace{\textcolor{deepskyblue3}{Y_i(T_i)\mathbbm{1}(T_i = 0)}}_{\textcolor{deepskyblue3}{\text{\tiny observable (factual)}}} + \frac{1}{n}\sum_{i=1}^n \underbrace{\textcolor{firebrick3}{Y_i(1-T_i)\mathbbm{1}(T_i = 1)}}_{\textcolor{firebrick3}{\text{\tiny non-observable (counterfactual)}}}, \\
+        %
+        \oline{Y(1)} &= \frac{1}{n}\sum_{i=1}^n\underbrace{\textcolor{firebrick3}{Y_i(1-T_i)\mathbbm{1}(T_i = 0)}}_{\textcolor{firebrick3}{\text{\tiny non-observable (counterfactual)}}} + \frac{1}{n}\sum_{i=1}^n \underbrace{\textcolor{deepskyblue3}{Y_i(T_i)\mathbbm{1}(T_i = 1)}}_{\textcolor{deepskyblue3}{\text{\tiny observable (factual)}}}.
+    \end{align*}
+\vspace{0.4cm}
+
+\begin{center}
+    We need to \textbf{estimate the missing parts}!    
+\end{center}
+
+\end{frame}
+
+% \begin{frame}{Control and treatment groups}
+    
+%   \begin{itemize}    
+%     \item \textbf{Treatment group:} Set of individuals who \textbf{received the treatment}, 
+%     \begin{align*}
+%         S_T = \lrc{i : T_i = 1}\ \ \text{(treatment group)},\quad 
+%         n_T = \# \{T_i = 1\} \ \ \text{(treatment group size)}.
+%     \end{align*}
+
+%     \item \textbf{Control group:} Set of individuals who \textbf{do not received the treatment},
+%     \begin{align*}
+%         S_C = \lrc{i : T_i = 0}\ \ \text{(control group)},\quad 
+%         n_C = \# \{T_i = 0\} \ \ \text{(control group size)}.
+%     \end{align*}
+
+% \end{itemize}
+    
+% \end{frame}
+
+% \begin{frame}{SATE$_0$ and SATE$_1$ decomposition}
+
+% Let $\mathrm{SATE}_{\textcolor{deepskyblue3}{0}}^{\textcolor{firebrick3}{T}}$ and $\mathrm{SATE}_{\textcolor{deepskyblue3}{0}}^{\textcolor{firebrick3}{C}}$ be the sample average treatment effect \textcolor{deepskyblue3}{WITHOUT the treatment} of the \textcolor{firebrick3}{treatment and control groups}:
+% \begin{align*}
+%     \mathrm{SATE}_{\textcolor{deepskyblue3}{0}}^{\textcolor{firebrick3}{T}} &= \frac{1}{\textcolor{firebrick3}{n_T}}\sum_{i\in \textcolor{firebrick3}{S_T}}Y_i(\textcolor{deepskyblue3}{0}) = \frac{1}{\textcolor{firebrick3}{n_T}}\sum_{i=1}^{n}Y_i(\textcolor{deepskyblue3}{0})\mathbbm{1}(T_i = \textcolor{firebrick3}{0}); \\
+%     \mathrm{SATE}_{\textcolor{deepskyblue3}{0}}^{\textcolor{firebrick3}{C}} &= \frac{1}{\textcolor{firebrick3}{n_C}}\sum_{i\in \textcolor{firebrick3}{S_C}}Y_i(\textcolor{deepskyblue3}{0}) = \frac{1}{\textcolor{firebrick3}{n_C}}\sum_{i=1}^{n}Y_i(\textcolor{deepskyblue3}{0})\mathbbm{1}(T_i = \textcolor{firebrick3}{1}).
+% \end{align*}
+% \vspace{0.3cm}
+
+% Let $\mathrm{SATE}_{\textcolor{deepskyblue3}{1}}^{\textcolor{firebrick3}{T}}$ and $\mathrm{SATE}_{\textcolor{deepskyblue3}{1}}^{\textcolor{firebrick3}{C}}$ be the sample average treatment effect \textcolor{deepskyblue3}{WITH the treatment} of the \textcolor{firebrick3}{treatment and control groups}:
+% \begin{align*}
+%     \mathrm{SATE}_{\textcolor{deepskyblue3}{1}}^{\textcolor{firebrick3}{T}} &= \frac{1}{\textcolor{firebrick3}{n_T}}\sum_{i\in \textcolor{firebrick3}{S_T}}Y_i(\textcolor{deepskyblue3}{1}) = \frac{1}{\textcolor{firebrick3}{n_T}}\sum_{i=1}^{n}Y_i(\textcolor{deepskyblue3}{1})\mathbbm{1}(T_i = \textcolor{firebrick3}{0}); \\
+%     \mathrm{SATE}_{\textcolor{deepskyblue3}{1}}^{\textcolor{firebrick3}{C}} &= \frac{1}{\textcolor{firebrick3}{n_C}}\sum_{i\in \textcolor{firebrick3}{S_C}}Y_i(\textcolor{deepskyblue3}{1}) = \frac{1}{\textcolor{firebrick3}{n_C}}\sum_{i=1}^{n}Y_i(\textcolor{deepskyblue3}{1})\mathbbm{1}(T_i = \textcolor{firebrick3}{1}).
+% \end{align*}
+    
+% \end{frame}
+
+% \begin{frame}{SATE decomposition}
+
+% \begin{coolblock}{SATE decomposition}
+%     \begin{align*}
+%         \mathrm{SATE} = \overbrace{\frac{1}{n}\lrp{n_T\underbrace{\textcolor{deepskyblue3}{\mathrm{SATE}_1^T}}_{\textcolor{deepskyblue3}{\text{\tiny factual}}} 
+%         + n_C\underbrace{\textcolor{firebrick3}{\mathrm{SATE}_1^C}}_{\textcolor{firebrick3}{\text{\tiny counterfac.}}}}}^{=\ \mathrm{SATE}_1} -
+%         \overbrace{\frac{1}{n}\lrp{n_T\underbrace{\textcolor{firebrick3}{\mathrm{SATE}_0^T}}_{\textcolor{firebrick3}{\text{\tiny counterfac.}}} 
+%         + n_C\underbrace{\textcolor{deepskyblue3}{\mathrm{SATE}_0^C}}_{\textcolor{deepskyblue3}{\text{\tiny factual}}}}}^{=\ \mathrm{SATE}_0}.
+%     \end{align*}
+%     \hspace{0.1cm}
+    
+% \end{coolblock}
+    
+% \end{frame}
+
+% \section{\Large Estimating the SATE}
+
+\begin{frame}{Estimating the SATE}
+
+    Depending on the \textbf{data type} and its \textbf{underlying circumstances}, many methods can be used to \textbf{estimate the SATE}. Among the most common ones are:
+    \vspace{0.2cm}
+    
+    \begin{itemize}
+        \item Difference-in-Means (DiM) estiamator
+        \item Before-and-after (BA) estimator
+        \item Difference-in-differences (DiD) estimator
+    \end{itemize}
+    \vspace{0.2cm}
+
+    \textbf{Choosing the right estimator} (next chapter) is critical to \textbf{avoid bias in the estimation}.
+        
+\end{frame}
+
+\section{\Large Sources of bias}
+
+% \begin{frame}{Estimating the SATE}
+
+% \begin{coolblock}{Same Average Assumption}
+%     Assume that the treatment and control group have the same average potential outcomes.
+% \end{coolblock}
+
+% \textbf{Under the Same Average Assumption:} 
+% \begin{itemize}
+%     \item Use the observed control group outcome as an estimate for the treatment group’s counterfactual:
+%     $$
+%     \mathrm{SATE_0^T} \approx \mathrm{SATE_0^C}.
+%     $$
+%     \item Use the observed treatment group outcome as an estimate for the control group’s counterfactual:
+%     $$
+%     \mathrm{SATE_1^C} \approx \mathrm{SATE_1^T}.
+%     $$
+% \end{itemize}
+        
+% \end{frame}
+
+% \begin{frame}{Difference-in-means estimator}
+
+% \begin{coolblock}{Difference-in-means estimator}
+%     Under the Same Average Assumption, the SATE can be estimated by the Difference-in-Means estimator $\widehat{\mathrm{SATE}}_{DiM}$:
+%     $$
+%     \mathrm{SATE} \approx \widehat{\mathrm{SATE}}_{\mathrm{DiM}} = SATE_1^T - SATE_0^C.
+%     $$
+% \end{coolblock}
+% \vspace{0.4cm}
+
+% \begin{center}
+%     Prove it!  
+% \end{center}
+    
+% \end{frame}
+
+% \begin{frame}{The Same Average Assumption}
+
+%     \begin{itemize}
+%         \item \textbf{Question:} when can we interpret DiM as a valid estimate of the average causal effect? That is,
+%         \vspace{0.1cm}
+        
+%         \begin{center}
+%             \textbf{When it is sensible to rely on the Same Average Assumption?}
+%         \end{center}
+%         \vspace{0.1cm}
+        
+%         \textcolor{deepskyblue3}{e.g., does the difference in callback rate between employers who were sent black- and white-sounding names represent the average causal effect of the applicant’s race?}
+%     \end{itemize}
+    
+% \end{frame}
+
+\begin{frame}{Pretreatment variables and Confounders}
+
+    \textbf{Pretreatment variable:} measured before the treatment or intervention is applied \textcolor{deepskyblue3}{(e.g., age, education, gender,...)}
+    
+    \begin{coolblock}{Confounders\footnote{\scriptsize \textbf{Alternative names:} confounding factor, common causes.}}
+        A pretreatment variable that is associated with both the treatment and the outcome variables is called a confounder and is a \textbf{source of confounding bias} in the estimation of the treatment effect.
+    \end{coolblock}
+    
+\end{frame}
+
+\begin{frame}{Confounding bias}
+    
+    \begin{coolblock}{Confounding bias}
+       Distortion of the estimated relationship between the treatment and the outcome due to the influence of a confounder
+    \end{coolblock}
+
+    \textbf{Example:} 
+    \begin{itemize}
+        \item \textbf{Correlation with the treatment:} the résumés of white-sounding names may be associated with higher education status.
+        \item \textbf{Correlation with the outcome:} higher education status may positively influence callback rates.
+        \item \textbf{Confounder:} Education status may be a confounder.
+    \end{itemize}
+
+    % \textbf{How to address:}
+    % \begin{itemize}
+    %     \item \textbf{Random Sampling:} Ensures similar proportion of confounders among the treatment and control groups.
+    %     % \item \textbf{Weighting Adjustments:} Adjusting the analysis to account for the overrepresentation or underrepresentation of confounders.
+    % \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Selection bias}
+    
+    \begin{coolblock}{Selection bias}
+       Phenomenon that occurs when the sample of individuals selected for a study is not representative of the broader population, leading to biased estimates.
+    \end{coolblock}
+
+    \textbf{Example:} 
+    \begin{itemize}
+        \item \textbf{Non-representative sample:} Sending only résumés with high levels of education. 
+        \item \textbf{Selection bias:} the results may not reflect the discrimination faced by less-educated individuals. 
+    \end{itemize}
+
+    % \textbf{How to address:}
+    % \begin{itemize}
+    %     \item \textbf{Random Sampling:} Ensure that the study includes a diverse range of job applicants, representing various education levels.
+    %     \item \textbf{Stratification:} Group applicants by factors like education, ensuring that each group is proportionally represented in the study to account for selection bias.
+    % \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Types of Selection Bias}
+
+\begin{itemize}
+    \item \textbf{Sampling Bias:} When certain individuals are more likely to be selected, leading to a non-representative sample.
+    \item \textbf{Self-Selection Bias:} When participants choose themselves into a study, potentially skewing results.
+    \item \textbf{Attrition Bias:} When participants drop out of a study, affecting the representativeness of the remaining sample.
+    \item \textbf{Non-Response Bias:} When those who don't respond differ systematically from those who do.
+    \item \textbf{Time Interval Bias:} When data collection timing affects the results.
+    \item \textbf{Survivorship Bias:} When only successful subjects are considered, overlooking failures.
+    \item \textbf{Common Source Bias:} When both variables are collected from the same group, causing shared biases.
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Avoiding bias through study designs}
+
+    \textbf{Question:} In the study about the racial discrimination in the job market, would you say that there is confounding and/or selection bias?
+    \vspace{0.2cm}
+    
+    \textbf{Answer:} we need more information about how the study was conducted.
+    \vspace{0.9cm}
+
+    In general, \textbf{how a research is conducted could dramatically affect the way we interpret the results.}
+   \vspace{0.3cm}
+    \begin{center}
+         We will dive deeper into this topic in the \\
+        Next chapter!
+    \end{center}
+    
+\end{frame}
+
+% \section{Summary}
+
+% \begin{frame}{Summary}
+
+% \begin{table}[h!]
+% \centering
+% \caption{Potential Outcome Method \& SUTVA Assumption}
+% \renewcommand{\arraystretch}{1.3} % Adjust row height
+% \setlength{\tabcolsep}{8pt} % Adjust column spacing
+% \begin{tabular}{|c|c|}
+% \hline
+% \textbf{Concept} & \textbf{Example (Racism in Hiring)} \\
+% \hline
+% Potential Outcome Method & Compare callback rates for black-sounding vs. white-sounding résumés. \\
+% \hline
+% Factual Outcome & Callback for black-sounding name résumé sent to an employer. \\
+% \hline
+% Counterfactual Outcome & What would happen if the résumé had a white-sounding name. \\
+% \hline
+% SUTVA: No Interference & One résumé's callback decision doesn’t affect another’s. \\
+% \hline
+% SUTVA: No Hidden Variants & All black-sounding résumés are identical except for the name. \\
+% \hline
+% \end{tabular}
+% \end{table}
+    
+% \end{frame}
+
+% \begin{frame}{Recommended Bibliography}
+    
+% \end{frame}
+
+% % \begin{frame}{Studies}
+    
+% % \end{frame}
+
+
+
+
+
+
+
+\end{document}

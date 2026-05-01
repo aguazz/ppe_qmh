@@ -1,0 +1,126 @@
+% simplemetropolis.sty
+\ProvidesPackage{simplemetropolis}
+\NeedsTeXFormat{LaTeX2e}
+
+% Color Definitions
+\definecolor{CUNEFOrange}{RGB}{255, 87, 0}
+\definecolor{CUNEFGray}{RGB}{231, 227, 220}
+\definecolor{CUNEFBlue}{RGB}{21,31,108}
+
+% Main Theme and Font Settings
+\mode<presentation>{
+  % Background Color
+  \setbeamercolor{background canvas}{bg=white}
+
+  % Title and Frame Title Style
+  \setbeamercolor{frametitle}{bg=CUNEFGray, fg=CUNEFOrange}
+  \setbeamerfont{frametitle}{size=\large, series=\mdseries}
+  
+  \setbeamercolor{title}{bg=CUNEFGray, fg=CUNEFBlue}
+  \setbeamerfont{title}{size=\LARGE, series=\bfseries}
+
+  % Normal Text Color
+  \setbeamercolor{normal text}{fg=CUNEFBlue}
+  \setbeamerfont{normal text}{size=\normalsize}
+
+  % Subtitle Styling
+  \setbeamercolor{subtitle}{fg=CUNEFBlue}
+  \setbeamerfont{subtitle}{size=\large, series=\mdseries}
+
+  % Table of Contents Style
+  \setbeamercolor{section in toc}{fg=CUNEFOrange}
+  \setbeamerfont{section in toc}{series=\bfseries}
+
+% Custom section title frame
+\AtBeginSection[]
+{
+    \begin{frame}
+        \centering
+        \insertsection
+    \end{frame}
+}
+
+  % Itemize and Enumerate Styling
+  \setbeamercolor{itemize item}{fg = CUNEFOrange}
+  \setbeamercolor{itemize subitem}{fg = CUNEFOrange}
+  \setbeamercolor{itemize subsubitem}{fg = CUNEFOrange}		
+  \setbeamercolor{enumerate item}{fg = CUNEFOrange}
+  \setbeamercolor{enumerate subitem}{fg = CUNEFOrange}
+  \setbeamercolor{enumerate subsubitem}{fg = CUNEFOrange}	
+  
+  % Bullet Points and Lists
+  \setbeamertemplate{section in toc}[sections numbered]
+
+  % Footer Style (Frame Number)
+  % \setbeamertemplate{footline}[frame number]
+  % \setbeamercolor{footline}{fg=CUNEFBlue, bg=CUNEFGray}
+
+  % Block Titles Style
+  \setbeamercolor{block title}{bg=CUNEFGray, fg=CUNEFOrange}
+  \setbeamerfont{block title}{series=\mdseries}
+  \setbeamercolor{block body}{bg=white, fg=black}
+
+  % Remove background from title separator
+    \setbeamercolor{title separator}{fg=CUNEFOrange, bg=}
+    % Adjust the title separator length and author position
+\makeatletter
+\setbeamertemplate{title separator}{%
+    \begin{beamercolorbox}[sep=0.1cm,wd=0.3\paperwidth,center]{title separator} % Set the desired width for the line
+        \rule{0.65\paperwidth}{0.01cm} % Adjust for arbitrary line length
+    \end{beamercolorbox}%
+}
+\makeatother
+
+% Define a custom footline that isolates the frame number and avoids shifting other elements
+\setbeamertemplate{footline}{%
+  \begin{tikzpicture}[remember picture, overlay]
+    % Place the frame number at the bottom-right, slightly raised
+    \node[anchor=south east, yshift=0.2cm,xshift=-0.5cm] at (current page.south east) {%
+      \usebeamercolor[fg]{footline}\usebeamerfont{footline}\insertframenumber
+    };
+  \end{tikzpicture}%
+  \vspace{0.15cm} % Add some horizontal padding if needed
+}
+
+
+% Reset footnote mark after each beamer frame
+\makeatletter
+\let\beamer@oldframe=\beamer@frame
+\def\beamer@frame{\setcounter{footnote}{0}\beamer@oldframe}
+\makeatother
+
+\setbeamersize
+{
+    text margin left=0.5cm,
+    text margin right=0.5cm,
+    % sidebar width left=.0cm,
+    % sidebar width right=.0cm,
+    % description width,
+    % description width of=,
+    % mini frame size=,
+    % mini frame offset
+}
+
+  % Remove Navigation Symbols
+  \setbeamertemplate{navigation symbols}{}
+
+  \usepackage[sfdefault]{FiraSans}
+
+  \usepackage[most]{tcolorbox} % Package for custom box styling
+
+% Define a custom block style
+\tcbuselibrary{skins, breakable}
+\newtcolorbox{coolblock}[2][]{%
+    enhanced, breakable, colframe=CUNEFOrange, colback=white,
+    sharp corners, % Use sharp corners with slight rounding
+    arc=3mm, % Adjust for rounded corners
+    fonttitle=\bfseries, % Bold title
+    coltitle=CUNEFBlue, % Title color
+    title={\centering #2}, % Centered title
+    attach boxed title to top center={yshift=-0.35cm, yshifttext=-1mm},
+    boxed title style={colframe=white, colback=white, size=small},
+    boxrule=0.5pt, % Border thickness
+    width=\textwidth, % Full width box
+}
+  
+}

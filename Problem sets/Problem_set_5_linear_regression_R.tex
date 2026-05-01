@@ -1,0 +1,552 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\author{\empty}
+
+% Define solution if
+\newif\ifsolutions
+%\solutionstrue % Uncomment this line to display solutions
+\solutionsfalse % Uncomment this line to hide solutions
+
+\title{Problem Set 5. Linear Regression \\ Quantitative Methods for Humanities}
+
+\date{\empty}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+    \textbf{\large 1. Election and Conditional Cash Transfer Program in Mexico}
+\end{center}
+
+In this exercise, we analyze the data from a study that seeks to estimate the electoral impact of Progresa, Mexico’s conditional cash transfer program (CCT program)\footnote{Based on the articles: \\
+(1) Ana de la O (2013) “Do conditional cash transfers affect voting behavior? Evidence from a randomized experiment in Mexico. \\
+(2) Kosuke Imai, Gary King, and Carlos Velasco (2015) Do nonpartisan programmatic policies have partisan electoral effects? Evidence from two large scale randomized experiments.}. The original study relied on a randomized evaluation of the CCT program in which eligible villages were randomly assigned to receive the program either 21 months (early Progresa) or 6 months (late Progresa) before the 2000 Mexican presidential election. The author of the original study hypothesized that the CCT program would mobilize voters, leading to an increase in turnout and support for the incumbent party (PRI, or Partido Revolucionario Institucional). The analysis was based on a sample of precincts that contain at most one participating village in the evaluation.
+
+The data we analyze are available as the CSV file \texttt{progresa.csv}. Table \ref{table:cash_transfer} presents the names and descriptions of variables in the dataset. Each observation in the data represents a precinct, and for each precinct, the file contains information about its treatment status, the outcomes of interest, socioeconomic indicators, and other precinct characteristics.
+
+\begin{table}[!ht]
+\centering
+\caption{Conditional Cash Transfer Program (Progresa) Data.}
+\label{table:cash_transfer}
+\begin{tabular}{ll}
+\hline
+\textbf{Variable} & \textbf{Description} \\ \hline
+\texttt{treatment} & whether an electoral precinct contains a village where \\
+                   & households received early Progresa \\ 
+\texttt{pri2000s} & PRI votes in the 2000 election as a share of precinct \\
+                  & population above 18 \\ 
+\texttt{pri2000v} & official PRI vote share in the 2000 election \\ 
+\texttt{t2000} & turnout in the 2000 election as a share of precinct \\
+               & population above 18 \\ 
+\texttt{t2000r} & official turnout in the 2000 election \\ 
+\texttt{pri1994} & total PRI votes in the 1994 presidential election \\ 
+\texttt{pan1994} & total PAN votes in the 1994 presidential election \\ 
+\texttt{prd1994} & total PRD votes in the 1994 presidential election \\ 
+\texttt{pri1994s} & total PRI votes in the 1994 election as a share of precinct \\
+                  & population above 18 \\ 
+\texttt{pan1994s} & total PAN votes in the 1994 election as a share of precinct \\
+                  & population above 18 \\ 
+\texttt{prd1994s} & total PRD votes in the 1994 election as a share of precinct \\
+                  & population above 18 \\ 
+\texttt{pri1994v} & official PRI vote share in the 1994 election \\ 
+\texttt{pan1994v} & official PAN vote share in the 1994 election \\ 
+\texttt{prd1994v} & official PRD vote share in the 1994 election \\ 
+\texttt{t1994} & turnout in the 1994 election as a share of precinct \\
+               & population above 18 \\ 
+\texttt{t1994r} & official turnout in the 1994 election \\ 
+\texttt{votos1994} & total votes cast in the 1994 presidential election \\ 
+\texttt{avgpoverty} & precinct average of village poverty index \\ 
+\texttt{pobtot1994} & total population in the precinct \\ 
+\texttt{villages} & number of villages in the precinct \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+    \item \textbf{Estimating the impact of the CCT program.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Compare average electoral outcomes (turnout and PRI support) between treated (early Progresa) and control (late Progresa) precincts.
+        \item Regress turnout and PRI support rates (\texttt{t2000} and \texttt{pri2000s}) on the treatment variable.
+        \item Interpret and compare the results of the two approaches. Do the results support the hypothesis that the program mobilized voters and increased PRI support?
+    \end{enumerate}
+
+    \item \textbf{Adding pretreatment covariates to the model.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Fit a linear regression model for each outcome (\texttt{t2000} and \texttt{pri2000s}) including the following predictors:
+        \begin{itemize}
+            \item \texttt{avgpoverty}, \texttt{pobtot1994}, \texttt{votos1994},
+            \item \texttt{pri1994}, \texttt{pan1994}, and \texttt{prd1994}.
+        \end{itemize}
+        \item Compare these results to the previous question. Are the estimated average effects of the program different?
+    \end{enumerate}
+
+    \item \textbf{Alternative model specifications.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Use the same outcome variables but replace count predictors with their share-based equivalents (\texttt{t1994}, \texttt{pri1994s}, \texttt{pan1994s}, \texttt{prd1994s}).
+        \item Apply a natural log transformation to the precinct population variable (\texttt{pobtot1994}).
+        \item Include \texttt{avgpoverty} as an additional predictor and compare the results. Which model fits the data better?
+    \end{enumerate}
+
+    \item \textbf{Examining balance of pretreatment variables.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Use box plots to compare distributions between treatment and control groups for the following variables:
+        \begin{itemize}
+            \item Precinct population (\texttt{pobtot1994}),
+            \item Average poverty index (\texttt{avgpoverty}),
+            \item Previous turnout rate (\texttt{t1994}),
+            \item Previous PRI support rate (\texttt{pri1994s}).
+        \end{itemize}
+        \item Comment on the patterns observed in the box plots.
+    \end{enumerate}
+
+    \item \textbf{Using official turnout and vote shares.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Replace the outcome variables with official turnout (\texttt{t2000r}) and PRI vote share (\texttt{pri2000v}).
+        \item Compute the average treatment effect using a linear regression with:
+        \begin{itemize}
+            \item \texttt{avgpoverty}, log-transformed \texttt{pobtot1994}, and
+            \item Previous election outcome variables (\texttt{t1994r}, \texttt{pri1994v}, \texttt{pan1994v}, \texttt{prd1994v}).
+        \end{itemize}
+        \item Briefly interpret the results.
+    \end{enumerate}
+
+    \item \textbf{Exploring heterogeneous treatment effects.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Fit a linear regression model with:
+        \begin{itemize}
+            \item \texttt{treatment}, log-transformed \texttt{pobtot1994}, \texttt{avgpoverty}, and \texttt{avgpoverty}$^2$,
+            \item Interaction terms between \texttt{treatment} and \texttt{avgpoverty}, and between \texttt{treatment} and \texttt{avgpoverty}$^2$.
+        \end{itemize}
+        \item Estimate the average treatment effects at different levels of \texttt{avgpoverty}.
+        \item Plot the results and comment on the trends observed.
+    \end{enumerate}
+\end{enumerate}
+
+\ifsolutions
+{\color{blue}
+
+\begin{center}
+    \textbf{\large Solution}    
+\end{center}
+
+\textbf{Solution to Question 1: Estimating the impact of the CCT program}
+
+\begin{verbatim}
+## Load the data
+progresa <- read.csv("progresa.csv")
+
+## Q1a: Compare average electoral outcomes between treated and control precincts
+
+# Subset data into treatment and control groups
+treated <- subset(progresa, treatment == 1)
+control <- subset(progresa, treatment == 0)
+
+# Calculate average turnout and PRI support for both groups
+avg_turnout_treated <- mean(treated$t2000, na.rm = TRUE)
+avg_turnout_control <- mean(control$t2000, na.rm = TRUE)
+avg_pri_treated <- mean(treated$pri2000s, na.rm = TRUE)
+avg_pri_control <- mean(control$pri2000s, na.rm = TRUE)
+
+# Print results
+print(paste("Average turnout (treated):", avg_turnout_treated))
+print(paste("Average turnout (control):", avg_turnout_control))
+print(paste("Average PRI support (treated):", avg_pri_treated))
+print(paste("Average PRI support (control):", avg_pri_control))
+
+## Q1b: Regress turnout and PRI support on the treatment variable
+
+# Turnout regression
+turnout_model <- lm(t2000 ~ treatment, data = progresa)
+summary(turnout_model)
+
+# PRI support regression
+pri_model <- lm(pri2000s ~ treatment, data = progresa)
+summary(pri_model)
+
+## Compare results
+# - Check whether the regression estimates match the differences in averages.
+# - Interpret whether the results support the hypothesis.
+\end{verbatim}
+
+\textbf{Solution to Question 2: Adding pretreatment covariates to the model}
+
+\begin{verbatim}
+## Fit a linear regression model with pretreatment covariates
+
+# Turnout model
+turnout_model_cov <- lm(t2000 ~ treatment + avgpoverty + pobtot1994 + votos1994 + 
+                        pri1994 + pan1994 + prd1994, data = progresa)
+summary(turnout_model_cov)
+
+# PRI support model
+pri_model_cov <- lm(pri2000s ~ treatment + avgpoverty + pobtot1994 + votos1994 + 
+                    pri1994 + pan1994 + prd1994, data = progresa)
+summary(pri_model_cov)
+
+## Compare with results from Q1
+# - Check whether adding covariates changes the estimated treatment effect.
+# - Discuss whether these additional variables help explain turnout and PRI support.
+\end{verbatim}
+
+\textbf{Solution to Question 3: Alternative model specifications}
+
+\begin{verbatim}
+## Fit a new model with share-based covariates and log-transformed population
+
+# Turnout model
+turnout_model_alt <- lm(t2000 ~ treatment + avgpoverty + log(pobtot1994) + 
+                        t1994 + pri1994s + pan1994s + prd1994s, data = progresa)
+summary(turnout_model_alt)
+
+# PRI support model
+pri_model_alt <- lm(pri2000s ~ treatment + avgpoverty + log(pobtot1994) + 
+                    t1994 + pri1994s + pan1994s + prd1994s, data = progresa)
+summary(pri_model_alt)
+
+## Compare with previous models
+# - Discuss whether the log transformation improves the fit of the model.
+# - Analyze whether share-based covariates provide better insights than count-based covariates.
+\end{verbatim}
+
+\textbf{Solution to Question 4: Examining balance of pretreatment variables}
+
+\begin{verbatim}
+## Create box plots for the selected variables
+
+# Box plot for precinct population
+boxplot(pobtot1994 ~ treatment, data = progresa,
+        main = "Precinct Population by Treatment Group",
+        xlab = "Treatment", ylab = "Population")
+
+# Box plot for average poverty index
+boxplot(avgpoverty ~ treatment, data = progresa,
+        main = "Average Poverty Index by Treatment Group",
+        xlab = "Treatment", ylab = "Poverty Index")
+
+# Box plot for previous turnout rate
+boxplot(t1994 ~ treatment, data = progresa,
+        main = "Previous Turnout Rate by Treatment Group",
+        xlab = "Treatment", ylab = "Turnout Rate")
+
+# Box plot for previous PRI support rate
+boxplot(pri1994s ~ treatment, data = progresa,
+        main = "Previous PRI Support Rate by Treatment Group",
+        xlab = "Treatment", ylab = "Support Rate")
+
+## Comment on balance
+# - Observe whether the distributions of these variables are similar between groups.
+# - Discuss potential implications for the analysis.
+\end{verbatim}
+
+\textbf{Solution to Question 5: Using official turnout and vote shares}
+
+\begin{verbatim}
+## Linear regression with official turnout and PRI vote shares
+
+# Turnout model
+turnout_model_official <- lm(t2000r ~ treatment + avgpoverty + log(pobtot1994) + 
+                             t1994r + pri1994v + pan1994v + prd1994v, data = progresa)
+summary(turnout_model_official)
+
+# PRI support model
+pri_model_official <- lm(pri2000v ~ treatment + avgpoverty + log(pobtot1994) + 
+                         t1994r + pri1994v + pan1994v + prd1994v, data = progresa)
+summary(pri_model_official)
+
+## Interpret results
+# - Analyze whether using official vote shares affects the estimated treatment effect.
+# - Discuss the potential reasons for differences from previous models.
+\end{verbatim}
+
+\textbf{Solution to Question 6: Exploring heterogeneous treatment effects}
+
+\begin{verbatim}
+## Fit a model to examine heterogeneous effects by poverty level
+
+# Linear regression with interactions
+heterogeneous_model <- lm(t2000 ~ treatment + log(pobtot1994) + avgpoverty + 
+                          I(avgpoverty^2) + treatment:avgpoverty + 
+                          treatment:I(avgpoverty^2), data = progresa)
+summary(heterogeneous_model)
+
+## Plot estimated effects by poverty level
+poverty_levels <- seq(min(progresa$avgpoverty, na.rm = TRUE), 
+                      max(progresa$avgpoverty, na.rm = TRUE), length.out = 100)
+predicted_effects <- coef(heterogeneous_model)["treatment"] + 
+                     coef(heterogeneous_model)["treatment:avgpoverty"] * poverty_levels + 
+                     coef(heterogeneous_model)["treatment:I(avgpoverty^2)"] * poverty_levels^2
+
+plot(poverty_levels, predicted_effects, type = "l", 
+     main = "Treatment Effects by Poverty Level",
+     xlab = "Average Poverty Level", ylab = "Estimated Treatment Effect")
+
+## Comment on the results
+# - Analyze how treatment effects vary with poverty levels.
+# - Discuss whether the results align with the hypothesis.
+\end{verbatim}
+}
+\fi
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+\begin{center}
+    \textbf{\large 2. Government Transfer and Poverty Reduction in Brazil}
+\end{center}
+
+A central question in public policy is whether giving more resources to local governments actually improves citizens' lives. There are two competing views:
+\begin{itemize}
+    \item \textbf{Pessimistic view:} additional public money may be wasted or captured by local elites, especially where institutions are weak.
+    \item \textbf{Optimistic view:} additional resources may improve public services when citizens strongly need them and politicians face pressure to respond.
+\end{itemize}
+
+To address this debate, we estimate the effects of increased government spending on educational attainment, literacy, and poverty rates\footnote{Based on Stephan Litschig and Kevin M. Morrison (2013) The impact of intergovernmental transfers on education outcomes and poverty reduction.}. 
+We exploit the fact that until 1991, the formula for government transfers to individual Brazilian municipalities was determined in part by the municipality’s population. This meant that municipalities with populations below the official cutoff did not receive additional revenue, while municipalities above the cutoff did. The data set \texttt{transfer.csv} contains the variables shown in Table \ref{table:transfer_data}. 
+
+Importantly, the policy did not use a single population cutoff. Transfers were assigned through a stepwise population formula: municipalities just above certain population thresholds received a larger transfer coefficient than municipalities just below them. In this exercise, we focus on the first three relevant cutoffs: 10,188, 13,584, and 16,980 inhabitants. The RDD compares municipalities located very close to these thresholds   .
+
+\begin{table}[!ht]
+\centering
+\caption{Brazilian Government Transfer Data.}
+\label{table:transfer_data}
+\begin{tabular}{ll}
+\hline
+\textbf{Variable} & \textbf{Description} \\ \hline
+\texttt{pop82} & population of the municipality in 1982 \\ 
+\texttt{poverty80} & poverty rate of the municipality in 1980 \\ 
+\texttt{poverty91} & poverty rate of the municipality in 1991 \\ 
+\texttt{educ80} & average years of education in the municipality in 1980 \\ 
+\texttt{educ91} & average years of education in the municipality in 1991 \\ 
+\texttt{literate91} & literacy rate of the municipality in 1991 \\ 
+\texttt{state} & state where the municipality is located \\ 
+\texttt{region} & region where the municipality is located \\ 
+\texttt{id} & municipal ID \\ 
+\texttt{year} & year of measurement \\  \hline
+\end{tabular}
+\end{table}
+
+
+\begin{enumerate}
+    \item \textbf{Regression discontinuity design assumptions.}
+    \begin{enumerate}[label=(\alph*)]
+        \item State the required assumption for the regression discontinuity design (RDD).
+        \item Interpret the assumption in the context of this specific application.
+        \item Describe a scenario where the assumption would be violated.
+        \item Discuss the advantages and disadvantages of using this design for this application.
+    \end{enumerate}
+
+    \item \textbf{Creating a variable for proximity to the cutoff.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Calculate the difference between each municipality’s population and the closest population cutoff (10,188, 13,584, or 16,980).
+        \item Standardize this measure by dividing the difference by the corresponding cutoff and multiplying it by 100.
+        \item The resulting variable should represent a normalized percentage score for the difference from the closest population cutoff, relative to the cutoff value.
+    \end{enumerate}
+
+    \item \textbf{Estimating causal effects near the cutoff.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Subset the data to include only municipalities within 3 percentage points of the funding cutoff on either side.
+        \item Use regressions to estimate the average causal effect of government transfers on:
+        \begin{itemize}
+            \item Educational attainment,
+            \item Literacy,
+            \item Poverty.
+        \end{itemize}
+        \item Provide a brief substantive interpretation of the results.
+    \end{enumerate}
+
+    \item \textbf{Visualizing the analysis.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Create a plot of the data points, fitted regression lines, and the population threshold.
+        \item Briefly comment on the patterns observed in the plot.
+    \end{enumerate}
+
+    \item \textbf{Difference-in-means analysis.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Compute the difference-in-means for the outcome variables (educational attainment, literacy, poverty) between municipalities above and below the threshold.
+        \item Compare these estimates to the ones obtained in question 3.
+        \item Discuss whether the assumption required for this analysis is the same as for question 3.
+        \item Evaluate which estimates are more appropriate and why.
+    \end{enumerate}
+
+    \item \textbf{Varying the analysis window.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Repeat the regression analysis from question 3, varying the width of the analysis window from 1 to 5 percentage points above and below the threshold.
+        \item Obtain the estimate for each window width.
+        \item Briefly comment on how the results change as the window size varies.
+    \end{enumerate}
+
+    \item \textbf{Validity check using pre-treatment data.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Conduct the same analysis as in question 3, but use measures of poverty rate and educational attainment from 1980 (before the population-based government transfers began).
+        \item Interpret the results and evaluate their implications for the validity of the analysis presented in question 3.
+    \end{enumerate}
+\end{enumerate}
+
+\ifsolutions \color{blue}
+{\color{blue}
+
+\begin{center}
+    \textbf{\large Solution}    
+\end{center}
+
+\textbf{Solution to Question 1: Regression Discontinuity Design Assumptions}
+\begin{verbatim}
+## Required assumption for RDD:
+# The municipalities just above and just below the population cutoff are
+# comparable in all respects except for the treatment (transfer).
+
+## Interpretation:
+# In this context, this means that municipalities with populations just below
+# and just above the cutoff should not differ systematically in unobserved
+# characteristics other than their eligibility for transfers.
+
+## Violation scenario:
+# The assumption would be violated if municipalities manipulated their
+# population counts to fall just above the cutoff.
+
+## Advantages:
+# - Provides a quasi-experimental setting to estimate causal effects.
+# - Can produce valid estimates if the assumption holds.
+
+## Disadvantages:
+# - Results are valid only for municipalities near the cutoff.
+# - The assumption may not hold if there is manipulation around the threshold.
+\end{verbatim}
+
+\textbf{Solution to Question 2: Creating a Variable for Proximity to the Cutoff}
+\begin{verbatim}
+## Load the data
+transfer <- read.csv("transfer.csv")
+
+## Calculate proximity to the nearest cutoff
+cutoffs <- c(10188, 13584, 16980)
+
+transfer$proximity <- apply(transfer, 1, function(row) {
+  diff_to_cutoffs <- abs(row$population - cutoffs)
+  min_diff <- min(diff_to_cutoffs)
+  return(min_diff)
+})
+
+## Normalize the proximity variable
+transfer$proximity_normalized <- (transfer$proximity / transfer$population) * 100
+\end{verbatim}
+
+\textbf{Solution to Question 3: Estimating Causal Effects Near the Cutoff}
+\begin{verbatim}
+## Subset the data to within 3 percentage points of the cutoff
+transfer_subset <- subset(transfer, abs(proximity_normalized) <= 3)
+
+## Regressions for each outcome variable
+edu_model <- lm(education ~ transfer, data = transfer_subset)
+literacy_model <- lm(literacy ~ transfer, data = transfer_subset)
+poverty_model <- lm(poverty ~ transfer, data = transfer_subset)
+
+## Summarize the results
+summary(edu_model)
+summary(literacy_model)
+summary(poverty_model)
+
+## Interpretation:
+# - Check the signs and significance of the coefficients.
+# - Positive coefficients indicate an increase in outcomes due to transfers,
+#   while negative coefficients suggest a decrease.
+\end{verbatim}
+
+\textbf{Solution to Question 4: Visualizing the Analysis}
+\begin{verbatim}
+## Plot data points, regression lines, and threshold
+library(ggplot2)
+
+ggplot(transfer_subset, aes(x = proximity_normalized, y = education)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, col = "blue") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Effect of Transfers on Educational Attainment",
+       x = "Proximity to Cutoff (Normalized)",
+       y = "Educational Attainment")
+
+## Interpretation:
+# - Observe the trend in the outcome variable around the cutoff.
+# - Comment on whether there is a noticeable jump at the cutoff.
+\end{verbatim}
+
+\textbf{Solution to Question 5: Difference-in-Means Analysis}
+\begin{verbatim}
+## Calculate difference-in-means
+above_cutoff <- subset(transfer, proximity_normalized > 0)
+below_cutoff <- subset(transfer, proximity_normalized < 0)
+
+diff_edu <- mean(above_cutoff$education, na.rm = TRUE) - 
+            mean(below_cutoff$education, na.rm = TRUE)
+diff_literacy <- mean(above_cutoff$literacy, na.rm = TRUE) - 
+                 mean(below_cutoff$literacy, na.rm = TRUE)
+diff_poverty <- mean(above_cutoff$poverty, na.rm = TRUE) - 
+                mean(below_cutoff$poverty, na.rm = TRUE)
+
+## Print results
+print(paste("Difference-in-means for education:", diff_edu))
+print(paste("Difference-in-means for literacy:", diff_literacy))
+print(paste("Difference-in-means for poverty:", diff_poverty))
+
+## Compare with regression estimates:
+# - Difference-in-means assumes comparability between groups above and below
+#   the cutoff, similar to RDD but without adjusting for covariates.
+# - Regression estimates may be more precise as they account for covariates.
+\end{verbatim}
+
+\textbf{Solution to Question 6: Varying the Analysis Window}
+\begin{verbatim}
+## Vary the analysis window and compute estimates
+windows <- 1:5
+results <- data.frame(Window = windows, Estimate = NA)
+
+for (w in windows) {
+  subset_data <- subset(transfer, abs(proximity_normalized) <= w)
+  model <- lm(education ~ transfer, data = subset_data)
+  results$Estimate[w] <- coef(model)["transfer"]
+}
+
+## Plot results
+plot(results$Window, results$Estimate, type = "b",
+     xlab = "Window Size (Percentage Points)",
+     ylab = "Estimated Effect of Transfers",
+     main = "Effect Estimates by Window Size")
+
+## Interpretation:
+# - Analyze how the estimated effects change with the window size.
+# - Larger windows include more data but may violate the assumption of
+#   comparability near the cutoff.
+\end{verbatim}
+
+\textbf{Solution to Question 7: Validity Check Using Pre-Treatment Data}
+\begin{verbatim}
+## Use 1980 data for the same analysis
+edu_model_1980 <- lm(education_1980 ~ transfer, data = transfer_subset)
+poverty_model_1980 <- lm(poverty_1980 ~ transfer, data = transfer_subset)
+
+## Summarize the results
+summary(edu_model_1980)
+summary(poverty_model_1980)
+
+## Interpretation:
+# - If there are significant effects for pre-treatment data, it suggests potential
+#   bias in the analysis from question 3.
+# - A lack of significant effects supports the validity of the RDD approach.
+\end{verbatim}
+}
+\fi
+
+\end{document}

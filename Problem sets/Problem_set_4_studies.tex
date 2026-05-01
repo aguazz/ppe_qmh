@@ -1,0 +1,364 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\author{\empty}
+
+% Define solution if
+\newif\ifsolutions
+%\solutionstrue % Uncomment this line to display solutions
+\solutionsfalse % Uncomment this line to hide solutions
+
+\title{Problem Set 4. Causality and Studies \\ Quantitative Methods for Humanities}
+
+\date{\empty}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+    \textbf{\large 1. Efficacy of Small Class Size in Early Education}    
+\end{center}
+
+The STAR (Student–Teacher Achievement Ratio) Project was a four-year longitudinal study investigating the effects of class size in early grades on educational performance and personal development. This study, conducted from 1985 to 1989, involved 11,601 students who were randomly assigned to one of three groups: small classes, regular-sized classes, or regular-sized classes with a teacher's aid. The experiment cost approximately \$12 million, and although the program ended in 1989 when the first kindergarten cohort completed third grade, data collection continued through high school.
+
+The data file, \texttt{STAR.csv}, contains the following variables (see Table~\ref{tab:star-data}):
+
+\begin{table}[h]
+\centering
+\caption{Description of Variables in the STAR Study}\label{tab:star-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{race} & Student’s race (1 = white, 2 = black, 3 = Asian, 4 = Hispanic, \\
+              & 5 = Native American, 6 = others) \\
+\texttt{classtype} & Type of kindergarten class (1 = small, 2 = regular, 3 = regular with aid) \\
+\texttt{g4math} & Total scaled score for the math portion of the fourth-grade standardized test \\
+\texttt{g4reading} & Total scaled score for the reading portion of the fourth-grade standardized test \\
+\texttt{yearssmall} & Number of years spent in small classes \\
+\texttt{hsgrad} & High-school graduation status (1 = graduated, 0 = did not graduate) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The dataset contains missing values, which occur due to students leaving STAR schools before third grade or joining later. The tasks below analyze the effects of small class sizes.
+
+\begin{enumerate}
+    \item \textbf{Recode Variables:} Create a new factor variable, \texttt{kinder}, in the data frame to recode \texttt{classtype} into meaningful labels (\texttt{small}, \texttt{regular}, \texttt{regular\_aid}). Similarly, recode \texttt{race} into four categories (\texttt{white}, \texttt{black}, \texttt{hispanic}, \texttt{others}) by combining \texttt{Asian} and \texttt{Native American} into \texttt{others}. For the race variable, overwrite the original variable.
+
+    \item \textbf{Comparison of Test Scores:} Compare the fourth-grade reading and math test scores between students assigned to small classes and those in regular-sized classes. Use means to make this comparison while removing missing values. Interpret the results. To assess the size of the effect, compare it to the standard deviation of the test scores.
+
+    \item \textbf{Quantile Treatment Effects:} Instead of focusing solely on mean differences, examine the distribution of test scores. Compare high scores (66th percentile) and low scores (33rd percentile) for small classes and regular classes. Discuss whether this analysis provides additional insights compared to the mean-based comparison.
+
+    \item \textbf{Effect of Years in Small Classes:} Some students participated in small classes for all four years, while others only experienced one year. 
+    \begin{enumerate}
+        \item How many students fall into each category? Create a contingency table of proportions using \texttt{kinder} and \texttt{yearssmall}.
+        \item Investigate whether the number of years in small classes affects test scores. Compare the mean and median reading and math scores for students with different durations of exposure to small classes.
+    \end{enumerate}
+
+    \item \textbf{Reducing Racial Achievement Gaps:} Investigate whether small class sizes reduced racial achievement gaps. Compare the mean reading and math test scores between white and minority students (blacks and Hispanics) within regular-sized classes. Repeat this comparison for small classes. Provide a substantive interpretation.
+
+    \item \textbf{Long-Term Effects on Graduation:} Assess whether the STAR program influenced high-school graduation rates. 
+    \begin{enumerate}
+        \item Compare graduation rates across different class types (\texttt{kinder}).
+        \item Investigate whether the number of years spent in small classes affects graduation rates.
+        \item Analyze whether the STAR program reduced racial disparities in graduation rates.
+    \end{enumerate}
+\end{enumerate}
+
+% {\color{blue}
+
+% \begin{center}
+%     \textbf{\large Solution}    
+% \end{center}
+
+% \textbf{R code for analysis:}
+
+% \begin{verbatim} 
+% ## Substitute for your own and execute to set the working directory
+% ## setwd("C:\Users\YOUR-USER-NAME\Documents\QMH")
+
+% ## Q1
+
+% star <- read.csv("STAR.csv")
+% head(star)
+
+% ## Create kinder variable.
+% unique(star$classtype)
+% star$kinder <- NA 
+% star$kinder[star$classtype == 1] <- "small" 
+% star$kinder[star$classtype == 2] <- "middle"
+% star$kinder[star$classtype == 3] <- "large" 
+% class(star$kinder)
+% ## Class of kinder has to be factor in the following question.
+% star$kinder <- as.factor(star$kinder)
+% unique(star$kinder)
+
+% ## Re-create race variable.
+% unique(star$race)
+% star$race[star$race == 1] <- "white"
+% star$race[star$race == 2] <- "black"
+% star$race[star$race == 4] <- "hispanic"
+% star$race[star$race == 3 | star$race == 5 | star$race == 6] <- "others"
+
+
+% ## Q2
+
+% small <- subset(star, star$kinder == "small") 
+% middle <- subset(star, star$kinder == "middle")
+% large <- subset(star, star$kinder == "large")
+
+% ## Ignore the missing value by argument na.rm = TRUE
+% ## Reading score of 4th grade
+% sr <- mean(small$g4reading, na.rm = TRUE)
+% mr <- mean(middle$g4reading, na.rm = TRUE)
+% lr <- mean(large$g4reading, na.rm = TRUE)
+
+% ## Math score of 4th grade
+% sm <- mean(small$g4math, na.rm = TRUE)
+% mm <- mean(middle$g4math, na.rm = TRUE)
+% lm <- mean(large$g4math, na.rm = TRUE)
+
+% ## Display & see means of each score.
+% c(sr, mr, lr); c(sm, mm, lm)
+
+% ## Q3 
+
+% srq <- quantile(small$g4reading, 
+%                 probs = seq(0.33, 0.66, 0.33), na.rm = TRUE)
+% mrq <- quantile(middle$g4reading,
+%                 probs = seq(0.33, 0.66, 0.33), na.rm = TRUE)
+
+% smq <- quantile(small$g4math, 
+%                 probs = seq(0.33, 0.66, 0.33), na.rm = TRUE)
+% mmq <- quantile(middle$g4math,
+%                 probs = seq(0.33, 0.66, 0.33), na.rm = TRUE)
+
+% ## Q4
+
+% ## Make a contingency table.
+% table(class_size = star$kinder, year = star$yearssmall)
+
+% ## Function tapply() applies one function repeatedly
+% ## to each level of the factor variable. 
+% tapply(star$g4reading, star$yearssmall, mean, na.rm = TRUE)
+% tapply(star$g4reading, star$yearssmall, median, na.rm = TRUE)
+
+% tapply(star$g4math, star$yearssmall, mean, na.rm = TRUE)
+% tapply(star$g4math, star$yearssmall, median, na.rm = TRUE)
+
+
+% ## Q5
+
+% ## White people have higher score in both class sizes.
+% tapply(middle$g4reading, middle$race, mean, na.rm = TRUE)
+% tapply(middle$g4math, middle$race, mean, na.rm = TRUE)
+
+% tapply(small$g4reading, small$race, mean, na.rm = TRUE)
+% tapply(small$g4math, small$race, mean, na.rm = TRUE)
+
+
+% ## Q6
+
+% tapply(star$hsgrad, star$kinder, mean, na.rm = TRUE)
+% tapply(star$hsgrad, star$yearssmall, mean, na.rm = TRUE)
+% tapply(star$hsgrad, star$race, mean, na.rm = TRUE)
+% \end{verbatim}
+
+% \textbf{Solution Summary}
+
+% \begin{itemize}
+%     \item \textbf{Question 1:} The \texttt{kinder} variable was created to classify students into small, middle, and large class types. The \texttt{race} variable was redefined into four categories: white, black, Hispanic, and others.
+%     \item \textbf{Question 2:} The mean scores for reading and math in 4th grade were calculated for each class type. Small classes showed better average performance than middle and large classes.
+%     \item \textbf{Question 3:} Quantile treatment effects were computed using the 33rd and 66th percentiles for reading and math scores. Small classes exhibited better scores across the range, further confirming the advantage of small class sizes.
+%     \item \textbf{Question 4:} A contingency table was created to analyze the number of years spent in small classes. Average and median scores were calculated across these categories, showing better results for students who spent more years in small classes.
+%     \item \textbf{Question 5:} Racial disparities were analyzed for reading and math scores. White students consistently scored higher than minority groups across all class sizes, but small classes narrowed the achievement gap.
+%     \item \textbf{Question 6:} High-school graduation rates were higher for students in small classes and for those who spent more years in small classes. Additionally, small classes reduced racial disparities in graduation rates.
+% \end{itemize}
+% }
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+%%%%%---------------------%%%%%
+
+\begin{center}
+    \textbf{\large 2. The Anchoring Effect}    
+\end{center}
+
+The \textbf{anchoring effect} is a cognitive bias in which individuals’ decisions are affected by an initial piece of information, called the \emph{anchor}. This phenomenon was first formally identified and studied by Nobel laureate Daniel Kahneman and his coauthor Amos Tversky in their 1974 paper on judgment under uncertainty.\footnote{Tversky, Amos, and Daniel Kahneman. 1974. Judgment under uncertainty: heuristics and biases.
+Science 185 (4157): 1124–1131.}
+
+Originally, Kahneman and Tversky asked participants to estimate the percentage of African countries in the United Nations, after presenting them with a rigged “wheel of fortune” that landed on 10 or 65. In a more recent replication effort (ManyLabs 1 study), participants were asked about the height of Mount Everest. Some were randomly given a “high” anchor, others a “low” anchor, and each participant then provided a numerical estimate of Everest’s height. The replication data is contained in the \texttt{anchoring.RData} dataset, whose relevant variables are described in Table~\ref{tab:anchoring-data}.
+
+\begin{table}[h]
+\centering
+\caption{Key Variables in the \texttt{anchoring} Dataset}\label{tab:anchoring-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{anchor}       & The randomly assigned anchor (\texttt{low} or \texttt{high}) \\
+\texttt{everest\_feet}& Judged height of Mount Everest in feet \\
+\texttt{sex}          & Participant’s reported sex (\texttt{m} or \texttt{f}) \\
+\texttt{age}          & Participant’s age in years \\
+\texttt{citizenship}  & country code of citizenship \\
+\texttt{lab\_or\_online} & Indicator of whether the study was done online or in-lab \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Answer the following:
+
+\begin{enumerate}
+  \item \textbf{Treatment vs.\ Outcome.} What is the \emph{treatment} in this experiment, and what is the \emph{outcome} variable of interest?
+  \item \textbf{Threats to Internal Validity.} Identify two factors that could undermine internal validity. Think about sample size or potential interference among participants (e.g., if they share information).
+  % \item \textbf{Randomization in online tests?} ManyLabs 1 ensured that the experiment is completely randomized. Explain why there are good reasons to be suspicious about this randomization for online takers of the test?
+  \item \textbf{Checking randomization.} What would you expect in the data under randomization? Load the data (\texttt{load(anchoring.RData)}) and check it for the subsamples online vs lab.
+  \item \textbf{Causal inference under randomization.} Suppose that randomization holds for the lab sample? How might one estimate the \emph{causal} effect of the anchor?
+  \item \textbf{Data Exploration.} Compute and compare the average judged heights (\texttt{everest\_feet}) by \texttt{anchor}.
+  \item \textbf{Interpretation.} Is there a noticeable difference between the “low” and “high” anchor groups? Compare it to the standard deviation of \texttt{everest\_feet}.
+  \item \textbf{Causation?} Based on this design, can you say that the anchor \emph{caused} people to give higher or lower estimates? Why or why not?
+  \item \textbf{External Validity.} Comment on threats to the external validity of this study. Compare the estimated causal effect different countries to illustrate this potential lack of external validity of randomized experiments. 
+\end{enumerate}
+
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+  \item \textbf{Treatment vs.\ Outcome.}\\
+  The \emph{treatment} is the randomly assigned anchor (\texttt{low} or \texttt{high}). The \emph{outcome} variable is the participant’s numerical estimate of Everest’s height in feet (\texttt{everest\_feet}).
+
+  \item \textbf{Threats to Internal Validity.}\\
+  Two potential threats include:
+  \begin{itemize}
+    \item \emph{Small or unbalanced samples} in the anchor groups, which can increase variance or bias the estimated effect.
+    \item \emph{Interference among participants,} such as discussing the anchors or looking up Everest’s height online, violating the assumption that each individual’s treatment does not affect other individuals’ outcomes.
+  \end{itemize}
+
+  % \item \textbf{Randomization in Online Tests?}\\
+  % Even though ManyLabs 1 \emph{intended} a completely randomized design, we might be suspicious for online participants because:
+  % \begin{itemize}
+  %   \item There is less control over the environment (participants might open multiple windows, skip or refresh pages, or inadvertently see different anchors). Also, self assignment bias may be plausible.
+  %   \item The random assignment code online could potentially fail or be circumvented if participants retake the survey or share links.
+  % \end{itemize}
+
+  \item \textbf{Checking Randomization.}\\
+  Under proper randomization, we would expect that participant characteristics (e.g., age, sex) are similarly distributed across the \texttt{low} and \texttt{high} anchor groups. For both \texttt{lab} and \texttt{online} subsamples, you might:
+  \begin{itemize}
+    \item Compare mean ages by anchor group.
+    \item Compare the proportion of \texttt{m} vs.\ \texttt{f} in each anchor group.
+    \item Check distribution of participants' \texttt{citizenship}.
+  \end{itemize}
+  Similarity of these distributions across anchors suggests randomization is holding at least superficially in each subsample.
+
+  \item \textbf{Causal Inference under Randomization.}\\
+  If randomization truly holds for the lab sample, we can estimate the causal effect of the high vs.\ low anchor by calculating the difference in average \texttt{everest\_feet} between the high-anchor and low-anchor groups.
+  
+  This difference is interpretable as the \emph{causal} effect of being assigned a high anchor (as opposed to a low anchor), provided no major violations of randomization assumptions exist.
+
+  \item \textbf{Data Exploration.}\\
+  By loading the dataset with:
+  \begin{verbatim}
+  load("anchoring.RData")
+  \end{verbatim}
+  you can compute, for example:
+  \begin{verbatim}
+  # Average judged height by anchor:
+  tapply(anchoring$everest_feet, anchoring$anchor, mean, na.rm = TRUE)
+  
+  # Standard deviation by anchor (for context):
+  tapply(anchoring$everest_feet, anchoring$anchor, sd, na.rm = TRUE)
+  \end{verbatim}
+  This will display how the mean estimated height differs between the \texttt{high} and \texttt{low} anchor groups.
+
+  \item \textbf{Interpretation.}\\
+  If there is a noticeable difference (say, high-anchor group guesses are on average a few thousand feet higher), compare that difference to the standard deviation of \texttt{everest\_feet}. A difference of 2,000 feet might be significant if the standard deviation is also around 2,000 or lower, but might be less striking if the standard deviation is very large.
+
+  \item \textbf{Causation?}\\
+  Under \emph{ideal} randomization, the difference in average estimates can be interpreted as \emph{caused} by the anchor. However, if randomization is compromised (especially online), or if participants share information, the difference might also reflect these confounding factors rather than a genuine anchoring effect.
+
+  \item \textbf{External Validity.}\\
+  While randomized designs help establish internal validity, the findings might not generalize to different countries or contexts. For example, participants from one country or cultural context could be more familiar with Mount Everest’s approximate height, reducing the anchoring effect. You can compare:
+  \begin{itemize}
+    \item The mean effect in different countries (using \texttt{citizenship}).
+    \item The lab vs.\ online samples.
+  \end{itemize}
+  Variation across these subgroups illustrates how cultural or procedural differences might limit the generalizability (external validity) of the results.
+\end{enumerate}
+
+
+
+\vspace{0.5cm}
+
+%%%%-----------------%%%%
+
+\begin{center}
+    \textbf{\large 3. Worker Injury Benefits and Time Out of Work}    
+\end{center}
+
+How worker injury benefits affect time out of work is a central question in labor policy. Some argue that generous benefits reduce incentives to return to work, while others see them as promoting fairness and better job matches. 
+
+In July 1980, the state of Kentucky raised the maximum weekly worker injury benefit from $\$131$ to $\$217$ (\textbf{66\%} increase). Only high-earning workers (i.e., above a certain income threshold) qualified for the higher benefits, creating a natural experiment for researchers.\footnote{Meyer, B.D., W.K. Viscusi, and D.L. Durbin. 1995. Workers’ Compensation and Injury Duration: Evidence from a Natural Experiment. \emph{The American Economic Review} 85 (3): 322–340.} The file \texttt{injury.csv} contains the variables described in Table~\ref{tab:injury-data}.
+
+\begin{table}[H]
+\centering
+\caption{Description of Variables in the Worker Injury Data}\label{tab:injury-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{afchnge} & Equals 1 if the claim occurs after the policy change, 0 otherwise \\
+\texttt{ldurat}  & Log of the duration (in weeks) out of work \\
+\texttt{highearn}& Binary indicator (1 if high wage earner, 0 if low wage earner) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Answer the following questions:
+\begin{enumerate}
+  \item Identify the treatment and the outcome variables.
+  \item Would a Difference-in-Mean estimator between the treated and not-treated groups \emph{after} the policy fairly represent the causal effect in this study? Explain.
+  \item Suppose you decide to stick to a Before-and-After (BA) design. What would be the treated and control groups in such a case?
+  \item Load the data \texttt{injury.RData} and show the summary.
+  \item Compute the BA estimator and comment on your result.
+  \item Discuss potential limitations of the BA study, and how the Difference-in-Differences (DiD) design could mitigate them.
+  \item Why do we need the assumption that, in the absence of the policy, time trends for both groups (high earners and low earners) would have moved in parallel?
+  \item Recall the DiD estimator:
+  \[
+     \widehat{\mathrm{SATE}}_{\mathrm{DiD}} 
+       = (\overline{Y}_T^{\mathrm{after}} - \overline{Y}_T^{\mathrm{before}}) 
+         \;-\; 
+         (\overline{Y}_C^{\mathrm{after}} - \overline{Y}_C^{\mathrm{before}}).
+  \]
+  Explain, in plain words, the two terms in parentheses.
+  \item Compute the DiD estimator and comment on the results.
+  \item List potential factors that might invalidate the parallel trends assumption (e.g., macro shocks hitting the groups differently).
+\end{enumerate}
+
+\noindent \textbf{Solution:}
+\begin{itemize}
+  \item \textbf{Treatment/Outcome.} Treatment is receiving higher benefits (i.e., being a high earner \emph{after} the policy change). The outcome is \texttt{ldurat}, the log duration out of work.
+  \item \textbf{Difference-in-Mean After the Policy.} Simply comparing high earners to low earners after the policy overlooks confounders (e.g., work ethics and satisfaction with the work place) and and thus fails to isolate the policy’s causal effect.
+  \item \textbf{Before-and-After (BA) Groups.} “Treated” = high earners after policy; “Control” = high earners before policy, if one tries a BA approach. 
+  %But BA alone does not remove confounding trends.
+  \item \textbf{Loading and Summaries.} \texttt{summary(injury)}, provided you saved the data into the \texttt{injury} variable. 
+  \item \textbf{BA Estimator.} It computes the difference in mean outcomes \emph{for the same group} pre- vs.\ post-policy. It can be biased if other time-varying factors affect outcomes. See the Rmd file for the specifics. 
+  \item \textbf{Limitations and DiD.} BA fails to account for overall time trends or group differences. DiD subtracts out the trend using an untreated “control” group that presumably captures the baseline shift over time.
+  \item \textbf{Parallel Trends.} DiD requires that, absent the policy, the outcome trend for high earners would have been parallel to that of low earners. This lets us state that any difference observed after the policy is due to the policy itself.
+  \item \textbf{DiD Terms.} $(\overline{Y}_T^{\mathrm{after}} - \overline{Y}_T^{\mathrm{before}})$ is the post-minus-pre difference for the treated group; $(\overline{Y}_C^{\mathrm{after}} - \overline{Y}_C^{\mathrm{before}})$ is the analogous difference for the control group. Their difference isolates the policy’s impact, under the parallel-trend assumption.
+  \item \textbf{Result of DiD.} See the specifics in the Rmd file.
+  \item \textbf{Potential Violations.} Any event around July 1980 that unequally affects high- and low-wage workers (e.g., sector-specific shocks) can invalidate parallel trends and bias the DiD estimate.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,319 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{verbatimbox} % For verbatim inside custom environments
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,        % color of links to bibliography
+    urlcolor=magenta           % color of external links
+}
+
+% Define solution if
+\newif\ifsolutions
+%\solutionstrue % Uncomment this line to display solutions
+\solutionsfalse % Uncomment this line to hide solutions
+
+\author{\empty}
+\title{Problem Set 5. Linear Regression \\ Quantitative Methods for Humanities}
+\date{\empty}
+
+\begin{document}
+
+\maketitle
+
+\bigskip
+
+\begin{enumerate}
+    %%%%
+    %% Problem 1
+    %%%%
+    \item \textbf{University Life and Final Grade.}
+
+    A university wants to study whether weekly hours spent in student associations are related to students' final grade in an Economics course. For a sample of students, the following simple linear regression is estimated:
+    \[
+        \widehat{\text{grade}} = 5.8 + 0.22\,\text{association\_hours}.
+    \]
+    Grades are measured from 0 to 10, and \texttt{association\_hours} measures hours per week.
+
+    \begin{enumerate}[label=(\alph*)]
+        \item Interpret the intercept and the slope coefficient in this context.
+        \item A student who spends 18 hours per week in student associations obtains a final grade of 9.44. Does the linear model under or overestimate the student's performance in the final exam?
+        \item The observed values of \texttt{association\_hours} in the sample range from 0 to 12. Was the prediction for the student in the previous part reliable? Explain.
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item The intercept, 5.8, is the predicted grade for a student who spends 0 hours per week in student associations. The slope, 0.22, means that increasing association participation by one hour per week is associated with an increase of 0.22 points in the predicted grade, on average.
+        \item For 6 hours:
+        \[
+            \widehat{\text{grade}} = 5.8 + 0.22 \times 6 = 5.8 + 1.32 = 7.12.
+        \]
+        \item Using \(\widehat u = \widehat Y - Y\),
+        \[
+            \widehat u = 7.12 - 6.7 = 0.42.
+        \]
+        The residual is positive because the model overpredicts this student's grade by 0.42 points.
+        \item This would be an extrapolation, because 18 hours is outside the observed range of the predictor in the sample. The prediction is therefore less reliable than a prediction made within the range 0 to 12.
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem 2
+    %%%%
+    % \item \textbf{Explaining Political Knowledge: Fit and Model Comparison.}
+
+    % A researcher studies political knowledge among 250 university students. The dependent variable \(Y\) is a political knowledge score from 0 to 100. The researcher estimates two models:
+    % \[
+    %     \text{Model A: } Y = \beta_0 + \beta_1\text{news} + u,
+    % \]
+    % \[
+    %     \text{Model B: } Y = \beta_0 + \beta_1\text{news} + \beta_2\text{debate} + \beta_3\text{parents\_degree} + u.
+    % \]
+    % The variable \texttt{news} measures hours per week following political news, \texttt{debate} measures participation in debate clubs, and \texttt{parents\_degree} is a dummy variable equal to 1 if at least one parent has a university degree.
+
+    % The following results are obtained:
+    % \begin{center}
+    % \begin{tabular}{lccc}
+    %     \toprule
+    %     Model & Number of regressors \(k\) & SSR & TSS \\
+    %     \midrule
+    %     A & 1 & 18000 & 30000 \\
+    %     B & 3 & 16200 & 30000 \\
+    %     \bottomrule
+    % \end{tabular}
+    % \end{center}
+
+    % \begin{enumerate}[label=(\alph*)]
+    %     \item Compute the \(R^2\) of each model.
+    %     \item Compute the adjusted \(R^2\) of each model.
+    %     \item Compute the Standard Error of the Regression (SER) for each model.
+    %     \item Based on these three measures, does Model B clearly improve the fit? Explain without using causal language.
+    %     \item Suppose the coefficient on \texttt{debate} in Model B is 4.5. Interpret it using the ceteris paribus idea.
+    % \end{enumerate}
+
+    % \ifsolutions \color{blue} \textbf{Solution:} \\
+    % \begin{enumerate}[label=(\alph*)]
+    %     \item Since \(R^2 = 1 - SSR/TSS\),
+    %     \[
+    %         R^2_A = 1 - \frac{18000}{30000} = 0.40,
+    %     \]
+    %     and
+    %     \[
+    %         R^2_B = 1 - \frac{16200}{30000} = 0.46.
+    %     \]
+    %     \item The adjusted \(R^2\) is
+    %     \[
+    %         \overline R^2 = 1 - \frac{n-1}{n-k-1}\frac{SSR}{TSS}.
+    %     \]
+    %     For Model A:
+    %     \[
+    %         \overline R^2_A = 1 - \frac{249}{248}\frac{18000}{30000}
+    %         \approx 1 - 1.0040 \times 0.6
+    %         \approx 0.3976.
+    %     \]
+    %     For Model B:
+    %     \[
+    %         \overline R^2_B = 1 - \frac{249}{246}\frac{16200}{30000}
+    %         \approx 1 - 1.0122 \times 0.54
+    %         \approx 0.4534.
+    %     \]
+    %     \item The SER is
+    %     \[
+    %         SER = \sqrt{\frac{SSR}{n-k-1}}.
+    %     \]
+    %     For Model A:
+    %     \[
+    %         SER_A = \sqrt{\frac{18000}{250-1-1}} = \sqrt{\frac{18000}{248}} \approx 8.52.
+    %     \]
+    %     For Model B:
+    %     \[
+    %         SER_B = \sqrt{\frac{16200}{250-3-1}} = \sqrt{\frac{16200}{246}} \approx 8.12.
+    %     \]
+    %     \item Model B has a higher \(R^2\), a higher adjusted \(R^2\), and a lower SER. Therefore, it fits the sample data better. However, this does not imply that debate participation or parental education cause political knowledge to increase; these are associations in the data.
+    %     \item The coefficient 4.5 means that, holding weekly political news consumption and parental education constant, students who participate more in debate clubs by one unit are predicted to have political knowledge scores 4.5 points higher, on average. If \texttt{debate} is a dummy, it means debate-club participants are predicted to score 4.5 points higher than otherwise similar non-participants.
+    % \end{enumerate}
+    % \fi \color{black}
+
+    %%%%
+    %% Problem 3
+    %%%%
+    \item \textbf{Predicting Support for Rent Control Policies.}
+    
+    A political scientist studies whether citizens who spend a larger share of their income on rent are more likely to support rent control policies. The variable \texttt{rent\_burden} measures the percentage of monthly income spent on rent. The variable \texttt{urban} is a dummy equal to 1 if the respondent lives in a large city and 0 otherwise.
+    
+    The researcher estimates the following model using survey data:
+    \[
+        \widehat{\text{support}}
+        = 22 + 0.85\,\text{rent\_burden} + 9\,\text{urban}.
+    \]
+    Support for rent control is measured on a 0--100 scale. The sample used to estimate the model contains values of \texttt{rent\_burden} between 10 and 55.
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Interpret the coefficient on \texttt{rent\_burden}.
+        \item Interpret the coefficient on \texttt{urban}.
+        \item Predict the support for rent control of a non-urban respondent who spends 35\% of their income on rent.
+        \item A new respondent spends 65\% of their income on rent. Is this prediction within range or outside range? Why does this matter?
+        \item The researcher worries that the relationship between rent burden and support for rent control is not linear. Write a transformed linear model that allows rent burden to have a nonlinear effect while remaining a linear regression model in the parameters.
+    \end{enumerate}
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item The coefficient 0.85 means that a one percentage-point increase in the share of income spent on rent is associated with a 0.85-point increase in predicted support for rent control, holding urban residence fixed. For example, a 10 percentage-point increase in rent burden is associated with an \(0.85 \times 10 = 8.5\)-point increase in predicted support.
+        
+        \item The coefficient 9 means that, holding rent burden fixed, respondents living in large cities are predicted to have support for rent control that is 9 points higher than respondents not living in large cities.
+        
+        \item For a non-urban respondent, \(\texttt{urban}=0\):
+        \[
+            \widehat{\text{support}} = 22 + 0.85(35) + 9(0) = 51.75.
+        \]
+        
+        \item For an urban respondent, \(\texttt{urban}=1\):
+        \[
+            \widehat{\text{support}} = 22 + 0.85(35) + 9(1) = 60.75.
+        \]
+        The predictions differ because the urban respondent receives the additional 9 points associated with living in a large city.
+        
+        \item This is outside range, because 65 is higher than the maximum value of \texttt{rent\_burden} observed in the estimation sample, which is 55. This matters because the model would be extrapolating beyond the data used to estimate the relationship.
+        
+        \item One possible transformed linear model is
+        \[
+            \text{support}
+            = \beta_0 + \beta_1\text{rent\_burden}
+            + \beta_2\text{rent\_burden}^2
+            + \beta_3\text{urban} + u.
+        \]
+        This model allows the effect of rent burden to be nonlinear, but it is still linear in the parameters \(\beta_0, \beta_1, \beta_2, \beta_3\).
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem 4
+    %%%%
+    \item \textbf{Civic Education Workshops: Regression and Difference in Means.}
+    
+    A political science department runs a randomized experiment to study whether civic education workshops increase citizens' political knowledge. Some citizens are randomly assigned to attend a short workshop about local institutions, while others are not invited. Let \(Y\) be the number of correct answers in a political knowledge quiz for a citizen, and let \(T=1\) if the citizen was assigned to the workshop and \(T=0\) otherwise.
+    
+    The data are summarized as follows:
+    \begin{center}
+    \begin{tabular}{lccc}
+        \toprule
+        Group & Number of citizens & Mean of \(Y\) & Mean baseline interest in politics \\
+        \midrule
+        Control, \(T=0\) & 120 & 5.2 & 3.0 \\
+        Treatment, \(T=1\) & 125 & 6.1 & 3.1 \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Consider the regression \(Y = \beta_0 + \beta_1T + u\). What are the OLS estimates \(\widehat\beta_0\) and \(\widehat\beta_1\)?
+        \item Interpret \(\widehat\beta_1\) as a difference in means. Under random assignment, what is its causal interpretation?
+        \item Why is random assignment important for this causal interpretation?
+        \item A second researcher estimates
+        \[
+            Y = \beta_0 + \beta_1T + \beta_2\text{interest}
+            + \beta_3(T\cdot \text{interest}) + u.
+        \]
+        Interpret \(\beta_3\).
+        \item According to the interaction model, what is the treatment effect for a citizen with \(\text{interest}=4\)? Give the formula.
+    \end{enumerate}
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item With a binary regressor, the intercept is the mean of the control group and the slope is the treated mean minus the control mean. Therefore,
+        \[
+            \widehat\beta_0 = 5.2,
+            \qquad
+            \widehat\beta_1 = 6.1 - 5.2 = 0.9.
+        \]
+        
+        \item The estimate \(0.9\) is the difference in average political knowledge between citizens assigned to the workshop and citizens not assigned to the workshop. Under random assignment, it estimates the average treatment effect of the civic education workshop on the number of correct answers in the political knowledge quiz.
+        
+        \item Random assignment is important because it makes the treatment and control groups comparable, on average. Therefore, systematic differences in political knowledge can be attributed to the workshop rather than to pre-existing differences between citizens.
+        
+        \item \(\beta_3\) measures how the treatment effect changes when baseline political interest increases by one unit. If \(\beta_3>0\), the workshop effect is larger among citizens with higher baseline political interest. If \(\beta_3<0\), the workshop effect is smaller among those citizens.
+        
+        \item The treatment effect is the predicted difference between \(T=1\) and \(T=0\), holding baseline political interest fixed:
+        \[
+            (\beta_0 + \beta_1 + \beta_2\text{interest} + \beta_3\text{interest})
+            - (\beta_0 + \beta_2\text{interest})
+            = \beta_1 + \beta_3\text{interest}.
+        \]
+        For \(\text{interest}=4\), the treatment effect is
+        \[
+            \beta_1 + 4\beta_3.
+        \]
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem 5
+    %%%%
+    \item \textbf{Scholarships and a Regression Discontinuity Design.}
+
+    A regional government awards a university scholarship to students who score at least 80 points on an entrance exam. Let \(X\) be the exam score, let \(T=1\) if \(X \geq 80\), and let \(Y\) be first-year university enrollment, measured as 1 if the student enrolls and 0 otherwise.
+
+    The researcher estimates the following regression:
+    \[
+        Y = \beta_0 + \beta_1X + \beta_2T + \beta_3(T\cdot X) + u.
+    \]
+    The estimated coefficients are:
+    \[
+        \widehat\beta_0 = -0.55, \quad
+        \widehat\beta_1 = 0.015, \quad
+        \widehat\beta_2 = 0.30, \quad
+        \widehat\beta_3 = -0.001.
+    \]
+
+    \begin{enumerate}[label=(\alph*)]
+        \item Compute the estimated jump at the cutoff \(c=80\).
+        \item State the key assumption that makes this jump a valid estimate of the average treatment effect.
+        \item Explain why this RDD estimate may have strong internal validity near the cutoff but weaker external validity for students with scores far from 80.
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item In the one-regression formulation, the jump at cutoff \(c\) is
+        \[
+            \widehat\beta_2 + \widehat\beta_3 c.
+        \]
+        For \(c=80\):
+        \[
+            0.30 + (-0.001)(80) = 0.30 - 0.08 = 0.22.
+        \]
+        The estimated jump is 0.22, or 22 percentage points.
+        \item Just below the cutoff, \(T=0\):
+        \[
+            \widehat Y = -0.55 + 0.015(80) = -0.55 + 1.20 = 0.65.
+        \]
+        \item Just above the cutoff, \(T=1\):
+        \[
+            \widehat Y = -0.55 + 0.015(80) + 0.30 - 0.001(80)
+            = 0.65 + 0.22 = 0.87.
+        \]
+        \item The difference is
+        \[
+            0.87 - 0.65 = 0.22,
+        \]
+        which equals the estimated jump from part (a).
+        \item The key assumption is that students just below and just above the cutoff are similar in all relevant respects except for receiving the scholarship. Equivalently, potential outcomes should be continuous at the cutoff in the absence of treatment.
+        \item The design compares students very close to the cutoff, so it can be credible for estimating the local effect of the scholarship around 80 points. However, this effect may not generalize to students with much lower or much higher exam scores, who may differ in motivation, preparation, financial need, or university plans.
+    \end{enumerate}
+    \fi \color{black}
+
+\end{enumerate}
+
+\end{document}

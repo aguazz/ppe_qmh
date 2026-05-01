@@ -1,0 +1,370 @@
+\documentclass[12pt]{article}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{enumitem} % for structured lists
+\usepackage{graphicx}
+
+\begin{document}
+
+\section*{Probability Quiz with Answers}
+
+\subsection*{1. Probability Axioms and Basic Events}
+\noindent
+\textbf{1.1. Question}\\
+You roll a fair six-sided die. Define events:
+\[
+  A = \{\text{the result is an odd number}\}, \quad
+  B = \{\text{the result is } \ge 4\}.
+\]
+\begin{enumerate}[label=(\alph*)]
+\item Which of the following sets describes $A$?  
+  \textbf{(A)} $\{1,3,5\}$,\quad 
+  (B) $\{2,4,6\}$,\quad 
+  (C) $\{1,2,3\}$,\quad 
+  (D) $\{4,5,6\}$.
+\item What is $P(A)$? (Short numeric.)
+\item Which of these is $P(A \cup B)$?  
+  \textbf{(A)} $\tfrac{2}{6}$,\quad 
+  (B) $\tfrac{3}{6}$,\quad
+  (C) $\tfrac{4}{6}$,\quad 
+  \textbf{(D)} $\tfrac{5}{6}.$
+\item Are $A$ and $B$ mutually exclusive?  
+  (A) Yes,\quad \textbf{(B)} No.
+\end{enumerate}
+
+\noindent
+\textbf{1.1. Answer}
+\begin{itemize}
+\item (a) Correct set for $A$: \textbf{(A)} $\{1,3,5\}$.
+\item (b) $P(A)=\tfrac{3}{6} = 0.50.$
+\item (c) $A \cup B = \{1,3,4,5,6\}$, so $P(A\cup B)=\tfrac{5}{6}\approx 0.83.$ 
+  Correct choice: \textbf{(D)}.
+\item (d) $A$ and $B$ intersect at $\{5\}$, so they are not mutually exclusive. 
+  Correct: \textbf{(B)} No.
+\end{itemize}
+
+\hrule
+
+\subsection*{2. Counting Techniques}
+
+\textbf{2.1. Question}\\
+A group has $6$ men and $6$ women (12 total). A committee of $4$ people is chosen at random.
+\begin{enumerate}[label=(\alph*)]
+\item How many possible committees of $4$ are there in total? (Short numeric.)
+\item What is the probability that the committee has exactly 2 men and 2 women?  
+  \begin{enumerate}[label=\Alph*.]
+  \item $\displaystyle \frac{\binom{6}{2}\,\binom{6}{2}}{\binom{12}{4}}$
+  \item $\displaystyle \frac{\binom{6}{2}\,\binom{6}{2}}{\binom{12}{2}\,\binom{12}{2}}$
+  \item $\displaystyle \frac{\binom{12}{2}}{\binom{6}{4}}$
+  \item $\displaystyle \binom{6}{2}\,\binom{6}{2}\quad (\text{no division})$
+  \end{enumerate}
+\item What is the probability that at least 3 members are women?
+  \begin{enumerate}[label=\Alph*.]
+  \item $\displaystyle \frac{\binom{6}{3}\,\binom{6}{1} + \binom{6}{4}\,\binom{6}{0}}{\binom{12}{4}}$
+  \item $\displaystyle \frac{\binom{6}{4}\,\binom{6}{4}}{\binom{12}{4}}$
+  \item $\displaystyle \frac{\binom{12}{3}}{\binom{12}{4}}$
+  \item $\displaystyle \binom{6}{3}\,\binom{6}{1} + \binom{6}{4}\,\binom{6}{0}\ (\text{no denominator})$
+  \end{enumerate}
+\end{enumerate}
+
+\noindent
+\textbf{2.1. Answer}
+\begin{itemize}
+\item (a) Total committees: $\binom{12}{4}=495.$
+\item (b) Probability of exactly 2 men, 2 women:
+  \[
+    \frac{\binom{6}{2}\,\binom{6}{2}}{\binom{12}{4}} \quad\text{(Choice (A))}.
+  \]
+\item (c) Probability of at least 3 women:
+  \[
+    \frac{\binom{6}{3}\,\binom{6}{1} + \binom{6}{4}\,\binom{6}{0}}{\binom{12}{4}} 
+    \quad\text{(Choice (A))}.
+  \]
+\end{itemize}
+
+\textbf{2.2. Question}\\
+In a simplified ``birthday'' model with $10$ equally likely birthdays, you have a group of $3$ people.  
+What is the probability that all $3$ have different birthdays? (Short formula or fraction.)
+
+\noindent
+\textbf{2.2. Answer}\\
+\[
+  P(\text{all different}) \;=\; \frac{10 \times 9 \times 8}{10^3} 
+  \;=\; 0.72.
+\]
+
+\hrule
+
+\subsection*{3. Independence and Conditional Probability}
+
+\textbf{3.1. Question}\\
+$A$ and $B$ are independent with $P(A)=0.3, P(B)=0.2.$ Which is $P(A\cap B)$?
+\begin{enumerate}[label=\Alph*.]
+\item 0.06
+\item 0.10
+\item 0.50
+\item Cannot be determined
+\end{enumerate}
+
+\noindent
+\textbf{3.1. Answer}\\
+For independent events, $P(A\cap B)=P(A)P(B)=0.3\times0.2=0.06.$  
+Correct choice: \textbf{(A)}.
+
+\medskip
+
+\textbf{3.2. Question}\\
+Two coins in a box:
+\begin{itemize}
+\item Coin 1 (fair): $P(H)=0.5$.
+\item Coin 2 (possibly double-headed): $P(H)=1$.
+\end{itemize}
+Pick one coin at random and flip it once. It shows Heads ($H$). Let $D$ = ``double-headed coin.''
+
+\begin{enumerate}[label=(\alph*)]
+\item Which set of values is correct for $\{P(D), P(H\mid D), P(H\mid D^c)\}$?
+  \begin{enumerate}[label=\Alph*.]
+  \item $P(D)=\tfrac12,\;P(H\mid D)=1,\;P(H\mid D^c)=\tfrac12$
+  \item $P(D)=\tfrac12,\;P(H\mid D)=\tfrac12,\;P(H\mid D^c)=1$
+  \item $P(D)=1,\;P(H\mid D)=\tfrac12,\;P(H\mid D^c)=0$
+  \item $P(D)=\tfrac12,\;P(H\mid D)=0,\;P(H\mid D^c)=\tfrac12$
+  \end{enumerate}
+
+\item What is $P(D \mid H)$? (Short numeric.)
+\end{enumerate}
+
+\noindent
+\textbf{3.2. Answer}
+\begin{itemize}
+\item (a) Correct: \textbf{(A)} $P(D)=\tfrac12,\;P(H\mid D)=1,\;P(H\mid D^c)=0.5.$
+\item (b) By Bayes' rule:
+  \[
+    P(D\mid H) 
+    \;=\; \frac{1 \times \tfrac12}{\,1 \times \tfrac12 + \tfrac12 \times \tfrac12\,}
+    \;=\;\frac{0.5}{0.5+0.25}
+    \;=\;\frac{2}{3}\approx 0.6667.
+  \]
+\end{itemize}
+
+\hrule
+
+\subsection*{4. Bayes' Rule in Practice}
+
+\textbf{4.1. Question}\\
+A disease affects 1 in 500 people, so $P(\text{disease})=0.002$. A test has 90\% true positive rate and 5\% false positive rate. You test positive. Which is
+\[
+  P(\text{disease}\mid \text{test positive}) \;=\; ?
+\]
+\begin{enumerate}[label=\Alph*.]
+\item $\displaystyle \frac{0.90 \times 0.002}{\,0.90 \times 0.002 + 0.05 \times 0.998\,}$
+\item $\displaystyle \frac{0.05 \times 0.998}{\,0.90 \times 0.002\,}$
+\item $0.90 + 0.002 - 0.05$
+\item $\displaystyle \frac{0.90}{\,0.90 + 0.05\,}$
+\end{enumerate}
+
+\noindent
+\textbf{4.1. Answer}\\
+Bayes' formula indicates choice \textbf{(A)} is correct.
+
+\medskip
+
+\textbf{4.2. Question}\\
+$P(W)=0.3$ for Candidate~A to win. Poll says ``high chance'' (HC) with probability $0.8$ if A wins, $0.15$ if A loses. Which formula is $P(W\mid HC)$?
+\begin{enumerate}[label=\Alph*.]
+\item $\displaystyle \frac{0.8\times 0.3}{\,0.8\times 0.3 + 0.15\times 0.7\,}$
+\item $0.3 + 0.8 - 0.15$
+\item $\displaystyle \frac{0.3 \times 0.15}{\,0.8\,}$
+\item $0.8\times 0.3$
+\end{enumerate}
+
+\noindent
+\textbf{4.2. Answer}\\
+Correct: \textbf{(A)}.
+
+\hrule
+
+\subsection*{5. Random Variables and Distributions}
+
+\textbf{5.1. Question}\\
+Let $X\sim \mathrm{Binomial}(n=5,\,p=0.3).$
+\begin{enumerate}[label=(\alph*)]
+\item Which is the correct PMF?
+  \begin{enumerate}[label=\Alph*.]
+  \item $\binom{5}{k}\,(0.3)^k (0.7)^{5-k}$
+  \item $\binom{5}{k}\,(0.5)^5$
+  \item $\frac{5}{k}(0.3)^k$
+  \item $k\,(0.3)$
+  \end{enumerate}
+\item $E[X]$? (Short numeric.)
+\item $\mathrm{Var}(X)$? (Short numeric.)
+\item Expression for $P(X\ge 3)$?
+  \begin{enumerate}[label=\Alph*.]
+  \item $\displaystyle \sum_{k=3}^{5}\binom{5}{k}(0.3)^k(0.7)^{5-k}$
+  \item $\binom{5}{3}(0.3)^3(0.7)^2$
+  \item $(0.3)^3$
+  \item $1-\sum_{k=3}^{5}\binom{5}{k}(0.3)^k(0.7)^{5-k}$
+  \end{enumerate}
+\end{enumerate}
+
+\noindent
+\textbf{5.1. Answer}
+\begin{itemize}
+\item (a) Correct: \textbf{(A)}. 
+\item (b) $E[X]=n\,p=5\times 0.3=1.5.$
+\item (c) $\mathrm{Var}(X)=n\,p\,(1-p)=5\times 0.3\times0.7=1.05.$
+\item (d) $P(X\ge 3)=\sum_{k=3}^5\binom{5}{k}(0.3)^k(0.7)^{5-k}.$ Choice \textbf{(A)}.
+\end{itemize}
+
+\medskip
+
+\textbf{5.2. Question}\\
+$Y\sim \mathrm{Uniform}(2,6).$
+\begin{enumerate}[label=(\alph*)]
+\item Which PDF is correct?
+  \begin{enumerate}[label=\Alph*.]
+  \item $f_Y(y)=\tfrac{1}{4}$ for $2\le y\le 6$
+  \item $f_Y(y)=\tfrac{1}{6}$ for $2\le y\le 6$
+  \item $f_Y(y)=4$ for $0\le y\le 1$
+  \item $f_Y(y)=\tfrac{1}{6-2}$ for $y\le2$
+  \end{enumerate}
+\item What is $P(3.5 \le Y \le 5)$? (Short numeric.)
+\item What is $E[Y]$? (Short numeric.)
+\end{enumerate}
+
+\noindent
+\textbf{5.2. Answer}
+\begin{itemize}
+\item (a) Correct: \textbf{(A)} $f_Y(y)=\frac{1}{4}$ on $[2,6].$
+\item (b) $P(3.5\le Y\le 5)=\frac{5-3.5}{6-2}=\frac{1.5}{4}=0.375.$
+\item (c) $E[Y]=\frac{2+6}{2}=4.$
+\end{itemize}
+
+\hrule
+
+\subsection*{6. Mean and Variance}
+
+\textbf{6.1. Question}\\
+$Z$ takes values $\{0,1,2\}$ with probabilities $0.5,0.3,0.2.$
+\begin{enumerate}[label=(\alph*)]
+\item $E[Z]$ is
+  \begin{enumerate}[label=\Alph*.]
+  \item $0.3$
+  \item $0.7$
+  \item $0.5$
+  \item $1.0$
+  \end{enumerate}
+\item $E[Z^2]$ is
+  \begin{enumerate}[label=\Alph*.]
+  \item $0.5^2 + 0.3^2 + 0.2^2$
+  \item $0.5\cdot0 + 0.3\cdot1 + 0.2\cdot2$
+  \item $0^2\cdot0.5 + 1^2\cdot0.3 + 2^2\cdot0.2$
+  \item $\sum_{z=0}^2 z^2$
+  \end{enumerate}
+\item If $E[Z]\approx0.7$, compute $\mathrm{Var}(Z)=E[Z^2]- (E[Z])^2.$
+\end{enumerate}
+
+\noindent
+\textbf{6.1. Answer}
+\begin{itemize}
+\item (a) $E[Z]=0\times0.5+1\times0.3+2\times0.2=0.7.$ Correct: \textbf{(B)}.
+\item (b) $E[Z^2]=0^2\times0.5 + 1^2\times0.3 + 2^2\times0.2=1.1.$ Correct: \textbf{(C)}.
+\item (c) $\mathrm{Var}(Z)=1.1 - (0.7)^2=1.1-0.49=0.61.$
+\end{itemize}
+
+\textbf{6.2. Question}\\
+In one sentence, why might standard deviation be more straightforward than variance?
+\begin{enumerate}[label=\Alph*.]
+\item Because SD has units matching the original data
+\item Because variance is always negative
+\item Because standard deviation is never used
+\item Because standard deviation only works with discrete variables
+\end{enumerate}
+
+\noindent
+\textbf{6.2. Answer:} \textbf{(A)} The standard deviation is in the same units as the original data, making it more intuitive.
+
+\hrule
+
+\subsection*{7. Large Sample Theorems}
+
+\textbf{7.1. Question}\\
+The Law of Large Numbers (LLN) states that as $n$ grows large, the sample mean:
+\begin{enumerate}[label=\Alph*.]
+\item Always moves away from the true mean
+\item Converges to the distribution's mode
+\item Converges to the distribution's median
+\item Converges to the population mean
+\end{enumerate}
+
+\noindent
+\textbf{7.1. Answer:} \textbf{(D)} Converges to the population mean.
+
+\bigskip
+
+\textbf{7.2. Question}\\
+Exam scores have $\mu=70,\,\sigma=10.$ Let $\overline{X}$ be the mean of a random sample of $n=36.$ By the CLT:
+\begin{enumerate}[label=(\alph*)]
+\item $\overline{X}$ is approximately distributed as:
+  \begin{enumerate}[label=\Alph*.]
+  \item $\mathrm{Uniform}(70,10)$
+  \item $\mathrm{Normal}\!\Bigl(70,\frac{10^2}{36}\Bigr)$
+  \item $\mathrm{Normal}(70,10)$
+  \item $\mathrm{Binomial}(36,0.7)$
+  \end{enumerate}
+
+\item $P(\overline{X}>75)$ is:
+  \begin{enumerate}[label=\Alph*.]
+  \item $1-\Phi\!\bigl(\tfrac{75-70}{\,10/\sqrt{36}\,}\bigr)$
+  \item $1-\Phi\!\bigl(\tfrac{75-70}{10}\bigr)$
+  \item $\Phi\!\bigl(\tfrac{70-75}{\,10/\sqrt{36}\,}\bigr)$
+  \item $\sum_{k=75}^{100}\binom{36}{k}(0.7)^k(0.3)^{36-k}$
+  \end{enumerate}
+
+\item Which sample size makes the CLT approximation more accurate?
+  \begin{enumerate}[label=\Alph*.]
+  \item $n=36$
+  \item $n=100$
+  \item Both are the same
+  \item No difference
+  \end{enumerate}
+\end{enumerate}
+
+\noindent
+\textbf{7.2. Answer}
+\begin{itemize}
+\item (a) \textbf{(B)} $\mathrm{Normal}\!\bigl(70,\tfrac{10^2}{36}\bigr).$
+\item (b) \textbf{(A)} $1-\Phi\!\Bigl(\tfrac{75-70}{\,10/\sqrt{36}\,}\Bigr).$
+\item (c) \textbf{(B)} $n=100$ is more accurate.
+\end{itemize}
+
+\hrule
+
+\subsection*{8. Putting It All Together}
+
+\textbf{8.1. Question}\\
+You want to model the number of emails you receive daily. Which distribution is \emph{least} appropriate?
+\begin{enumerate}[label=\Alph*.]
+\item Binomial
+\item A Poisson-like distribution
+\item Normal (if large count, roughly symmetric)
+\item $\mathrm{Uniform}[0,1]$
+\end{enumerate}
+
+\noindent
+\textbf{8.1. Answer:} \textbf{(D)} $\mathrm{Uniform}[0,1]$ is least appropriate because daily emails are nonnegative integers, not a continuous fraction in $[0,1]$.
+
+\bigskip
+
+\textbf{8.2. Question}\\
+A student flips a fair coin $10$ times and gets $10$ heads. They say, ``My next flip \textit{must} be tails!'' Which statement best describes this reasoning?
+\begin{enumerate}[label=\Alph*.]
+\item Correct: next flip is guaranteed tails
+\item Incorrect: each flip is independent, so it's still $0.5$
+\item Possibly correct: the coin will ``balance out''
+\item Impossible to determine
+\end{enumerate}
+
+\noindent
+\textbf{8.2. Answer:} \textbf{(B)}. Each flip is independent, so probability of tails remains $0.5.$
+
+\end{document}

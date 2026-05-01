@@ -1,0 +1,1065 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{verbatimbox} % For verbatim inside custom environments
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,        % color of links to bibliography
+    urlcolor=magenta           % color of external links
+}
+
+% Define solution if
+\newif\ifsolutions
+% \solutionstrue % Uncomment this line to display solutions
+\solutionsfalse % Uncomment this line to hide solutions
+
+
+\author{\empty}
+\title{Problem Set 2. Probability \\ Quantitative Methods for Humanities}
+\date{\empty}
+
+\begin{document}
+
+\maketitle
+
+\bigskip
+
+\begin{enumerate}
+    %%%%
+    %% Problem 1
+    %%%%
+    \item \textbf{Newspaper Headlines and Event Unions.}
+    
+    A news article (hypothetical) shows that out of 500 front-page articles in a major newspaper:
+    \begin{itemize}[noitemsep]
+        \item 200 are related to politics (Event \( P \)).
+        \item 150 are related to social issues (Event \( S \)).
+        \item 60 are related to both politics and social issues.
+    \end{itemize}
+    Answer the following questions
+    \begin{enumerate}[label=(\alph*)]
+        \item What is the probability that a randomly chosen front-page article is about politics or social issues? %(Hint: Use \( P(P \cup S) = P(P) + P(S) - P(P \cap S) \).)
+        \item If you know an article is about politics, what is the probability it also involves social issues? %(Hint: \( P(S \mid P) = \frac{P(P \cap S)}{P(P)} \).)
+    \end{enumerate}
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item We know from the problem's data that
+        \begin{align*}
+            P(P) = \frac{200}{500} = 0.4,\quad P(S) = \frac{150}{500} = 0.3,\quad P(P \cap S) = \frac{60}{500} = 0.12.
+        \end{align*}
+        Therefore,
+        \begin{align*}
+            P(P \cup S) = P(P) + P(S) - P(P \cap S) = 0.4 + 0.3 - 0.12 = 0.58.
+        \end{align*}
+        That is, there is a 58\% chance that an article is about politics or social issues.
+        
+        \item This part is about computing the conditional probability $P(S \mid P) = \frac{0.12}{0.4} = 0.3$, meaning that, given that an article is about politics, there is a 30\% chance it also involves social issues.
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem 2
+    %%%%
+    \item \textbf{Polling Philosophers: Independence or Not?}
+    
+    A philosophical society publishes a study on 300 philosophers. For a given philosopher, define the events:
+    \begin{itemize}[noitemsep]
+        \item \( R \): “The philosopher self-identifies as a Rationalist.”
+        \item \( E \): “The philosopher primarily studies Ethics.”
+    \end{itemize}
+    It is known that:
+    \[
+    P(R)=0.4,\quad P(E)=0.25,\quad P(R \cap E)=0.12.
+    \]
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Check if \( R \) and \( E \) are independent by comparing \( P(R \cap E) \) with \( P(R) \times P(E) \).
+        \item Interpret the result.
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item Given that $P(R \cap E)=0.12.$ and $P(R) \times P(E) = 0.4 \times 0.25= 0.1.$, we can conclude that the events \( R \) and \( E \) are \textbf{not independent}.
+        
+        \item This indicates that there is a relationship between a philosopher identifying as a Rationalist and focusing on Ethics; knowing that one of these events happened changes the probability of the other one.
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Conditional Probability in Political Prediction.}    
+
+    Consider the following political prediction problem focused on forecasting the outcome of a presidential election:
+    
+    \begin{enumerate}[label=(\roman*)]
+        \item Historically, there is a \(1\) in \(4\) chance that a candidate from Party A will win the presidency in any given election.
+        \item A political polling system categorizes the likelihood of Party A’s win as high probability based on campaign trends and voter behavior.
+        \item Out of \(100\) elections won by Party A, the polling system identifies high probability in \(90\) cases.
+        \item There is a \(1\) in \(5\) chance that Party A will not win the election, yet the polling system still predicts high probability.
+    \end{enumerate}
+    
+    Answer the following questions:
+    \begin{enumerate}[label=(\alph*)]
+        \item Define the probabilities \(P(\text{Win})\), \(P(\text{HP} \mid \text{Win})\), \(P(\text{HP} \mid \text{Lose})\), and \(P(\text{Lose})\).
+        \item Using Bayes' rule, compute \(P(\text{Win} \mid \text{HP})\).
+        \item Interpret the result in the context of the polling system's prediction.
+    \end{enumerate}
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    To determine the probability \(P(\text{Win} \mid \text{HP})\), we use the following steps:
+    
+    \begin{enumerate}
+        \item \textbf{Define Probabilities.}
+        \begin{align*}
+            P(\text{Win}) &= \frac{1}{4} = 0.25, \quad \text{(Probability that Party A wins the presidency)}. \\
+            P(\text{HP} \mid \text{Win}) &= 0.90, \quad \text{(True positive rate of the prediction)}. \\
+            P(\text{HP} \mid \text{Lose}) &= 0.20, \quad \text{(False positive rate of the prediction)}. \\
+            P(\text{Lose}) &= 1 - P(\text{Win}) = 0.75, \quad \text{(Probability that Party A does not win)}.
+        \end{align*}
+    
+        \item \textbf{Apply Bayes' Rule.}
+        Using Bayes' rule, we compute \(P(\text{Win} \mid \text{HP})\) as:
+        \[
+        P(\text{Win} \mid \text{HP}) = \frac{P(\text{HP} \mid \text{Win}) \cdot P(\text{Win})}{P(\text{HP} \mid \text{Win}) \cdot P(\text{Win}) + P(\text{HP} \mid \text{Lose}) \cdot P(\text{Lose})}.
+        \]
+    
+        \item \textbf{Substitute Values.}
+        Substituting the given values:
+        \[
+        P(\text{Win} \mid \text{HP}) = \frac{(0.90) \cdot (0.25)}{(0.90 \cdot 0.25) + (0.20 \cdot 0.75)}.
+        \]
+    
+        \item \textbf{Calculate.}
+        Simplify and calculate:
+        \[
+        P(\text{Win} \mid \text{HP}) = \frac{0.225}{0.225 + 0.15} = \frac{0.225}{0.375} \approx 0.6.
+        \]
+    
+        \item \textbf{Interpretation.}
+        Given that the polling system predicts \textbf{High-Probability (HP)}, there is approximately a \(60\%\) chance that Party A will win the election. This highlights the predictive strength of the political forecast system.
+    \end{enumerate}
+    \fi \color{black}  
+        
+    %%%%
+    %% Problem 3
+    %%%%
+    \item \textbf{Bayes' Rule for Fake News Detection.} 
+    
+    The Collins Dictionary named “fake news” the 2017 term of the year. And for good reason. Fake, misleading, and biased news has proliferated along with online news and social media platforms which allow users to post articles with little quality control. 
+    
+    In this problem we will implement a basic news ``reality detector'' using Bayes Rule. To this end, we’ll examine a sample of 150 articles which were posted on Facebook and fact checked by five BuzzFeed journalists\footnote{Shu, Kai, Amy Sliva, Suhang Wang, Jiliang Tang, and Huan Liu. 2017. ``Fake News Detection on Social Media: A Data Mining Perspective'' ACM SIGKDD Explorations Newsletter 19 (1): 22–36.}. Information about each article is stored in the \texttt{fake\_news} dataset in the \texttt{bayesrules} package. To learn more about this dataset, type \texttt{?fake\_news} in your console.
+
+    \begin{enumerate}[label=(\alph*)]
+        \item Display a summary of the data.
+        \item Summarize in a table the total and relative numbers of fake (event $F$) and real articles (variable \texttt{type})
+        \item We will say that an article ``appears sensational'' (event $S$) if its title contains and exclamation mark (\texttt{title\_excl} variable). How many articles ''appear sensational'' among fake and real ones?
+        \item What is the probability $P(S \mid F)$
+        \item Use Baye's rule to compute compute the probability of an article being fake given that it ``appears sensational''
+    \end{enumerate}
+
+    \textbf{Discussion:}  
+    This approach illustrates how evidence (an article appearing sensational) can update our belief about its authenticity. Similar methods can be incorporated into fact-checking algorithms that continuously update the probability of a news article being fake as more features or evidence are observed.
+    
+    The take away is that we most take advantage of upcoming or extra information available to \textbf{update our prior believes of how likely is the occurrence of an event}, and Bayes' rule provide us a method to do this.
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item First, install the \texttt{bayesrule} package and load the dataset to display a summary:
+        \begin{verbatim}
+# install.packages(bayesrules)
+library(bayesrules)
+data(fake_news)
+summary(fake_news)
+        \end{verbatim}
+        
+        \item We compute the total and relative counts of fake (\(F\)) and real (\(R\)) articles:
+        \begin{verbatim}
+table(fake_news$type)
+prop.table(table(fake_news$type))
+        \end{verbatim}
+
+        \item An article is considered "sensational" (\(S\)) if its title contains an exclamation mark. We count the occurrences:
+        \begin{verbatim}
+            table(fake_news$type, fake_news$title_excl)
+        \end{verbatim}
+
+        \item We calculate the conditional probability:
+        
+        \begin{verbatim}
+p_S_given_F <- sum(fake_news$title_excl > 0 & fake_news$type == "fake") /
+               sum(fake_news$type == "fake")
+p_S_given_F
+        \end{verbatim}
+
+        \item Using Bayes' Rule:
+        \[
+        P(F \mid S) = \frac{P(S \mid F) P(F)}{P(S)}
+        \]
+        In R:
+        \begin{verbatim}
+p_F <- sum(fake_news$type == "fake") / nrow(fake_news)
+p_S <- sum(fake_news$title_excl > 0) / nrow(fake_news)
+p_F_given_S <- (p_S_given_F * p_F) / p_S
+p_F_given_S
+        \end{verbatim} 
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Bayesian Analysis of Stylometric Testing.}    
+    
+    It has been suggested\footnote{Art Winslow. The Fiction Atop the Fiction. September 2015. \href{http://harpers.org/2015/09/the-fiction-atop-the-fiction/}{link.}} that an anonymous novel published in 2010 might have been written by the American novelist \href{https://en.wikipedia.org/wiki/Thomas_Pynchon}{Thomas Pynchon}. A stylometric test is used to determine the likelihood of Pynchon's authorship. The test has the following properties:
+    \begin{enumerate}[label=(\alph*)]
+        \item The probability that a random work of literary fiction published between 1960 and 2010 was written by Pynchon (or under his pseudonym) is 1 in 100,000.
+        \item The test correctly identifies a work by Pynchon 90\% of the time.
+        \item The test incorrectly attributes a work to Pynchon 1\% of the time.
+    \end{enumerate}
+    The novel in question, published in 2010, tested \textbf{positive} for Pynchon's authorship. What is the probability that the novel was actually written by Pynchon?
+    \vspace{0.2cm}
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    Define the events
+    \begin{align*}
+        P &= \text{ a work of literary fiction between 1960 and 2010 is written by Pynchon}, \\
+        T &= \text{ the test identifies a work of literary fiction as written by Pynchon}.
+    \end{align*}
+    We get the following from the problem's data,
+    \begin{align*}
+        (a) &\Longrightarrow P(P) = 0.00001 \\
+        (b) &\Longrightarrow P(T | P) = 0.9 \quad (\text{sensitivity of the test}) \\
+        (c) &\Longrightarrow P(T | P^c) = 0.01 \quad (\text{false-positive rate}) 
+    \end{align*}
+    By Bayes' theorem, the probability that the novel was written by Pynchon given that the test was positive is:
+    \begin{align*}
+        P(P | T) 
+        &= \frac{P(T | P) P(P)}{P(T | P) P(P) + P(T | P^c) P(P^c)} \\
+        &=  \frac{0.9 \times 0.00001}{(0.9 \times 0.00001) + (0.01 \times 0.99999)} \\
+        &\approx 0.0009 \text{ (rounded to 4 decimal places)}
+    \end{align*}
+    Therefore, the probability that the novel was actually written by Pynchon given that the test was positive is approximately \( 0.0009 \) or \( 0.09\% \).
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{The Enigma machine.}
+    
+    During World War II, five cryptanalytic machines were developed to decode $1500$ messages encrypted by the Enigma cipher machine. The Table \ref{tb:enigma} below presents information on the number of messages assigned to each machine and the machine’s failure rate (i.e., the percentage of messages the machine was unable to decode). Aside from this information, we do not know anything about the assignment of each message to a machine or whether the machine was able to correctly decode the message.
+
+    \begin{table}[ht!]
+        \centering
+        \begin{tabular}{lcc}
+            \toprule
+            \textbf{Machine} & \textbf{Number of Messages} & \textbf{Failure Rate} \\
+            \midrule
+            Banburismus & 300 & 10\% \\
+            Bombe & 400 & 5\% \\
+            Herivel tip & 250 & 15\% \\
+            Crib & 340 & 17\% \\
+            Hut 6 & 210 & 20\% \\
+            \bottomrule
+        \end{tabular}
+        \caption{Number of messages and failure rates of cryptanalytic machines}
+        \label{tb:enigma}
+    \end{table}
+    
+    Suppose that we select one message at random from the pool of all $1500$ messages but find out this message was not properly decoded. Which machine was most likely responsible for this mistake?
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    Define the events
+    \begin{align*}
+        M_i &= \text{a given message was assigned to machine } i, \\    
+        F &= \text{a given message failed to be decoded}.
+    \end{align*}
+    The probability of $M_i$ can be computed via the information presented at Table \ref{tb:enigma} as follows:
+    \[
+    P(M_i) = \frac{\text{Number of messages assigned to machine } i}{\text{Total messages}}
+    \]
+    On the other hand, for each machine, the probability of failure given that the message was assigned to that machine is simply its failure rate, meaning that %Thus, the joint probability of selecting a message assigned to machine $i$ and having it fail is:
+    \[
+    P(F | M_i) = \text{Failure rate of machine } i.
+    \]
+    
+    We use now Bayes' theorem to determine the probability that a given machine is responsible for an error, given that a message was not properly decoded. That is,
+    \begin{align}\label{eq:Bayes_machine}
+        P(M_i\ |\ F) = \frac{P(F\ |\ M_i)P(M_i)}{P(F)}.
+    \end{align}
+    We already have the value of the numerator, and to compute the one on the denominator, $P(F)$, we use the law of the total probability:
+    \begin{align*}
+        P(F) &= \sum_{i=1}^5 P(F\ |\ M_i)P(M_i) \\
+        &= 0.10 \times \frac{300}{1500} + 0.05 \times \frac{400}{1500} + 0.15 \times \frac{250}{1500} 
+        + 0.17 \times \frac{340}{1500} + 0.20 \times \frac{210}{1500} 
+        = 0.1249.
+    \end{align*}
+    Going back to Bayes' formula \eqref{eq:Bayes_machine},
+    \begin{align*}
+        P(M_1 | F) &= \frac{0.02}{0.1249} \approx 0.16 \\
+        P(M_2 | F) &= \frac{0.0133}{0.1249} \approx 0.107 \\
+        P(M_3 | F) &= \frac{0.025}{0.1249} \approx 0.2 \\
+        P(M_4 | F) &= \frac{0.0386}{0.1249} \approx 0.31 \\
+        P(M_5 | F) &= \frac{0.028}{0.1249} \approx 0.22
+    \end{align*}
+    
+    \fi \color{black}
+    
+    %%%%
+    %% Problem 4 
+    %%%%
+    \item \textbf{Passing a Quiz by Randomly Answering.}
+    
+    You have a quiz tomorrow on the subject ``Quantitative Methods for Humanities'' and have not studied at all, hopping that the chances of passing (at least 5 points out of 10) by randomly answering are not too low. 
+    
+    The quiz consists of 10 multiple-choice questions. Each question has 4 possible answers, and only two are correct (this information is not known to you). A question is correctly answered only if both correct options are selected as true. Each correctly answered question earns 1 point.
+
+    \begin{enumerate}[label=\alph*)]
+        \item Using counting techniques, what is the probability of correctly answering a question?
+        \item By modeling the number of correctly answered questions as a binomial random variable, was is the probability that you passes the quiz?
+        \item Repeat the calculations of the previous parts by assuming that now you know that only two are of the four choices are correct for each question.
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\ 
+    \begin{enumerate}[label=\alph*)]
+    \item 
+    Each question has 4 alternatives; however, since \emph{two} answers are correct and a response is correct only when \emph{both} correct options are marked, a student who fills in a response by marking each option as true/false has $2^4=16$ possible answer patterns. Only \textbf{one} of these corresponds to marking exactly the two correct options. Thus, if you answer completely at random (without knowing that exactly 2 are correct), the probability to answer a given question correctly is 
+    \[
+    p_1=\frac{1}{16} = 0.0625.
+    \]
+    
+    \item 
+    If we model the total number of correctly answered questions as a binomial random variable with parameters $n=10$ and $p=p_1=\frac{1}{16}$, then the probability of passing (i.e., scoring at least 5 points) is
+    \[
+    P\big(X\ge5\big)=\sum_{k=5}^{10}\binom{10}{k}\left(\frac{1}{16}\right)^k\left(\frac{15}{16}\right)^{10-k}.
+    \]
+    A quick numerical evaluation shows that this probability is extremely low (on the order of $10^{-4}$).
+    
+    \item 
+    Now suppose that you \emph{do know} that exactly 2 out of the 4 alternatives are correct. In that case you should select exactly 2 options for each question. There are 
+    \[
+    \binom{4}{2}=6
+    \]
+    possible ways to choose 2 options, and only one of these is the correct pair. Thus, your probability of answering a question correctly improves to
+    \[
+    p_2=\frac{1}{6} \approx 0.1667.
+    \]
+    Modeling the number of correct answers as $X\sim \mathrm{Binomial}(10,\,p_2)$, the probability of passing becomes
+    \[
+    P\big(X\ge5\big)=\sum_{k=5}^{10}\binom{10}{k}\left(\frac{1}{6}\right)^k\left(\frac{5}{6}\right)^{10-k} \approx 0.015.
+    \]
+    
+    \end{enumerate}
+    
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{The pardoned prisoners.}
+
+    There are three prisoners: A, B, C. One prisoner, selected uniformly at random, will be pardoned while the other two will be executed. Prisoner A asks the jailer (who knows) to tell him one of the prisoners who will be executed: "If I will be pardoned, just flip a coin and tell me B or C; if C will be pardoned, tell me B; and if B will be pardoned, tell me C." The jailer says B will be executed. 
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Using Bayes Rule, what is the numerator of the expression evaluating the probability that C is pardoned?
+        \begin{enumerate}[label=(\roman*)]
+            \item P(\text{B is executed}\ |\ \text{C is pardoned}) P(\text{B is executed}); or
+            \item P(\text{jailer says B executed}\ |\ \text{C is pardoned}) P(\text{C is pardoned}); or
+            \item P(\text{C is pardoned}\ |\ \text{jailer says B is executed}) P(\text{B is executed})?
+        \end{enumerate}
+        \item What is the probability of C being pardoned?
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item Using Bayes' Rule, we need to find the numerator in the expression evaluating the probability that C is pardoned. Bayes' Theorem states:
+        \begin{align*}
+            &P(\text{C is pardoned} \ | \ \text{jailer says B is executed}) \\
+            &= \frac{P(\text{jailer says B is executed} \ | \ \text{C is pardoned}) P(\text{C is pardoned})}{P(\text{jailer says B is executed})}.
+        \end{align*}
+        Thus, the correct numerator is:
+        \[
+        P(\text{jailer says B is executed} \ | \ \text{C is pardoned}) P(\text{C is pardoned}).
+        \]
+        Therefore, the correct answer is option (ii).
+    
+        \item Now, we compute the probability that C is pardoned given that the jailer says B is executed.
+    
+        Since the pardoning is uniformly random, the prior probabilities are:
+        \[
+        P(A \text{ is pardoned}) = P(B \text{ is pardoned}) = P(C \text{ is pardoned}) = \frac{1}{3}.
+        \]
+    
+        The jailer says that B is pardoned with the following conditional probabilities:
+        \begin{enumerate}[label=\roman*.]
+            \item If C is pardoned, both A and B are executed, and the jailer always says B, meaning
+            \[
+            P(\text{jailer says B is executed} \ | \ C \text{ is pardoned}) = 1, 
+            \]
+            
+            \item If A is pardoned, the jailer randomly says B or C with equal probability, so
+            \[
+            P(\text{jailer says B is executed} \ | \ A \text{ is pardoned}) = \frac{1}{2}.
+            \]
+
+            \item If B is pardoned, the jailer must say C is executed, hence
+            \[
+            P(\text{jailer says B is executed} \ | \ B \text{ is pardoned}) = 0.
+            \]
+        \end{enumerate}  
+        Using the Law of Total Probability and substituting values, we get that
+        \begin{align*}
+            &P(\text{jailer says B is executed}) \\
+            &= P(\text{jailer says B is executed} \ | \ A \text{ is pardoned}) P(A \text{ is pardoned}) \\
+            &\hspace{0.4cm} + P(\text{jailer says B is executed} \ | \ C \text{ is pardoned}) P(C \text{ is pardoned}). \\
+            &= \left(\frac{1}{2} \times \frac{1}{3} \right) + \left(1 \times \frac{1}{3} \right) = \frac{1}{6} + \frac{1}{3} = \frac{1}{2}.
+        \end{align*}
+        Now, applying Bayes’ Rule:
+        \[
+        P(C \text{ is pardoned} \ | \ \text{jailer says B is executed}) = \frac{1 \times \frac{1}{3}}{\frac{1}{2}} = \frac{\frac{1}{3}}{\frac{1}{2}} = \frac{2}{3}.
+        \]
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Guessing the fair coin.}    
+
+    You have a bucket with 2 coins: one is a regular coin, while the other has heads on both sides. You pick a coin at  random and flip it: it turns up heads. What is the probability you chose the fair coin?
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+        Define the events:
+        \begin{align*}
+            F &= \text{the fair coin is chosen}, \quad 
+            H = \text{we get heads on the flip.}
+        \end{align*}
+        Since we pick a coin at random:
+        \[
+        P(F) = P(\text{two-headed coin}) = \frac{1}{2}.
+        \]
+        The probabilities of flipping heads given the selected coins are
+        \[
+        P(H | F) = \frac{1}{2}, \quad P(H | \text{two-headed}) = 1.
+        \]
+        By Bayes’ Rule:
+        \[
+        P(F | H) = \frac{P(H | F) P(F)}{P(H)}.
+        \]
+        Note that we need $P(H)$, which we compute as follows using the Law of Total Probability:
+        \begin{align*}
+            P(H) &= P(H | F) P(F) + P(H | \text{two-headed}) P(\text{two-headed}) \\
+            &= \left(\frac{1}{2} \times \frac{1}{2}\right) + \left(1 \times \frac{1}{2}\right) = \frac{1}{4} + \frac{1}{2} = \frac{3}{4}
+        \end{align*}
+        Going back to Bayes’ formula:
+        \[
+        P(F | H) = \frac{\frac{1}{2} \times \frac{1}{2}}{\frac{3}{4}} = \frac{\frac{1}{4}}{\frac{3}{4}} = \frac{1}{3}.
+        \]
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Making fair the unfair coin.}    
+
+    An unfair coin lands head with probability $p > 0.5$. Cleverly, you designed the following method to make the coin fair: toss the coin twice, if the same side appear in both trials, start again, if two different sides appear, take the last tossing as the valid one. Prove that this new method makes the probability of each side equal. What would happen if the coin is tricked in the sense that has heads in both sides? 
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    % Define:
+    % $$  
+    % P(H) = p, \quad P(T) = 1 - p.
+    % $$
+    Since the tosses are independent from each other, the four possible outcomes for the two coin tosses are:
+    \begin{center}
+    \begin{tabular}{c c c}
+        \textbf{First Toss} & \textbf{Second Toss} & \textbf{Probability} \\
+        \hline
+        H & H & \( p^2 \) \\
+        H & T & \( p(1 - p) \) \\
+        T & H & \( (1 - p)p \) \\
+        T & T & \( (1 - p)^2 \) \\
+        \hline
+    \end{tabular}
+    \end{center}
+    Therefore, this new methods yields Head (TH event) and Tail (HT) with the same probability $p(1-p)$. If it was a tricked coin this method still prevents unfairness, since all the outcomes would be HH, leading to always repeating the experiment and eventually concluding that the coin is not fair.
+    \fi \color{black}
+
+    % %%%%
+    % %% Problem
+    % %%%%
+    % \item \textbf{Uniform distribution.}
+
+    % What is the probability that a random variable with a uniform distribution in the range [1, 4] takes on a value less than or equal to 2.5?
+
+    % \ifsolutions \color{blue} \textbf{Solution:} \\
+        
+    % \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Testing Psychic Abilities with the Zener Test.}
+    
+    The \textbf{Zener Test} is an experiment used to test for extrasensory perception (ESP). A researcher shows a subject a deck of 25 cards, each with one of five symbols (circle, cross, waves, square, star). The subject must guess the symbol on each card before seeing it. (Curious about your result? Take the test \href{https://psychicscience.org/esp3}{here})
+    \begin{enumerate}
+        \item Compute the probability of randomly guessing the correct symbol.
+        \item Given that the subject completes a 25-card Zener Test, model the number of correct guesses \( X \) using a random variable.
+        \item What is the expected number of correct guesses if the subject has no psychic ability?
+        \item What is the probability of getting exactly 10 correct guesses?
+        \item What is the probability of getting 15 or more correct guesses?
+        \item If a subject correctly guesses 15 or more cards, would this be strong evidence for psychic ability? Why or why not?
+        \item If 1,000 people take the test, what is the probability that at least one person gets 15 or more correct guesses?
+        \item If we increase the number of test participants, this probability also increases. Does that mean we can prove the existence of psychic abilities simply by increasing the sample size? Discuss this seemingly ``paradox''.
+\end{enumerate}
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}
+        \item Since there are 5 possible symbols and only one is correct per guess, the probability of randomly guessing correctly is $p = \frac{1}{5} = 0.2$.
+        
+        \item Since each guess is independent and has two possible outcomes (correct or incorrect), the number of correct guesses \( X \) follows a binomial distribution: $X \sim \text{Bin}(n=25, p=0.2)$.
+
+        \item The expected number of correct guesses is given by the expectation formula for a binomial distribution: $E(X) = n \cdot p = 25 \times 0.2 = 5$. Thus, if the subject is guessing randomly, we expect about \textbf{5 correct guesses}.        
+
+        \item Using the binomial probability mass function:
+         $$   
+        P(X = k) = \binom{n}{k} p^k (1 - p)^{n-k},
+        $$
+        where $n = 25$ is the number of total trials, $k = 10$ is the number of successful guesses, and $p = 0.2$ is the probability of a correct guess. Then
+        $$
+        P(X = 10) = \binom{25}{10} (0.2)^{10} (0.8)^{15} \approx 0.0414.
+        $$
+        
+        \item The probability of getting 15 or more correct guesses is:
+        $$
+        P(X \geq 15) = 1 - P(X \leq 14) \approx 0.0005.
+        $$
+
+        \item We just proved that randomly guessing 15 or more correct cards is highly unlikely. This could suggest that the subject has \textbf{some ability beyond random chance}. However, further testing would be needed to confirm this.
+
+        \item Each test-taker independently has a probability of
+        $
+        q = P(X \geq 15) = 0.0005
+        $
+        of achieving $15$ or more correct guesses by chance. 
+        If there are \( N = 1000 \) participants, we compute the probability that at least one of them achieves this by using the complement rule:
+        \[
+        P(\text{at least one person gets 15+}) = 1 - P(\text{nobody gets 15+}).
+        \]
+        Since each person independently has a \( 1 - q = 0.9995 \) probability of \textbf{not} getting 15 or more correct guesses, the probability that all 1,000 fail is:
+        \[ 
+        P(\text{nobody gets 15+}) = (1-q)^{1000} \approx 0.6065.
+        \]
+        Thus, the probability that at least one person gets 15+ correct is:
+        $$
+        P(\text{at least one gets 15+}) \approx 1 - 0.6065 = 0.3935.
+        $$
+        So there is nearly a $40\%$ chance that at least one person in the group appears to have psychic ability purely by luck.
+
+        \item While the probability of finding a "psychic" increases with the sample size, this does not mean that psychic ability actually exists. 
+        \begin{itemize}
+            \item In any large enough sample, \textbf{rare events happen by chance}.
+            \item The correct way to test the existence of psychic abilities is not to rely on a single lucky individual, but rather to analyze whether successful test-takers continue to systematically outperform chance across repeated experiments. 
+            \item True psychics should consistently perform above chance levels, while lucky individuals who guessed well should regress to the mean in future trials.
+            \item When testing collective, the threshold number of people who test positive for psychic abilities to consider that psychic abilities exist should increase along with the sample size.    
+        \end{itemize}
+    \end{enumerate}
+    
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Mean and variance.}
+    
+    Suppose I give you a random variable $X$, such that its mean is 0 and that the expectation of $X^2$ is 5. What is the variance of $X$?
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    
+    \fi \color{black}
+    %%%%
+    %% Problem
+    %%%%
+    % \item \textbf{Voting probability.}
+    
+    % Suppose there are 10 voters in an election for two candidates A and B. Each voter independently chooses to vote for A with probability 0.1, and for B with probability 0.9. What is the approximate probability that A gets at least 1 vote?
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Anthropology study of weight.}
+    
+    It is known that the elderly women of a certain rural American population have a mean weight of \( \mu = 150 \) pounds, with a standard deviation of \( \sigma = 10 \). Assuming the weight follows a normal distribution, find:
+
+    \begin{enumerate}
+        \item[(a)] The probability of selecting a woman who weighs between 125 and 135 pounds.
+        \item[(b)] The probability of selecting a woman who weighs between 140 and 160 pounds.
+    \end{enumerate}
+
+    Now drop the normality assumption and find:
+    \begin{enumerate}
+        \item[(c)] An approximation of the probability that a sample of size \( n = 30 \) has a sample mean \( \bar{Y} \geq 153 \). What would your answer be if \( n = 100 \)?
+    \end{enumerate}
+
+    What can you conclude from the results?
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Compute the $z$-scores:
+        $$
+        z_1 = \frac{125 - 150}{10} = -2.5, \quad z_2 = \frac{135 - 150}{10} = -1.5.
+        $$
+        Using the standard normal table:
+        $$
+        P(125 \leq X \leq 135) = P(Z \leq z_2) - P(Z \leq z_1) \approx 0.0668 - 0.0062 = 0.0606.
+        $$
+        Alternatively, using R:
+        $$
+        \texttt{pnorm(135, mean = 150, sd = 10) - pnorm(125, mean = 150, sd = 10)}
+        $$
+    
+        \item Similarly,
+        $$
+        P(140 \leq X \leq 160) = P(Z \leq 1) - P(Z \leq -1) \approx 0.8413 - 0.1587 = 0.6826.
+        $$
+        Alternatively, using R:
+        $$
+        \texttt{pnorm(160, mean = 150, sd = 10) - pnorm(140, mean = 150, sd = 10)}
+        $$
+    
+        \item Even without the normality assumption at individual level, the Central Limit Theorem ensures that, for large samples, the average still distributes almost normal with mean $\mu$ and standard deviation
+        \[
+        \sigma_{\bar{Y}} = \frac{10}{\sqrt{n}}.
+        \]
+        For \( n = 30 \):
+        \[
+        \sigma_{\bar{Y}} = \frac{10}{\sqrt{30}} \approx 1.83, \quad Z = \frac{153 - 150}{1.83} \approx 1.6393.
+        \]
+        In this case $P(Z > 1.6393) = \texttt{pnorm(1.6393, lower.tail = FALSE)} \approx 0.9494$.
+        
+        For \( n = 100 \):
+        \[
+        \sigma_{\bar{Y}} = \frac{10}{\sqrt{100}} \approx 1.29, \quad Z = \frac{153 - 150}{1} = 3.
+        \]
+        In this case $P(Z > 3) = \texttt{pnorm(3, lower.tail = FALSE)} \approx 0.0013$.
+    \end{enumerate} 
+        
+    \textbf{Conclusion:} While individual probabilities depend on the normal assumption, the Central Limit Theorem ensures that for large \( n \), the probability of observing an extreme sample mean remains negligible.
+    
+    \fi \color{black}
+    
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Beating the Casino?}
+
+    A casino offers a simple game: a player bets €1, and with probability 0.49, they win €2; otherwise, she loses her €1 bet.
+
+    \begin{enumerate}[label=(\alph*)]
+        \item Compute the expected net profit per bet.
+        \item Suppose a gambler plays 10 times. Could they walk away with a profit? With what probability? 
+        \item What if she plays $10,000$ times? Use the Central Limit Theorem. Is this method accurate for the previous part where the gambler payed only 10 times?
+        \item Use the Law of Large Numbers to give an approximation of the profit the casino makes after $n$ bets, for large $n$. Use this estimation to explain how the casino ensures that, over a long period, it will always make a profit, even though some individuals may win in the short run.
+        \item A player has lost 5 times in a row and believes they are now ``due for a win''. Explain why this reasoning is incorrect.
+    \end{enumerate}
+
+    
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}
+        \item Let the random variable $X$ represents the profit per bet, which can only takes two values. Note that $p = P(X = 1) 0.49 = 1- P(X=-1)$. The expected profit per bet is
+        \[
+        E[X] = (0.49 \times 1) + (0.51 \times (-1)) = 0.49 - 0.51 = -0.02.
+        \]
+        That is, the player loses, on average, €$0.02$ per bet, meaning the casino profits €$0.02$ per bet on average.
+        
+        \item Let $X_i$ be the profit made in the $n$-th bet and \( S_{n} \) be the total profit after $n$ bets, note that \(S_{n}\) can be expressed as
+        $$
+        S_n = 2Y_n - n,\quad Y_n = \sum_{i=1}^n(X_i + 1)/2.
+        $$
+        Since each bet is independent and $(X_i + 1)/2 \sim \text{Ber}(p)$, then $Y_n$ is a binomial random variable, specifically, $Y_n\sim\text{Bin}(n, p)$. Then the probability of walking away with a profit after $10$ bets is:
+        \[
+        P(S_{10} > 0) = P(Y_{10} \geq 6) = \sum_{k = 6}^{10} \binom{10}{k} (0.49)^k (0.51)^{10-k} \approx = 0.347.
+        \]
+        This probability was computed in R using the command \texttt{1 - pbinom(5, n = 10, p = 0.49)}.
+
+        \item Recall that $S_n = \sum_{i=1}^n X_i$, where the random variables $X_i$ are i.i.d. with mean $\mu = -0.02$ and variance $\sigma^2 = E[X^2] - \mu^2 = 1 - 0.02^2 = 0.9996$. The CLT states that, for $n$ large enough,
+        $$
+        \frac{\frac{1}{n}S_n - \mu}{\sigma/\sqrt{n}} \approx N(0, 1).
+        $$
+        Our sample size is significantly large \( n = 10,000 \), thus, for our case
+        \begin{align*}
+            P(S_n \geq 0)
+            &= P\left(\frac{\frac{1}{n}S_n - \mu}{\sigma/\sqrt{n}} > \frac{ - \mu}{\sigma/\sqrt{n}}\right) 
+            \approx P\left(Z > \frac{0.02}{0.9996/\sqrt{10,000}}\right) \\
+            &\approx P(Z > 0.0008) \approx 0.0227
+        \end{align*}
+        where the last probability was computed using the R command \texttt{pnorm(2.0008, lower.tail = FALSE)}.
+        Thus, after 10,000 bets, the chances of making any profit is only $2.28\%$.
+    
+        \item Let $W_n$ denote the profit of the casino after $n$ bets. By the LLN, for a large number of bets $n$, this profit is approximated as
+        \begin{align*}
+            W_n \approx 0.02 n.
+        \end{align*}
+        Hence,
+        \begin{itemize}
+            \item[] The casino ensures long-term profit by hosting thousands of bets daily, making individual wins negligible. Short-term variance allows some players to win big, but the aggregate effect guarantees steady income for the house.
+        \end{itemize}
+    
+        \item Each bet is independent, meaning that the probability of winning remains 0.49 regardless of past outcomes. A losing streak does not affect future bets, and believing otherwise is a cognitive bias. The correct mindset is to recognize that probabilities reset on each bet.
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem 
+    %%%%
+    \item \textbf{Democracy and the Condorcet’s Jury Theorem (CJT)\footnote{Condorcet, Marquis de, 1785, Essai sur l’application de l’analyse à la probabilité des décisions rendues àla pluralité des voix, Paris; reprinted Cambridge: Cambridge University Press, 2014. DOI: 10.1017/CBO9781139923972}.}
+    
+    The CJT states that, when certain assumptions hold, the probability that a majority of voters support the correct decision increases and approaches one as the number of voters increases. The assumptions are:
+
+    \begin{enumerate}[label=(\roman*)]
+        \item each voter is more likely than not to identify the correct decision (the competence assumption);
+        \item voters vote for what they believe is the correct decision (the sincerity assumption);
+        \item votes are independent from each other (the independence assumption).
+    \end{enumerate}
+
+    Introduce the notation
+    \begin{align*}
+        p &= \text{probability that an individual voter makes the correct decision;}   \\
+        N &= \text{total number of voters;} \\
+        X &= \text{number of voters who vote correctly.}
+    \end{align*}
+    Assume that $N$ is odd to avoid the possibility of a tie. 
+    Prove the theorem by following this steps:
+    \begin{enumerate}[label=(\alph*)]
+        \item What is the distribution of $X$? What are its mean and variance?
+        \item Express the probability of the right choice winning using $X$'s distribution.
+        \item Compute the probability of choosing the correct decision for $N = 5, 15, 25$ and $p = 0.6$. Comment.
+        \item Use the CLT to approximate the distribution of $X$ for large $N$. 
+        \item Use the CLT to express the probability of the right choice winning in terms of a standard normal random variable.
+        \item Take $N\rightarrow\infty$ to conclude the proof.
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    % The ``competence assumption'' implies that $p > \frac{1}{2}$. 
+    % The majority rule implies that the correct decision is chosen if more than half of the voters vote correctly.
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Due to the ``independence assumption'', $X \sim \text{Bin}(N, p)$. Hence, $E[X] = Np$ and $Var(X) = Np(1-p)$.
+        
+        \item For $N$ odd, the probability that the majority votes correctly is:
+        \[
+        P(X > N/2) = \sum_{k = N/2 + 0.5 }^{N} \binom{N}{k} p^k (1 - p)^{N-k}.
+        \]    
+        
+        \item Fixing $p = 0.6$,
+        \begin{align*}
+            P(X > 2.5) &= \texttt{pbinom(2.5, 5, 0.6, lower.tail = F)} \approx 0.6826,\quad (N = 5), \\
+            P(X > 7.5) &= \texttt{pbinom(7.5, 15, 0.6, lower.tail = F)} \approx 0.7869,\quad (N = 15), \\
+            P(X > 12.5) &= \texttt{pbinom(12.5, 25, 0.6, lower.tail = F)} \approx 0.8462,\quad (N = 25).
+        \end{align*}
+        The probability of choosing the right option increases in $N$.
+
+        \item By the CLT, for large \(N\), the binomial distribution can be approximated by a normal distribution:
+        \[
+        X \approx \mathcal{N}(Np, Np(1 - p)).
+        \]
+    
+        \item Therefore,
+        \[
+        P(X > N/2) \approx P \left( Z > \frac{N/2 - Np}{\sqrt{Np(1 - p)}} \right),
+        \]
+        where
+        \[
+        Z = \frac{X - Np}{\sqrt{Np(1 - p)}} \sim N(0, 1).
+        \]
+
+        \item Note that 
+        $$
+        \lim_{N\rightarrow\infty} \frac{N/2 - Np}{\sqrt{Np(1 - p)}} = \frac{N(1/2 - p)}{\sqrt{Np(1 - p)}} = -\infty.
+        $$
+        Hence,
+        $$
+        \lim_{N\rightarrow\infty} P(X > N/2) = \lim_{N\rightarrow\infty} P \left( Z > \frac{N/2 - Np}{\sqrt{Np(1 - p)}}\right) = P(Z > -\infty) = 1,
+        $$
+        which concludes the proof of the Condorcet’s Jury Theorem.
+    \end{enumerate}
+    \fi \color{black}
+    
+    % %%%%
+    % %% Problem 
+    % %%%%
+    % \item \textbf{Democracy and the Condorcet’s Jury Theorem}
+    
+    % In a democratic decision-making scenario, suppose there is a **binary decision** (e.g., "guilty" or "not guilty," "approve" or "reject"). Each voter has an independent probability \( p \) of identifying the correct decision, where \( p > 0.5 \) (i.e., voters are more likely than not to be correct). The total number of voters is \( N \), and the decision is made by **majority rule**.
+
+    % \begin{enumerate}
+    %     \item Express the probability that a majority of voters will choose the correct decision in terms of a binomial probability.
+    %     \item Using the Law of Large Numbers, explain what happens to this probability as \( N \) increases.
+    %     \item If \( p = 0.55 \), compute the probability that the majority selects the correct decision for \( N = 10 \) and \( N = 1,000 \) using the normal approximation to the binomial.
+    %     \item Explain the epistemic implications of the result for democratic decision-making.
+    % \end{enumerate}
+
+    % \ifsolutions \color{blue} \textbf{Solution:} \\
+    % \begin{enumerate}
+    %     \item The number of correct votes follows a \textbf{binomial distribution}:
+    %     \[
+    %     X \sim \text{Bin}(N, p),
+    %     \]
+    %     where \( X \) is the number of correct votes. A majority is correct if at least \( M = \lceil N/2 \rceil \) voters are correct. Thus, we want:
+    %     \[
+    %     P(X \geq M).
+    %     \]
+    
+    %     \item By the \textbf{Law of Large Numbers}, as \( N \to \infty \), the proportion of correct votes:
+    %     \[
+    %     \frac{X}{N} \to p.
+    %     \]
+    %     Since \( p > 0.5 \), the fraction of correct votes **will exceed 50% with probability approaching 1**, meaning that the majority decision almost surely becomes correct.
+    
+    %     \item Using the \textbf{normal approximation to the binomial}:
+    %     \[
+    %     X \approx \mathcal{N}(\mu, \sigma^2),
+    %     \]
+    %     where
+    %     \[
+    %     \mu = Np, \quad \sigma^2 = Np(1 - p).
+    %     \]
+    %     The probability that the majority is correct is approximated as:
+    %     \[
+    %     P\left( X \geq M \right) \approx 1 - \Phi \left( \frac{M - \mu}{\sigma} \right),
+    %     \]
+    %     where \( \Phi \) is the standard normal CDF.
+    
+    %     Substituting \( p = 0.55 \):
+    
+    %     - For \( N = 10 \):
+    %       \[
+    %       \mu = 10 \times 0.55 = 5.5, \quad \sigma = \sqrt{10 \times 0.55 \times 0.45} \approx 1.57.
+    %       \]
+    %       Approximating \( M = 6 \),
+    %       \[
+    %       z = \frac{6 - 5.5}{1.57} \approx 0.32.
+    %       \]
+    %       Using the normal table, \( P(X \geq 6) \approx 0.63 \).
+    
+    %     - For \( N = 1000 \):
+    %       \[
+    %       \mu = 1000 \times 0.55 = 550, \quad \sigma = \sqrt{1000 \times 0.55 \times 0.45} \approx 15.7.
+    %       \]
+    %       Approximating \( M = 501 \),
+    %       \[
+    %       z = \frac{501 - 550}{15.7} \approx -3.12.
+    %       \]
+    %       Using the normal table, \( P(X \geq 501) \approx 0.999 \).
+    
+    %     \item \textbf{Epistemic Implications:}  
+    %     - As the number of voters increases, the probability of a correct majority decision **approaches 1**.  
+    %     - This supports the idea that **large democracies make better decisions** under the assumptions of Condorcet’s Jury Theorem: individual competence, sincerity, and independence.  
+    %     - However, if voters are biased (\( p < 0.5 \)), the result reverses, and large electorates would systematically make **incorrect decisions**.
+    % \end{enumerate}
+    % \fi \color{black}
+    
+\end{enumerate}
+
+% \bigskip
+
+% \subsection*{Exercise 5: Predicting Voting Outcomes (Binomial)}
+
+% In a local referendum, suppose each voter has a 60\% chance of voting ``Yes.'' If 1,000 voters turn out, let
+% \[
+% X \sim \text{Binomial}(1000, 0.60)
+% \]
+% be the total number of ``Yes'' votes.
+% \begin{enumerate}
+%     \item Compute the expected value \( E[X] \).
+%     \item Calculate the approximate probability that the referendum passes (i.e., more than 500 ``Yes'' votes).
+% \end{enumerate}
+
+% \ifsolutions \color{blue} \textbf{Solution:} \\
+% \textbf{Step 1.} The expected value for a binomial random variable is:
+% \[
+% E[X] = n \cdot p = 1000 \times 0.60 = 600.
+% \]
+
+% \textbf{Step 2.} To compute the probability that \( X > 500 \), note that the standard deviation is
+% \[
+% \sigma = \sqrt{n p (1-p)} = \sqrt{1000 \times 0.60 \times 0.40} \approx \sqrt{240} \approx 15.49.
+% \]
+% Using a normal approximation, the \( z \)-score for \( X = 500 \) is:
+% \[
+% z = \frac{500 - 600}{15.49} \approx \frac{-100}{15.49} \approx -6.45.
+% \]
+% A \( z \)-score of \(-6.45\) is extremely low, so:
+% \[
+% P(X > 500) \approx 1.
+% \]
+% Thus, the referendum is almost certain to pass.
+
+% \textbf{R Tip:}
+% \begin{lstlisting}
+% # Probability that "Yes" exceeds 500
+% 1 - pbinom(500, size = 1000, prob = 0.6)
+% \end{lstlisting}
+% \fi \color{black}
+
+% \bigskip
+
+% \subsection*{Exercise 6: Ancient Manuscripts and Word Length (Uniform Distribution)}
+
+% A philologist assumes that the length of words (in letters) in a manuscript is uniformly distributed between 3 and 8 (inclusive).
+% \begin{enumerate}
+%     \item Compute \( E[L] \) and \( \mathrm{Var}(L) \) for this discrete uniform distribution.
+%     \item Discuss whether the uniform model is realistic and suggest an alternative.
+% \end{enumerate}
+
+% \ifsolutions \color{blue} \textbf{Solution:} \\
+% \textbf{Step 1.} The outcomes are \( \{3,4,5,6,7,8\} \) (6 values). The mean is:
+% \[
+% E[L] = \frac{3+4+5+6+7+8}{6} = \frac{33}{6} = 5.5.
+% \]
+% For the variance of a discrete uniform distribution on \( \{a, a+1, \dots, b\} \), a formula is:
+% \[
+% \mathrm{Var}(L) = \frac{(b - a + 1)^2 - 1}{12}.
+% \]
+% Here, \( b-a+1 = 8-3+1 = 6 \). Thus,
+% \[
+% \mathrm{Var}(L) = \frac{36 - 1}{12} = \frac{35}{12} \approx 2.92.
+% \]
+
+% \textbf{Step 2.} \textbf{Discussion:}  
+% Although the uniform model is simple, real word-length distributions are typically skewed (often modeled by a Poisson or a log-normal distribution). The uniform model may serve as an introductory approximation, but further study could explore more realistic models.
+% \fi \color{black}
+
+% \textbf{R Tip:}
+% \begin{lstlisting}
+% # Simulate word lengths from a discrete uniform distribution
+% set.seed(789)
+% word_lengths <- sample(3:8, 100, replace = TRUE)
+% mean(word_lengths)
+% var(word_lengths)
+% \end{lstlisting}
+
+% \bigskip
+
+
+
+% \bigskip
+
+% \subsection*{Exercise 8: Political Speeches Word Counts (Expectation \& Variance)}
+
+
+% Consider the word counts (in words) of 10 election campaign speeches:
+% \[
+% 1250,\; 1500,\; 1100,\; 2200,\; 1800,\; 1300,\; 1450,\; 1600,\; 2100,\; 1750.
+% \]
+% \begin{enumerate}
+%     \item Compute the sample mean \( \overline{y} \) and sample variance \( s^2 \).
+%     \item Interpret the results in terms of consistency in speech lengths.
+% \end{enumerate}
+
+% \ifsolutions \color{blue} \textbf{Solution:} \\
+% \textbf{Step 1.} \textbf{Calculating the Sample Mean:}
+% \[
+% \text{Sum} = 1250+1500+1100+2200+1800+1300+1450+1600+2100+1750 = 16050.
+% \]
+% \[
+% \overline{y} = \frac{16050}{10} = 1605.
+% \]
+
+% \textbf{Step 2.} \textbf{Sample Variance:}  
+% Using the formula
+% \[
+% s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (y_i - \overline{y})^2,
+% \]
+% one can compute \( s^2 \) (this can be done by hand or using R). A high variance indicates that the speech lengths vary widely, suggesting less consistency in the candidate's speech style, while a low variance would suggest a more uniform approach.
+% \fi \color{black}
+
+% \textbf{R Tip:}
+% \begin{lstlisting}
+% speeches <- c(1250, 1500, 1100, 2200, 1800, 1300, 1450, 1600, 2100, 1750)
+% mean_speeches <- mean(speeches)
+% var_speeches <- var(speeches)
+% mean_speeches
+% var_speeches
+% \end{lstlisting}
+
+% \bigskip
+
+% \subsection*{Exercise 9: Sentiment Analysis in Political Tweets (Conditional Probability)}
+
+% A research note claims that:
+% \[
+% P(\text{policy}) = 0.70,\quad P(\text{positive}) = 0.40,\quad P(\text{policy} \cap \text{positive}) = 0.25.
+% \]
+% \begin{enumerate}
+%     \item Compute \( P(\text{positive} \mid \text{policy}) \).
+%     \item Are the events ``policy'' and ``positive'' independent?
+% \end{enumerate}
+
+% \ifsolutions \color{blue} \textbf{Solution:} \\
+% \textbf{Step 1.} Compute the conditional probability:
+% \[
+% P(\text{positive} \mid \text{policy}) = \frac{P(\text{policy} \cap \text{positive})}{P(\text{policy})} = \frac{0.25}{0.70} \approx 0.357.
+% \]
+
+% \textbf{Step 2.} Check for independence:
+% \[
+% P(\text{positive}) = 0.40 \quad \text{and} \quad 0.357 \neq 0.40.
+% \]
+% Thus, the events are \textbf{not independent}.
+
+% \textbf{Discussion:}  
+% The lower conditional probability compared to the marginal probability of a positive tone suggests that policy-related tweets may be somewhat less positive than tweets in general.
+% \fi \color{black}
+
+% \bigskip
+
+% \subsection*{Exercise 10: Historical Voting Records and Bayes (Tiny R Project)}
+
+% Suppose historical records from a legislative assembly indicate that initially, we believe that a politician is equally likely to support or oppose progressive reforms (i.e., prior \( \text{Beta}(1,1) \)). In a sample of 5 new legislators, each votes ``yes'' on 8 out of 10 progressive reform proposals.
+% \begin{enumerate}
+%     \item Update the posterior distribution for a legislator's probability of voting ``yes''.
+%     \item Discuss the idea of evidence-based updating.
+% \end{enumerate}
+
+% \ifsolutions \color{blue} \textbf{Solution:} \\
+% \textbf{Step 1.}  
+% With a Beta prior \( \text{Beta}(1,1) \) and data showing 8 successes (``yes'' votes) in 10 trials, the posterior is:
+% \[
+% \text{Beta}(1+8,\, 1+10-8) = \text{Beta}(9, 3).
+% \]
+% The mean of the Beta distribution is:
+% \[
+% E[p] = \frac{9}{9+3} = \frac{9}{12} = 0.75.
+% \]
+% Thus, after observing the votes, our updated belief is that there is a 75\% chance that a legislator supports progressive reforms.
+
+% \textbf{Step 2.}  
+% \textbf{Discussion:}  
+% This exercise exemplifies Bayesian epistemology—updating beliefs based on new evidence. Each additional vote provides evidence that shifts the probability, demonstrating the process of evidence-based reasoning.
+% \fi \color{black}
+
+% \textbf{R Tip:}
+% \begin{lstlisting}
+% # Posterior simulation for one legislator
+% set.seed(999)
+% posterior_samples <- rbeta(10000, 1 + 8, 1 + 2)
+% mean_p <- mean(posterior_samples)
+% mean_p  # Should be close to 0.75
+% \end{lstlisting}
+
+\end{document}

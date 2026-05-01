@@ -1,0 +1,99 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\author{\empty}
+
+\title{Problem Set 1. Introduction to R \\ Quantitative Methods for Humanities}
+
+\date{\empty}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+    \textbf{\large 1. Understanding World Population Dynamics}    
+\end{center}
+
+Understanding population dynamics is crucial for many areas of social science. This exercise involves calculating basic demographic measures of births and deaths for the world population over two time periods: 1950–1955 and 2005–2010. The analysis will use data files \texttt{Kenya.csv}, \texttt{Sweden.csv}, and \texttt{World.csv}, which contain population data for Kenya, Sweden, and the world, respectively.
+
+\subsection*{Data Description}
+
+The variables included in the datasets are described in Table~\ref{tab:world-pop-data}.
+
+\begin{table}[h]
+\centering
+\caption{Description of Variables in the Population Data}\label{tab:world-pop-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{country} & Abbreviated country name \\
+\texttt{period} & Time period for data collection \\
+\texttt{age} & Age group \\
+\texttt{births} & Number of births (in thousands) \\
+\texttt{deaths} & Number of deaths (in thousands) \\
+\texttt{py.men} & Person-years for men (in thousands) \\
+\texttt{py.women} & Person-years for women (in thousands) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The data are collected for a five-year period, with person-years representing the time contribution of each individual during the period. For example, a person who lived through the entire five-year period contributes 5 person-years, while someone who lived only half the period contributes 2.5 person-years.
+
+\begin{enumerate}
+    \item \textbf{Crude Birth Rate (CBR):} The crude birth rate (CBR) is defined as:
+    \[
+    \text{CBR} = \frac{\text{Number of births}}{\text{Number of person-years lived}}.
+    \]
+    Compute the CBR for each period separately for Kenya, Sweden, and the world. 
+    \begin{enumerate}
+        \item Start by calculating the total person-years as the sum of person-years for men and women.
+        \item Store the results as a vector of length 2 (one for each period) for each region with appropriate labels.
+    \end{enumerate}
+    Briefly describe any patterns observed in the resulting CBRs.
+
+    \item \textbf{Total Fertility Rate (TFR):} The total fertility rate (TFR) adjusts for age composition in the female population. First, calculate the age-specific fertility rate (ASFR), defined as:
+    \[
+    \text{ASFR}[x, x+\delta) = \frac{\text{Number of births to women of age } [x, x+\delta)}{\text{Person-years lived by women of age } [x, x+\delta)}.
+    \]
+    Here, $x$ is the starting age, and $\delta$ is the width of the age range (e.g., 5 years). 
+    \begin{enumerate}
+        \item Compute the ASFR for Kenya, Sweden, and the world for each period.
+        \item Using the ASFR, calculate the TFR as:
+        \[
+        \text{TFR} = \sum_{\text{Age Groups}} \text{ASFR}[x, x+\delta) \times \delta.
+        \]
+        Store the resulting TFRs for each region and period as vectors of length 2. Describe any patterns in reproduction across the regions and periods.
+    \end{enumerate}
+
+    \item \textbf{Crude Death Rate (CDR):} The crude death rate (CDR) is defined as:
+    \[
+    \text{CDR} = \frac{\text{Number of deaths}}{\text{Number of person-years lived}}.
+    \]
+    Compute the CDR for each period and region, and describe the patterns observed.
+
+    \item \textbf{Age-Specific Death Rate (ASDR):} Calculate the age-specific death rate (ASDR) for each age group and region during the 2005–2010 period:
+    \[
+    \text{ASDR}[x, x+\delta) = \frac{\text{Number of deaths for people of age } [x, x+\delta)}{\text{Person-years of people of age } [x, x+\delta)}.
+    \]
+    Briefly describe the patterns observed in the ASDRs.
+
+    \item \textbf{Counterfactual CDR:} To understand differences in the CDR between Kenya and Sweden, compute the counterfactual CDR for Kenya using Sweden’s age distribution:
+    \[
+    \text{CDR} = \sum_{\text{Age Groups}} \text{ASDR}[x, x+\delta) \times P[x, x+\delta),
+    \]
+    where $P[x, x+\delta)$ is the proportion of the population in the age range $[x, x+\delta)$, calculated as the ratio of person-years in that age range to the total person-years. Compare the counterfactual CDR with the observed CDR for Kenya, and provide a substantive interpretation.
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{hyperref}
+
+\title{Causal Inference Project \\ Quantitative Methods for Humanities}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Project Instructions}
+\begin{itemize}
+    \item The project can be done in groups of \textbf{at most three students}.
+    \item Only one member of the group will upload the project to Canvas.
+    \item The project is worth \textbf{10\%} of the final grade.
+    \item You must use \textbf{R} to carry out the project.
+    \item The project must be uploaded either in \texttt{.R} (for a plain script) or \texttt{.Rmd} (for RMarkdown -- bonus points if you choose this format).
+    \item The project must be a maximum of \textbf{10 pages} (can be shorter) and done using the \textbf{selected dataset}.
+    \item You must submit the project by \textbf{09/05/2025}. Submissions after this date will not be considered and will be graded as zero.
+    \item Your team will give a short talk (maximum 15 minutes) about your work and findings on \textbf{07/05/2025}. This talk will also contribute to your grade.
+\end{itemize}
+\vspace{0.1cm}
+
+\noindent\textbf{Additional Notes:}  
+The project will consist of choosing one of the following datasets and performing a quantitative study focused on causal inference. You are free to add additional hypotheses and analyses beyond the steps outlined in the two problems below. Furthermore, if you are particularly interested in another dataset or problem, please notify me well in advance so that a suitable problem can be arranged.
+\vspace{0.2cm}
+
+\noindent\textbf{Other Datasets:} The following list include other rich (Kaggle) datasets you may find interesting to carry out your project.
+\begin{itemize}
+    \item TripAdvisor Rating Impact on Hotel Popularity.  \href{https://www.kaggle.com/datasets/jocelyndumlao/tripadvisor-rating-impact-on-hotel-popularity}{Link}.
+    \item Key Resume Attributes Impacting Job Callbacks. \href{https://www.kaggle.com/datasets/jocelyndumlao/tripadvisor-rating-impact-on-hotel-popularity}{Link}.
+    \item World Development Indicators 1960-2023. \href{https://www.kaggle.com/datasets/david780514/world-bank-world-development-indicators-1960-2023}{Link}.
+    % \item Incentives \& HIV Test Disclosure: Malawi Study. \href{https://www.kaggle.com/datasets/utkarshx27/hiv-information-experiment}{Link}.
+    \item Speed Dating Experiment. \href{https://www.kaggle.com/datasets/annavictoria/speed-dating-experiment}{Link}.
+\end{itemize}
+
+\newpage
+
+\section*{\large Problem 1: Changing Minds on Gay Marriage}
+
+In this exercise, we analyze data from two experiments in which households were canvassed for support on gay marriage. The original study was later retracted due to allegations of fabricated data; however, in this exercise we analyze the original data while ignoring these allegations.
+
+Canvassers followed a script leading to conversations averaging about 20 minutes. A distinctive feature of this study is that gay and straight canvassers were randomly assigned to households, revealing their sexual orientation during the conversation. The experiment aims to test the ``contact hypothesis,'' which contends that out-group hostility (towards gay people, in this case) diminishes when people from different groups interact.
+
+The data file, \texttt{gay.csv}, contains the following variables (see Table~\ref{tab:gay-data}):
+
+\begin{table}[H]
+\centering
+\caption{Description of Variables in Gay Marriage Study}\label{tab:gay-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{study} & Source of the data (1 = study 1, 2 = study 2) \\
+\texttt{treatment} & Five possible treatment assignment options \\
+\texttt{wave} & Survey wave (a total of seven waves) \\
+\texttt{ssm} & Five-point scale on same-sex marriage support, \\ 
+& where higher scores indicate greater support. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Each observation represents a respondent’s answer regarding same-sex marriage. There are two studies in this dataset, each with interviews conducted over seven waves. In both studies, the first wave consists of interviews conducted prior to the canvassing treatment.
+
+\subsection*{Guidelines}
+\begin{enumerate}
+    \item \textbf{Randomization Check:} Using the baseline interview (Wave 1) before treatment, examine whether randomization was properly conducted. Focus on three groups in Study 1: 
+    \begin{itemize}
+        \item \textit{same-sex marriage script by gay canvasser},
+        \item \textit{same-sex marriage script by straight canvasser}, and 
+        \item \textit{no contact}.
+    \end{itemize}
+    Briefly comment on your results.
+    
+    \item \textbf{Average Treatment Effects:} The second survey wave (Wave 2) was conducted two months after canvassing. Using Study 1, estimate the average treatment effects of gay and straight canvassers on support for same-sex marriage separately. Provide a brief interpretation.
+    
+    \item \textbf{Comparison with Recycling Script:} The study also included a recycling script treatment that involves contact without addressing gay marriage. 
+    \begin{enumerate}
+        \item What is the purpose of this treatment?
+        \item Using Study 1 and Wave 2, compare the outcomes for \textit{same-sex marriage script by gay canvasser} versus \textit{recycling script by gay canvasser}.
+        \item Similarly, compare \textit{same-sex marriage script by straight canvasser} versus \textit{recycling script by straight canvasser}. Provide a substantive interpretation.
+    \end{enumerate}
+    
+    \item \textbf{Long-Term Effects:} In Study 1, respondents were re-interviewed six times (Waves 2 to 7) after treatment at two-month intervals, with the final interview (Wave 7) occurring one year post-treatment.
+    \begin{enumerate}
+        \item Do the effects of canvassing persist over time?
+        \item Under what conditions are the effects most pronounced? Compute the average treatment effects of both straight and gay canvassers (with the same-sex marriage script) for each subsequent wave relative to the control condition.
+    \end{enumerate}
+    
+    \item \textbf{Replication (Study 2):} 
+    \begin{enumerate}
+        \item Study 2 aimed to replicate Study 1. In this study, only gay canvassers delivered the same-sex marriage script. Use the treatments \textit{same-sex marriage script by gay canvasser} and \textit{no contact} to examine whether randomization was appropriate, using baseline support (Wave 1) for analysis.
+        \item Estimate the treatment effects of gay canvassing using data from Wave 2. Are these results consistent with those of Study 1?
+        \item Estimate the average effect of gay canvassing at subsequent waves (Wave 3 and Wave 4) and draw an overall conclusion comparing Study 1 and Study 2.
+    \end{enumerate}
+\end{enumerate}
+
+%\begin{verbatim}
+% # Example R Code (commented out)
+% gay <- read.csv("gay.csv")
+% 
+% # Randomization check for Wave 1 in Study 1
+% wave1 <- subset(gay, study == 1 & wave == 1)
+% aggregate(ssm ~ treatment, data = wave1, mean)
+% 
+% # Further analysis...
+%\end{verbatim}
+
+\newpage
+
+\section*{\large Problem 2: Success of Leader Assassination as a Natural Experiment}
+
+This exercise explores whether individual political leaders significantly influence a nation by analyzing assassination attempts. While some argue that leaders' personal attributes drive historical events, others believe that institutional constraints play a larger role. Testing these claims is challenging due to the non-random nature of leadership changes.
+
+Here, we use a natural experiment in which the success or failure of assassination attempts is assumed to be essentially random. Each observation in the dataset \texttt{leaders.csv} corresponds to an assassination attempt. Table~\ref{tab:leader-data} provides details on the variables included.
+
+\begin{table}[H]
+\centering
+\caption{Description of Variables in the Leader Assassination Dataset}\label{tab:leader-data}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{country} & Country where the assassination attempt occurred \\
+\texttt{year} & Year of the assassination attempt \\
+\texttt{leadername} & Name of the leader targeted \\
+\texttt{age} & Age of the targeted leader \\
+\texttt{politybefore} & Average polity score of the country during the three years prior to the attempt \\
+\texttt{polityafter} & Average polity score of the country during the three years after the attempt \\
+\texttt{civilwarbefore} & 1 if the country was in a civil war during the three years prior, 0 otherwise \\
+\texttt{civilwarafter} & 1 if the country was in a civil war during the three years after, 0 otherwise \\
+\texttt{interwarbefore} & 1 if the country was in an international war during the three years prior, 0 otherwise \\
+\texttt{interwarafter} & 1 if the country was in an international war during the three years after, 0 otherwise \\
+\texttt{result} & Outcome of the assassination attempt (10 categories) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The \texttt{polity} variable represents a 21-point scale from the Polity Project (ranging from $-10$ for hereditary monarchy to $+10$ for consolidated democracy). The \texttt{result} variable describes the outcome of each assassination attempt.
+
+\subsection*{Guidelines}
+\begin{enumerate}
+    \item \textbf{Number of Attempts and Countries:} 
+    \begin{enumerate}
+        \item How many assassination attempts are recorded in the dataset?
+        \item How many countries experienced at least one assassination attempt?
+        \item What is the average number of attempts per year for countries with at least one attempt?
+    \end{enumerate}
+    
+    \item \textbf{Success Rate of Assassination Attempts:} 
+    \begin{enumerate}
+        \item Create a new binary variable, \texttt{success}, that equals 1 if a leader dies from the attack and 0 if the leader survives. What is the overall success rate of assassination attempts?
+        \item Discuss whether the success of assassination attempts appears random.
+    \end{enumerate}
+    
+    \item \textbf{Polity and Leader Characteristics:}
+    \begin{enumerate}
+        \item Compare the average \texttt{politybefore} scores between successful and failed attempts.
+        \item Examine whether the ages of targeted leaders differ between successful and failed attempts.
+        \item Provide a brief interpretation of the results in light of the assumption that assassination success is random.
+    \end{enumerate}
+    
+    \item \textbf{War Status Before Assassination:}
+    \begin{enumerate}
+        \item Create a new binary variable, \texttt{warbefore}, that equals 1 if the country was involved in either civil or international war during the three years before the attempt.
+        \item Investigate whether \texttt{warbefore} differs between successful and failed assassination attempts. Provide a substantive interpretation.
+    \end{enumerate}
+    
+    \item \textbf{Effects of Assassination:}
+    \begin{enumerate}
+        \item Does successful leader assassination cause democratization? Compare \texttt{polityafter} scores for successful and failed attempts.
+        \item Does successful leader assassination lead to war? Analyze changes in war status (\texttt{civilwarafter} and \texttt{interwarafter}) between successful and failed attempts.
+        \item State your assumptions and provide a substantive interpretation of the results.
+    \end{enumerate}
+\end{enumerate}
+
+%\begin{verbatim}
+% # Example R Code (commented out)
+% leader <- read.csv("leaders.csv")
+% 
+% # Create binary variable for assassination success
+% leader$success <- ifelse(leader$result %in% c("dies within a day after the attack", "dies between a day and a week", "dies between a week and a month", "dies, timing unknown"), 1, 0)
+% 
+% # Compute overall success rate
+% mean(leader$success)
+%\end{verbatim}
+
+\end{document}
