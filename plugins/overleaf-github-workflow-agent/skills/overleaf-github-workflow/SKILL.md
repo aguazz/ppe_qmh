@@ -116,8 +116,8 @@ If `.gitignore` is missing private or LaTeX auxiliary rules, propose adding:
 
 ```gitignore
 # Private instructor material: keep the folder shell, ignore its contents.
-/11_GRADES/*
-!/11_GRADES/README.md
+/11_GRADES_AND_SUBMISSIONS/*
+!/11_GRADES_AND_SUBMISSIONS/README.md
 
 # LaTeX auxiliary files
 aux_files/

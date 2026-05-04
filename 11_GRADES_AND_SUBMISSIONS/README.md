@@ -1,4 +1,4 @@
-# Grades Folder
+# Grades And Submissions Folder
 
 This folder is tracked so the course repository keeps a visible place for grades and student submissions.
 

@@ -2,7 +2,7 @@
 param(
     [string]$RepoRoot = "",
     [string]$Branch = "",
-    [string[]]$PrivatePaths = @("11_GRADES"),
+    [string[]]$PrivatePaths = @("11_GRADES_AND_SUBMISSIONS"),
     [switch]$CheckRemoteAccess,
     [switch]$Json
 )
@@ -269,12 +269,12 @@ $gitignorePath = Join-Path $script:ResolvedRepoRoot ".gitignore"
 if (Test-Path -LiteralPath $gitignorePath) {
     Add-Check -Status "PASS" -Name ".gitignore present" -Details ".gitignore exists at the repository root."
 
-    $gradesIgnoreRule = Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*/?11_GRADES/\*\s*$"
-    $gradesPlaceholderRule = Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*!/?11_GRADES/README\.md\s*$"
+    $gradesIgnoreRule = Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*/?11_GRADES_AND_SUBMISSIONS/\*\s*$"
+    $gradesPlaceholderRule = Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*!/?11_GRADES_AND_SUBMISSIONS/README\.md\s*$"
     if ($gradesIgnoreRule -and $gradesPlaceholderRule) {
-        Add-Check -Status "PASS" -Name ".gitignore private rule" -Details "11_GRADES contents are ignored while README.md is allowed."
+        Add-Check -Status "PASS" -Name ".gitignore private rule" -Details "11_GRADES_AND_SUBMISSIONS contents are ignored while README.md is allowed."
     } else {
-        Add-Check -Status "WARN" -Name ".gitignore private rule" -Details "The 11_GRADES placeholder/content pattern was not found." -NextStep "Use /11_GRADES/* and !/11_GRADES/README.md."
+        Add-Check -Status "WARN" -Name ".gitignore private rule" -Details "The 11_GRADES_AND_SUBMISSIONS placeholder/content pattern was not found." -NextStep "Use /11_GRADES_AND_SUBMISSIONS/* and !/11_GRADES_AND_SUBMISSIONS/README.md."
     }
 
     $latexPatterns = @(

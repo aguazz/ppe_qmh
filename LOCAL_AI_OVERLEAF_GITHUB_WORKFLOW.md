@@ -167,10 +167,10 @@ For this kind of course repository, typical folders might include:
 2_PROBLEM_SETS/
 3_R_PRACTICE/
 7_BIBLIOGRAPHY/
-11_GRADES/
+11_GRADES_AND_SUBMISSIONS/
 ```
 
-Private contents inside folders such as `11_GRADES/` should be ignored by Git before pushing to shared remotes. If you want the folder itself to appear on Overleaf and GitHub, track a harmless placeholder such as `11_GRADES/README.md` while ignoring everything else inside the folder.
+Private contents inside folders such as `11_GRADES_AND_SUBMISSIONS/` should be ignored by Git before pushing to shared remotes. If you want the folder itself to appear on Overleaf and GitHub, track a harmless placeholder such as `11_GRADES_AND_SUBMISSIONS/README.md` while ignoring everything else inside the folder.
 
 ### 2.2 Enable Overleaf Git integration
 
@@ -436,7 +436,7 @@ Practical cautions:
 - Review diffs before accepting AI changes.
 - Do not let AI commit or push private data.
 - Do not paste Overleaf tokens, API keys, passwords, student grades, or private feedback into AI prompts.
-- Keep private contents inside `11_GRADES/` and other private folders ignored.
+- Keep private contents inside `11_GRADES_AND_SUBMISSIONS/` and other private folders ignored.
 - Prefer small commits with descriptive messages.
 - Compile locally before pushing when possible.
 
@@ -488,7 +488,7 @@ The script checks:
 - Configured remotes.
 - Whether `origin` should be renamed to `overleaf`.
 - Whether a `github` remote exists.
-- Whether private contents inside paths such as `11_GRADES/` are ignored while a public placeholder can remain tracked.
+- Whether private contents inside paths such as `11_GRADES_AND_SUBMISSIONS/` are ignored while a public placeholder can remain tracked.
 - Whether common LaTeX auxiliary files are ignored.
 - Whether `.vscode/settings.json` contains the recommended LaTeX Workshop settings.
 
@@ -626,8 +626,8 @@ Recommended block:
 
 ```gitignore
 # Private instructor material: keep the folder shell, ignore its contents.
-/11_GRADES/*
-!/11_GRADES/README.md
+/11_GRADES_AND_SUBMISSIONS/*
+!/11_GRADES_AND_SUBMISSIONS/README.md
 
 # LaTeX auxiliary files
 aux_files/
@@ -647,7 +647,7 @@ aux_files/
 
 This is a safety net even if LaTeX Workshop cleans auxiliary files automatically.
 
-Git cannot track a truly empty folder. The exception for `11_GRADES/README.md` keeps the grades folder visible on Overleaf and GitHub without tracking private files, student submissions, feedback, exports, or subfolders inside it.
+Git cannot track a truly empty folder. The exception for `11_GRADES_AND_SUBMISSIONS/README.md` keeps the grades/submissions folder visible on Overleaf and GitHub without tracking private files, student submissions, feedback, exports, or subfolders inside it.
 
 Check ignored files:
 
@@ -665,8 +665,8 @@ git commit -m "Stop tracking private file"
 For a private folder whose shell should be visible in Git but whose contents should remain local-only, use a tracked placeholder and ignore everything else:
 
 ```gitignore
-/11_GRADES/*
-!/11_GRADES/README.md
+/11_GRADES_AND_SUBMISSIONS/*
+!/11_GRADES_AND_SUBMISSIONS/README.md
 ```
 
 If private files were already tracked, remove only those private files from Git tracking with `git rm --cached path\to\private-file`, then commit the ignore-rule change. Be careful: `git rm --cached` removes files from Git tracking, not from your disk. Do not omit `--cached` unless you intentionally want to delete the files from the working folder too.
@@ -833,7 +833,7 @@ Before using this workflow regularly, confirm:
 - [ ] GitHub repo exists.
 - [ ] `github` remote works.
 - [ ] `.gitignore` protects private and auxiliary files.
-- [ ] `11_GRADES/README.md` is tracked, but private `11_GRADES/` contents are ignored.
+- [ ] `11_GRADES_AND_SUBMISSIONS/README.md` is tracked, but private `11_GRADES_AND_SUBMISSIONS/` contents are ignored.
 - [ ] LaTeX compiles locally.
 - [ ] `latexmk -v` works.
 - [ ] PDF is produced beside the `.tex` file.
