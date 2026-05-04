@@ -1,0 +1,788 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\author{\empty}
+\usepackage{listings}
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,                % Enable line breaking
+  breakatwhitespace=false     % Don't break at whitespace
+}
+
+
+\title{Problem Set 3\\Multiple Regression Analysis: Inference\\Econometrics}
+
+\date{\empty}
+
+\begin{document}
+	\maketitle
+	
+\begin{enumerate}
+	
+\item Which of the following can cause the usual OLS t statistics to be invalid (that is, not to have t distributions
+under H0)?
+\begin{enumerate}
+\item Heteroskedasticity.
+\item A sample correlation coefficient of .95 between two independent variables that are in the model.
+\item Omitting an important explanatory variable.
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+\begin{enumerate}
+
+\item \textbf{Heteroskedasticity:}
+
+Heteroskedasticity refers to the situation where the variance of the error term is not constant across all levels of the explanatory variables. The classical linear model (CLM) assumptions require homoskedasticity (constant variance). When heteroskedasticity is present, the OLS estimators remain unbiased, but the usual standard errors are no longer valid because they are based on the assumption of homoskedasticity. As a result, the $t$ statistics derived from these standard errors will be invalid and may lead to incorrect inference. 
+
+Heteroskedasticity violates Assumption MLR.5 (Homoskedasticity), which states:
+\[
+\text{Var}(u_i | x_1, x_2, \dots, x_k) = \sigma^2
+\]
+When this assumption is violated, the $t$ statistics calculated using the usual OLS standard errors no longer follow a $t$ distribution under $H_0$.
+
+Therefore, \textbf{heteroskedasticity can cause the usual $t$ statistics to be invalid}.
+
+\item \textbf{A sample correlation coefficient of 0.95 between two independent variables that are in the model:}
+
+A high sample correlation between two independent variables, also known as multicollinearity, can make it difficult to separately identify the effects of the correlated variables on the dependent variable. However, multicollinearity does not, by itself, violate the assumptions required for the $t$ statistics to have a $t$ distribution under $H_0$.
+
+The classical linear model assumptions (specifically MLR.4) only require that no perfect collinearity exists between the independent variables (i.e., the correlation is not exactly 1). If the correlation is 0.95, it indicates high but not perfect multicollinearity. While this can lead to inflated standard errors and less precise estimates, it does not invalidate the $t$ distribution of the test statistics. 
+
+In summary, while multicollinearity can make estimation challenging and lead to high standard errors, it does \textbf{not} cause the $t$ statistics to be invalid.
+
+\item \textbf{Omitting an important explanatory variable:}
+
+Omitting an important explanatory variable from the regression model is a serious issue because it violates Assumption MLR.3 (No Omitted Variables). Specifically, it implies that the error term is correlated with one or more of the included independent variables, leading to biased and inconsistent OLS estimates. 
+
+When an important variable is omitted, the error term $u_i$ is no longer independent of the included explanatory variables. As a result, the OLS estimators become biased and inconsistent, and the $t$ statistics do not follow the $t$ distribution under $H_0$. This is because the standard errors are computed under the assumption that the omitted variable is not affecting the outcome, leading to misleading inferences.
+
+Thus, \textbf{omitting an important explanatory variable can cause the usual $t$ statistics to be invalid}.
+
+\end{enumerate}
+
+\textbf{Conclusion:} Both (a) heteroskedasticity and (c) omitting an important explanatory variable can cause the $t$ statistics to be invalid. High correlation between independent variables (b) does not invalidate the $t$ statistics, though it can affect the precision of the estimates.
+
+}
+%%% ex2
+\item The variable \textit{rdintens} is expenditures on research and development (R\&D) as a percentage of sales. Sales are measured in millions of dollars. The variable \textit{profmarg} is profits as a percentage of sales.
+
+Using the data in RDCHEM for 32 firms in the chemical industry, the following equation is estimated:
+
+\[
+\widehat{\text{rdintens}} = .472 + .321 \log(\text{sales}) + .050 \textit{profmarg}
+\]
+\[
+(1.369)\,\,\, (.216) \quad\quad\quad\quad\,\, (.046)
+\]
+\[
+n = 32,\quad R^2 = .099.
+\]
+
+\begin{enumerate}
+    \item Interpret the coefficient on \textit{log(sales)}. In particular, if sales increases by 10\%, what is the estimated percentage point change in \textit{rdintens}? Is this an economically large effect?
+    \item Test the hypothesis that R\&D intensity does not change with sales against the alternative that it does increase with sales. Do the test at the 5\% and 10\% levels.
+    \item Interpret the coefficient on \textit{profmarg}. Is it economically large?
+    \item Does \textit{profmarg} have a statistically significant effect on \textit{rdintens}?
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item \textbf{Interpretation of the Coefficient on \(\log(\text{sales})\):}
+    
+    The coefficient on \(\log(\text{sales})\) is \( 0.321 \). In a log-linear model, this coefficient implies that a 1\% increase in sales leads to an estimated 0.321 percentage point increase in R\&D intensity. If sales increase by 10\%, the estimated change in R\&D intensity is:
+    
+    \[
+    0.321 \times 10\% = 3.21\%
+    \]
+    
+    This suggests a moderate economic effect, depending on the baseline levels of R\&D intensity.
+    
+    \item \textbf{Hypothesis Test: Does R\&D Intensity Increase with Sales?}
+    
+    We test \( H_0: \beta_{\log(\text{sales})} = 0 \) against \( H_a: \beta_{\log(\text{sales})} > 0 \). The t-statistic is:
+    
+    \[
+    t = \frac{0.321}{0.216} \approx 1.486
+    \]
+    
+    Comparing to the critical values from the t-distribution with 29 degrees of freedom:
+    
+    - Critical value at 5\% level: \( 1.699 \)
+    - Critical value at 10\% level: \( 1.311 \)
+    
+    Since \( t = 1.486 \) is greater than the 10\% critical value but less than the 5\% critical value, we reject the null hypothesis at the 10\% level but not at the 5\% level. Thus, R\&D intensity increases with sales, but only weakly.
+    
+    \item \textbf{Interpretation of the Coefficient on \(\text{profmarg}\):}
+    
+    The coefficient on \( \text{profmarg} \) is \( 0.050 \), meaning that a 1 percentage point increase in profit margin is associated with a 0.05 percentage point increase in R\&D intensity. This is a relatively small effect. For example, even a 10 percentage point increase in profit margin leads to only a 0.5 percentage point increase in R\&D intensity.
+    
+    \item \textbf{Statistical Significance of \(\text{profmarg}\):}
+    
+    The t-statistic for \( \text{profmarg} \) is:
+    
+    \[
+    t = \frac{0.050}{0.046} \approx 1.087
+    \]
+    
+    Comparing this to the critical values from the t-distribution, we see that \( t = 1.087 \) is less than both the 5\% and 10\% critical values. Therefore, \( \text{profmarg} \) is not statistically significant.
+\end{enumerate}
+ 
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item Are rent rates influenced by the student population in a college town? Let rent be the average monthly rent paid on rental units in a college town in the United States. Let pop denote the total city population, avginc the average city income, and pctstu the student population as a percentage of the total population. One model to test for a relationship is
+
+$$
+\log (\text { rent })=\beta_0+\beta_1 \log (\text { pop })+\beta_2 \log (\text { avginc })+\beta_3 p c t s t u+u
+$$
+\begin{enumerate}
+    \item State the null hypothesis that size of the student body relative to the population has no ceteris paribus effect on monthly rents. State the alternative that there is an effect.
+    \item  What signs do you expect for $\beta_1$ and $\beta_2$ ?
+    \item  The equation estimated using 1990 data from RENTAL for 64 college towns is
+$$
+\begin{aligned}
+\widehat{\log (\text { rent })}= & .043+.066 \log (\text { pop })+.507 \log (\text { avginc })+.0056 \text { pctstu } \\
+& (.844)(.039)\quad\quad\quad \quad\quad(.081)\quad\quad \quad\quad\quad\quad(.0017)\\
+n= & 64, R^2=.458
+\end{aligned}
+$$
+ What is wrong with the statement: "A $10 \%$ increase in population is associated with about a $6.6 \%$ increase in rent"?
+    \item  Test the hypothesis stated in part (a) at the $1 \%$ level.
+
+\end{enumerate}
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item \textbf{Null and Alternative Hypotheses:}
+    \[
+    H_0: \beta_3 = 0 \quad (\text{the size of the student body has no effect on rents})
+    \]
+    \[
+    H_a: \beta_3 \neq 0 \quad (\text{the size of the student body has an effect on rents})
+    \]
+
+    \item \textbf{Expected Signs for \(\beta_1\) and \(\beta_2\):}
+
+    We expect \(\beta_1 > 0\) because larger populations typically drive up demand for housing, leading to higher rent prices. Similarly, we expect \(\beta_2 > 0\) because higher average incomes allow residents to afford higher rents.
+
+    \item    The statement "A 10\% increase in population is associated with about a 6.6\% increase in rent" is incorrect. The correct interpretation of the coefficient \( \beta_1 = 0.066 \) is that a 1\% increase in population leads to approximately a 0.066\% increase in rent. Therefore, a 10\% increase in population would lead to a 0.66\% increase in rent, not 6.6\%.
+
+    \item \textbf{Hypothesis Test for \(\beta_3\):}
+
+    The null hypothesis is \( H_0: \beta_3 = 0 \), and the alternative hypothesis is \( H_a: \beta_3 \neq 0 \). The test statistic is:
+    \[
+    t = \frac{0.0056}{0.0017} \approx 3.29
+    \]
+    The degrees of freedom for this test are \( n - k - 1 = 64 - 3 - 1 = 60 \). For a two-tailed test at the 1\% significance level, the critical value from the t-distribution is approximately \( 2.660 \).
+
+    Since \( t = 3.29 > 2.660 \), we reject the null hypothesis at the 1\% significance level. There is strong evidence that the student population has a statistically significant effect on rent prices.
+
+
+\end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item Consider the estimated equation from Example 4.3, which can be used to study the effects of skipping class on college GPA:
+
+$$
+\begin{aligned}
+\widehat{\text { colGPA }}= & 1.39+.412 \text { hsGPA }+.015 \text { ACT }-.083 \text { skipped } \\
+& (.33)\quad(.094)\quad\quad\quad\quad(.011)\quad\quad\quad(.026) \\
+n= & 141, R^2=.234
+\end{aligned}
+$$
+\begin{enumerate}
+    \item  Using the standard normal approximation, find the $95 \%$ confidence interval for $\beta_{h s G P A}$.
+\item Can you reject the hypothesis $\mathrm{H}_0: \beta_{h s G P A}=.4$ against the two-sided alternative at the $5 \%$ level?
+\item Can you reject the hypothesis $\mathrm{H}_0: \beta_{h s G P A}=1$ against the two-sided alternative at the $5 \%$ level?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item[(a)] The 95\% confidence interval for \( \beta_{\text{hsGPA}} \) is calculated as:
+    \[
+    \beta_{\text{hsGPA}} \pm 1.96 \times \text{standard error} = 0.412 \pm 1.96 \times 0.094.
+    \]
+    The confidence interval is approximately \( (0.227, 0.597) \).
+
+    \item[(b)] To test the hypothesis \( H_0: \beta_{\text{hsGPA}} = 0.4 \) against the alternative \( H_1: \beta_{\text{hsGPA}} \neq 0.4 \), we compute the t-statistic:
+    \[
+    t = \frac{0.412 - 0.4}{0.094} \approx 0.128.
+    \]
+    The p-value for this test is approximately \( 0.898 \). Since the p-value is much greater than 0.05, we do not reject the null hypothesis at the 5\% significance level.
+
+    \item[(c)] To test the hypothesis \( H_0: \beta_{\text{hsGPA}} = 1 \) against the alternative \( H_1: \beta_{\text{hsGPA}} \neq 1 \), we compute the t-statistic:
+    \[
+    t = \frac{0.412 - 1}{0.094} \approx -6.255.
+    \]
+    The p-value for this test is nearly 0, which is much less than 0.05. Therefore, we reject the null hypothesis at the 5\% significance level.
+\end{enumerate}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item In this exercise, we will test the rationality of assessments of housing prices. For that purpose, we will specify a model of house prices as a function of the the assessed housing value (before the house was sold).
+
+\begin{enumerate}
+    \item In the simple regression model
+$$
+\text { price }=\beta_0+\beta_1 \text { assess }+u
+$$
+the assessment is rational if $\beta_1=1$ and $\beta_0=0$. The estimated equation is
+$$
+\begin{aligned}
+\widehat{\text { price }}= & -14.47+.976 \text { assess } \\
+& \,\,\,(16.27) \quad(.049) \\
+n= & 88, \mathrm{SSR}=165,644.51, R^2=.820
+\end{aligned}
+$$
+First, test the hypothesis that $\mathrm{H}_0: \beta_0=0$ against the two-sided alternative. Then, test $\mathrm{H}_0: \beta_1=1$ against the two-sided alternative. What do you conclude?
+
+\item  To test the joint hypothesis that $\beta_0=0$ and $\beta_0=1$, we need the SSR in the restricted model. This amounts to computing $\sum_{i=1}^n\left(\text { price }_i-\text { assess }_i\right)^2$, where $n=88$, since the residuals in the restricted model are just price ${ }_i-$ assess $_i$. (No estimation is needed for the restricted model because both parameters are specified under $\mathrm{H}_0$.) This turns out to yield SSR $=209,448.99$. Carry out the $F$ test for the joint hypothesis.
+
+\item Now, test $\mathrm{H}_0: \beta_2=0, \beta_3=0$, and $\beta_4=0$ in the model
+$$
+\text { price }=\beta_0+\beta_1 \text { assess }+\beta_2 \text { lotsize }+\beta_3 \text { sqrft }+\beta_4 \text { bdrms }+u
+$$
+The $R$-squared from estimating this model using the same 88 houses is .829.
+
+\item If the variance of price changes with assess, lotsize, sqrft, or bdrms, what can you say about the $F$ test from part (c)?
+\end{enumerate}
+
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+
+    \item We first test the hypothesis \( H_0: \beta_0 = 0 \) against the alternative \( H_1: \beta_0 \neq 0 \). The t-statistic is calculated as:
+    \[
+    t = \frac{-14.47}{16.27} \approx -0.889.
+    \]
+    The p-value for this test is approximately \( 0.376 \). Since the p-value is greater than 0.05, we do not reject the null hypothesis at the 5\% significance level.
+
+    Next, we test the hypothesis \( H_0: \beta_1 = 1 \) against the alternative \( H_1: \beta_1 \neq 1 \). The t-statistic is calculated as:
+    \[
+    t = \frac{0.976 - 1}{0.049} \approx -0.490.
+    \]
+    The p-value for this test is approximately \( 0.626 \). Since the p-value is greater than 0.05, we do not reject the null hypothesis at the 5\% significance level.
+
+    \item To test the joint hypothesis \( H_0: \beta_0 = 0 \) and \( \beta_1 = 1 \), we compute the F-statistic:
+    \[
+    F = \frac{\left(209448.99 - 165644.51\right)/2}{165644.51 / 86} \approx 11.692.
+    \]
+    The p-value for this test is nearly 0, which is much less than 0.05. Therefore, we reject the joint null hypothesis at the 5\% significance level.
+
+    \item To test the null hypothesis \( H_0: \beta_2 = 0 \), \( \beta_3 = 0 \), and \( \beta_4 = 0 \) in the extended model, we calculate the F-statistic as:
+    \[
+    F = \frac{\left(0.829 - 0.820\right)/3}{(1 - 0.829)/(88 - 5)} \approx 1.595.
+    \]
+    The p-value for this test is approximately \( 0.198 \). Since the p-value is greater than 0.05, we do not reject the null hypothesis at the 5\% significance level.
+
+    \item If the variance of price changes with assess, lotsize, sqrft, or bdrms, the assumption of homoskedasticity is violated. This could lead to invalid inference using the F-test in part (c) because the test assumes homoskedastic errors. Specifically, the standard errors might be biased, leading to incorrect p-values and conclusions.
+
+\end{enumerate}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item The following model is a simplified version of the multiple regression model used by Biddle and Hamermesh (1990) to study the trade-off between time spent sleeping (sleep) and time spent working (totwrk), as well as to examine other factors that affect sleep.
+$$
+\begin{aligned}
+\widehat{\text { sleep }}= & 3,638.25-.148 \text { totwrk }-11.13 \text { educ }+2.20 \text { age } \\
+& (112.28)\quad(.017)\quad\quad\quad\quad(5.88)\quad\quad\quad\,\,(1.45) \\
+n= & 706, R^2=.113
+\end{aligned}
+$$
+where we now report standard errors along with the estimates.
+\begin{enumerate}
+    \item Is either educ or age individually significant at the 5\% level against a two-sided alternative? Show your work.
+\item Dropping educ and age from the equation gives
+$$
+\begin{aligned}
+& \widehat{\text { sleep }}=3,586.38-.151 \text { totwrk } \\
+& \text {\quad \quad\quad \quad\quad(38.91) \quad(.017) } \\
+& n=706, R^2=.103 \text {. }
+\end{aligned}
+$$
+Are educ and age jointly significant in the original equation at the $5 \%$ level? Justify your answer.
+ \item Does including educ and age in the model greatly affect the estimated tradeoff between sleeping and working?
+ \item Suppose that the sleep equation contains heteroskedasticity. What does this mean about the tests computed in parts (a) and (b)?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item The null hypothesis for each variable is:
+    \[
+    H_0: \beta_{\text{educ}} = 0 \quad \text{and} \quad H_0: \beta_{\text{age}} = 0.
+    \]
+    We can test the significance of \textit{educ} and \textit{age} by calculating the $t$-statistics:
+    \[
+    t_{\text{educ}} = \frac{\hat{\beta}_{\text{educ}}}{\text{SE}(\hat{\beta}_{\text{educ}})} = \frac{-11.13}{5.88} \approx -1.89,
+    \]
+    \[
+    t_{\text{age}} = \frac{\hat{\beta}_{\text{age}}}{\text{SE}(\hat{\beta}_{\text{age}})} = \frac{2.20}{1.45} \approx 1.52.
+    \]
+    Using a two-sided $t$-test at the 5\% significance level with 703 degrees of freedom ($n - 3 = 706 - 3$), the critical value is approximately $t_{0.025, 703} \approx 1.96$. 
+
+    Since $|t_{\text{educ}}| < 1.96$ and $|t_{\text{age}}| < 1.96$, neither \textit{educ} nor \textit{age} is individually significant at the 5\% level.
+
+    \item  The null hypothesis for joint significance is:
+    \[
+    H_0: \beta_{\text{educ}} = \beta_{\text{age}} = 0.
+    \]
+
+    We use the $F$-statistic for the joint significance test:
+    \[
+    F = \frac{(R^2_{\text{full}} - R^2_{\text{restricted}}) / q}{(1 - R^2_{\text{full}}) / (n - k_{\text{full}})},
+    \]
+    where:
+    \begin{itemize}
+        \item $R^2_{\text{full}} = 0.113$ (the $R^2$ for the original model),
+        \item $R^2_{\text{restricted}} = 0.103$ (the $R^2$ for the model without \textit{educ} and \textit{age}),
+        \item $q = 2$ (the number of restrictions),
+        \item $n = 706$ (the number of observations),
+        \item $k_{\text{full}} = 4$ (the number of coefficients in the full model, including the intercept).
+    \end{itemize}
+
+    Plugging in the values:
+    \[
+    F = \frac{(0.113 - 0.103) / 2}{(1 - 0.113) / 702} \approx \frac{0.01 / 2}{0.887 / 702} \approx \frac{0.005}{0.00126} \approx 3.97.
+    \]
+
+    The critical value for an $F$-test at the 5\% level with 2 and 702 degrees of freedom is approximately 3.00. Since the calculated $F$-statistic (3.97) is greater than the critical value (3.00), we reject the null hypothesis. Therefore, \textit{educ} and \textit{age} are jointly significant at the 5\% level.
+
+    \item  The coefficient on \textit{totwrk} is $-0.148$ in the original model and $-0.151$ in the restricted model. The change is small and not substantial. Thus, including \textit{educ} and \textit{age} does not greatly affect the estimated tradeoff between sleeping and working.
+
+    \item If the sleep equation contains heteroskedasticity, the standard errors reported in the regression output are likely biased and inconsistent. This means the $t$-tests and $F$-tests in parts (a) and (b) may be invalid. Specifically, the test statistics might not follow the assumed distributions, leading to potentially incorrect conclusions. To address this, heteroskedasticity-robust standard errors should be used when conducting hypothesis tests.
+
+\end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item Regression analysis can be used to test whether the market efficiently uses information in valuing stocks. For concreteness, let return be the total return from holding a firm's stock over the four-year period from the end of 1990 to the end of 1994. The efficient markets hypothesis says that these returns should not be systematically related to information known in 1990. If firm characteristics known at the beginning of the period help to predict stock returns, then we could use this information in choosing stocks.
+
+For 1990, let $d k r$ be a firm's debt to capital ratio, let $eps$ denote the earnings per share, let $netinc$ denote net income, and let $salary$ denote total compensation for the CEO.
+
+\begin{enumerate}
+    \item Using the data in RETURN, the following equation was estimated:
+
+$$
+\begin{aligned}
+\widehat{\text { return }=}= & -14.37+.321 \mathrm{dkr}+.043 \mathrm{eps}-.0051 \text { nentinc }+.0035 \text { salary } \\
+& \quad(6.89)\quad(.201)\quad\quad(.078)\quad\quad(.0047)\quad\quad\quad\quad(.0022) \\
+n= & 142, R^2=.0395
+\end{aligned}
+$$
+Test whether the explanatory variables are jointly significant at the $5 \%$ level. Is any explanatory variable individually significant?
+\item Now, re-estimate the model using the log form for $netinc$ and $salary$:
+$$
+\begin{aligned}
+\widehat{\text { return }}= & -36.30+.327 \mathrm{dkr}+.069 \mathrm{eps}-4.74 \log (\text { netinc })+7.24 \log (\text { salary }) \\
+& \quad(39.37)\quad(.203)\,\,\quad(.080)\quad\quad(3.39)\quad\quad\quad\quad\quad\quad(6.31) \\
+n= & 142, R^2=.0330
+\end{aligned}
+$$
+Do any of your conclusions from part (a) change?
+\item In this sample, some firms have zero debt and others have negative earnings. Should we try to use $\log (d k r)$ or $\log (e p s)$ in the model to see if these improve the fit? Explain.
+\item Overall, is the evidence for predictability of stock returns strong or weak?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+
+\item To test the joint significance of the explanatory variables at the 5\% level, we perform an $F$-test. The $F$-statistic is computed as follows:
+
+\[
+F = \frac{(R^2 / k)}{((1 - R^2) / (n - k - 1))}
+\]
+
+Where:
+\begin{itemize}
+    \item $R^2 = 0.0395$
+    \item $k = 4$ (the number of independent variables)
+    \item $n = 142$ (the number of observations)
+\end{itemize}
+
+Substituting in these values gives:
+
+\[
+F = \frac{(0.0395 / 4)}{((1 - 0.0395) / (142 - 4 - 1))} = \frac{0.009875}{\frac{0.9605}{137}} \approx \frac{0.009875}{0.00701} \approx 1.41
+\]
+
+The critical $F$ value for $k = 4$ and $n - k - 1 = 137$ at the 5\% significance level is approximately 2.45. Since $F = 1.41 < 2.45$, we fail to reject the null hypothesis that the coefficients are jointly zero. Therefore, the explanatory variables are not jointly significant.
+
+\item The individual $t$-statistics are calculated as:
+
+\[
+t = \frac{\hat{\beta}_j}{\text{SE}(\hat{\beta}_j)}
+\]
+
+For each coefficient:
+\begin{itemize}
+    \item For dkr: $t = \frac{0.321}{0.201} \approx 1.60$
+    \item For eps: $t = \frac{0.043}{0.078} \approx 0.55$
+    \item For netinc: $t = \frac{-0.0051}{0.0047} \approx -1.09$
+    \item For salary: $t = \frac{0.0035}{0.0022} \approx 1.59$
+\end{itemize}
+
+The critical $t$ value at the 5\% significance level for 137 degrees of freedom is approximately 1.98. Since none of the absolute $t$-statistics exceed 1.98, none of the explanatory variables are individually significant at the 5\% level.
+
+\item The new estimated equation is:
+
+\[
+\widehat{\text{return}} = -36.30 + 0.327\, \text{dkr} + 0.069\, \text{eps} - 4.74\, \log(\text{netinc}) + 7.24\, \log(\text{salary})
+\]
+\[
+\quad (39.37) \quad (0.203) \,\,\quad (0.080) \quad (3.39) \quad\quad\quad\quad\quad (6.31)
+\]
+
+\[
+n = 142, \quad R^2 = 0.0330
+\]
+
+The conclusions do not change significantly. The $R^2$ has slightly decreased, and the $t$-statistics for the logarithmic variables indicate that they are not statistically significant at the 5\% level:
+
+\begin{itemize}
+    \item For log(netinc): $t = \frac{-4.74}{3.39} \approx -1.40$
+    \item For log(salary): $t = \frac{7.24}{6.31} \approx 1.15$
+\end{itemize}
+
+Again, since these $t$-statistics are below the critical value of 1.98, neither variable is individually significant.
+
+\item Since some firms have zero debt and negative earnings, it would be inappropriate to use $\log(\text{dkr})$ or $\log(\text{eps})$ in the model. The logarithm is undefined for non-positive values, which would cause issues in the regression analysis.
+
+\item The overall evidence for predictability of stock returns is weak. The $R^2$ values in both models are very low (0.0395 and 0.0330), indicating that the explanatory variables do not explain much of the variation in returns. Additionally, the explanatory variables are not statistically significant, either individually or jointly. This suggests that the firm characteristics included in this analysis do not provide a strong basis for predicting stock returns.
+
+\end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item The following table was created using the data in CEOSAL2, where standard errors are in parentheses below the coefficients:
+\begin{center}
+\begin{tabular}{|lccc|}
+\hline & \multicolumn{3}{l|}{ Dependent Variable: log(salary) } \\
+\hline Independent Variables & $(1)$ & (2) & $(3)$ \\
+\hline log(sales) & .224 & .158 & .188 \\
+& $(.027)$ & $(.040)$ & $(.040)$ \\
+log(mktval) & - & .112 & .100 \\
+& & $(.050)$ & $(.049)$ \\
+Profmarg & - & -.0023 & -.0022 \\
+& & $(.0022)$ & $(.0021)$ \\
+Ceoten & - & - & .0171 \\
+& & & $(.0055)$ \\
+comten & - & - & -.0092 \\
+& & & $(.0033)$ \\
+intercept & 4.94 & 4.62 & 4.57 \\
+& $(0.20)$ & $(0.25)$ & $(0.25)$ \\
+Observations & 177 & 177 & 177 \\
+$R$-squared & .281 & .304 & .353 \\
+\hline
+\end{tabular}
+\end{center}
+
+The variable mktval is market value of the firm, profmarg is profit as a percentage of sales, ceoten is years as CEO with the current company, and comten is total years with the company.
+\begin{enumerate}
+\item Comment on the effect of profmarg on CEO salary.
+\item Does market value have a significant effect? Explain.
+\item Interpret the coefficients on ceoten and comten. Are these explanatory variables statistically significant?
+\item What do you make of the fact that longer tenure with the company, holding the other factors fixed, is associated with a lower salary?
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item In regression (2) and (3), the coefficient on \textit{profmarg} is negative and small, with values of $-0.0023$ and $-0.0022$, respectively. This suggests that a 1 percentage point increase in profit margin is associated with only a 0.23\% or 0.22\% decrease in CEO salary, holding all other factors constant.
+
+The associated standard errors are $0.0022$ and $0.0021$, respectively, resulting in $t$-statistics of approximately $-1.05$ and $-1.05$. These $t$-statistics are well below the critical value for significance at the 5\% level (approximately $1.98$ for 177 observations), meaning that the effect of profit margin on CEO salary is not statistically significant.
+
+\item In both models (2) and (3), \textit{mktval} has positive coefficients: $0.112$ and $0.100$, respectively. This indicates that a 1\% increase in market value is associated with an approximate 0.112% or 0.100% increase in CEO salary, holding other factors constant.
+
+The associated standard errors are $0.050$ and $0.049$, giving $t$-statistics of $2.24$ and $2.04$. These $t$-statistics exceed the critical value of approximately $1.98$ for significance at the 5\% level, meaning that market value has a statistically significant positive effect on CEO salary.
+
+\item In model (3):
+\begin{itemize}
+    \item The coefficient on \textit{ceoten} is $0.0171$ with a standard error of $0.0055$, leading to a $t$-statistic of approximately $3.11$. This is well above the critical value of $1.98$, so the effect is statistically significant. The positive coefficient suggests that each additional year as CEO is associated with a 1.71\% increase in salary, holding other factors constant.
+    \item The coefficient on \textit{comten} is $-0.0092$ with a standard error of $0.0033$, leading to a $t$-statistic of approximately $-2.79$. This is also statistically significant at the 5\% level. The negative coefficient indicates that each additional year with the company (not necessarily as CEO) is associated with a 0.92\% decrease in salary, holding other factors constant.
+\end{itemize}
+
+\item The negative coefficient on \textit{comten} might seem counterintuitive at first, but it could reflect a scenario where longer-tenured employees are compensated less, possibly because they were promoted internally over a long period of time, with smaller incremental salary increases. On the other hand, newer employees or externally hired CEOs might receive higher salaries to attract them to the company. The results suggest that the market rewards fresh talent or that higher compensation packages are more common for those who are recruited externally rather than for those who rise through the ranks.
+
+\end{enumerate}
+}
+
+
+\end{enumerate}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Computer Exercises}
+
+
+
+\begin{enumerate}
+    \item The following model can be used to study whether campaign expenditures affect election outcomes:
+$$
+\text { vote } A=\beta_0+\beta_1 \log (\text { expendA })+\beta_2 \log (\text { expend } B)+\beta_3 \text { prtystr } A+u
+$$
+where voteA is the percentage of the vote received by Candidate $A$, expendA and expendB are campaign expenditures by Candidates A and B , and prtystrA is a measure of party strength for Candidate A (the percentage of the most recent presidential vote that went to A's party).
+\begin{enumerate}
+    \item What is the interpretation of $\beta_1$ ?
+\item In terms of the parameters, state the null hypothesis that a 1\% increase in A's expenditures is offset by a $1 \%$ increase in B's expenditures.
+\item Estimate the given model using the data in VOTE1 and report the results in usual form. Do A's expenditures affect the outcome? What about B's expenditures? Can you use these results to test the hypothesis in part (b)?
+\item Estimate a model that directly gives the $t$ statistic for testing the hypothesis in part (b). What do you conclude? (Use a two-sided alternative.)
+\end{enumerate}
+
+
+%%%
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item In the given model:
+\[
+\text{voteA} = \beta_0 + \beta_1 \log(\text{expendA}) + \beta_2 \log(\text{expendB}) + \beta_3 \text{prtystrA} + u,
+\]
+the coefficient $\beta_1$ represents the elasticity of vote share with respect to Candidate A's campaign expenditures. Specifically, $\beta_1$ tells us the percentage change in Candidate A's vote share for a 1\% change in their campaign expenditures, holding all other factors constant.
+
+For example, if $\beta_1 = 0.2$, a 1\% increase in Candidate A's expenditures would result in a 0.2\% increase in their vote share, ceteris paribus.
+
+\item The question asks us to state the null hypothesis that a 1\% increase in Candidate A's expenditures is offset by a 1\% increase in Candidate B's expenditures.
+
+The interpretation of "offset" here means that the effect of increasing expenditures for one candidate is exactly countered by increasing expenditures for the other candidate. Mathematically, this means:
+\[
+\beta_1 + \beta_2 = 0.
+\]
+The null hypothesis is:
+\[
+H_0: \beta_1 + \beta_2 = 0.
+\]
+The alternative hypothesis is:
+\[
+H_a: \beta_1 + \beta_2 \neq 0.
+\]
+
+This hypothesis implies that if both candidates increase their expenditures by 1\%, the net effect on Candidate A’s vote share would be zero.
+
+\item 
+\begin{verbatim}
+# install.packages("wooldridge")
+# install.packages("car")
+
+################################################
+library(car)
+library(dplyr)
+data(vote1, package='wooldridge')
+
+# Estimating the model
+model1 <- lm(voteA ~ lexpendA + lexpendB + prtystrA, data = vote1)
+summary(model1)
+
+# Test the hypothesis that beta1 + beta2 = 0
+linearHypothesis(model1, "lexpendA + lexpendB = 0")
+
+# Create a new variable that is the sum of lexpendA and lexpendB
+vote1 <- vote1 %>% mutate(sum_expend = lexpendA + lexpendB)
+
+# Estimate the model
+model2 <- lm(voteA ~ sum_expend + prtystrA, data = vote1)
+
+# Summary of the model
+summary(model2)
+\end{verbatim}
+
+\end{enumerate}
+
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%
+\item The folllowing model is used to study how house prices:
+
+$$
+\log (\text { price })=\beta_0+\beta_1 \text { sqrft }+\beta_2 \text { bdrms }+u
+$$
+where house price measured in thousands of dollars.
+\begin{enumerate}
+    \item You are interested in estimating and obtaining a confidence interval for the percentage change in price when a 150 -square-foot bedroom is added to a house. In decimal form, this is $\theta_1=150 \beta_1+\beta_2$. Use the data in HPRICE1 to estimate $\theta_1$.
+\item Write $\beta_2$ in terms of $\theta_1$ and $\beta_1$ and plug this into the $\log ($ price $)$ equation.
+\item  Use part (ii) to obtain a standard error for $\hat{\theta}_2$ and use this standard error to construct a $95 \%$ confidence interval.
+\end{enumerate}
+
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item 
+\begin{verbatim}
+###############################################
+data(hprice1, package='wooldridge')
+
+# Estimating the model
+model <- lm(lprice ~ sqrft + bdrms, data = hprice1)
+
+# Extract the coefficients and standard errors
+beta_1 <- coef(model)["sqrft"]
+beta_2 <- coef(model)["bdrms"]
+var_beta_1 <- vcov(model)["sqrft", "sqrft"]
+var_beta_2 <- vcov(model)["bdrms", "bdrms"]
+cov_beta_1_beta_2 <- vcov(model)["sqrft", "bdrms"]
+
+# Calculate theta_1
+theta_1 <- 150 * beta_1 + beta_2
+
+# Calculate the standard error for theta_1 considering the covariance
+se_theta_1 <- sqrt((150^2) * var_beta_1 + var_beta_2 + 2 * 150 * cov_beta_1_beta_2)
+
+# Construct the 95% confidence interval for theta_1
+ci_lower <- theta_1 - 1.96 * se_theta_1
+ci_upper <- theta_1 + 1.96 * se_theta_1
+
+# Print results
+cat("Estimated theta_1:", round(theta_1, 4), "\n")
+cat("95% Confidence Interval for theta_1:", round(ci_lower, 4), "to", round(ci_upper, 4), "\n")
+
+\end{verbatim}
+
+\item To express $\beta_2$ in terms of $\theta_1$ and $\beta_1$:
+
+\[
+\beta_2 = \theta_1 - 150\beta_1
+\]
+
+Substituting this into the log-price equation:
+
+\[
+\log (\text { price }) = \beta_0 + \beta_1 \text { sqrft } + (\theta_1 - 150\beta_1) \text { bdrms } + u
+\]
+
+This simplifies to:
+
+\[
+\log (\text { price }) = \beta_0 + \beta_1 (\text { sqrft } - 150 \text { bdrms }) + \theta_1 \text { bdrms } + u
+\]
+
+\item 
+\begin{verbatim}
+# Create the transformed variable for the regression
+hprice1$sqrft_minus_150_bdrms <- hprice1$sqrft - 150 * hprice1$bdrms
+
+# Estimate the model
+model_b <- lm(lprice ~ sqrft_minus_150_bdrms + bdrms, data = hprice1)
+
+# Summary of the model
+summary(model_b)
+\end{verbatim}
+\end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%
+    \item The data set 401KSUBS contains information on net financial wealth (nettfa), age of the survey respondent (age), annual family income (inc), family size (fsize), and participation in certain pension plans for people in the United States. The wealth and income variables are both recorded in thousands of dollars. For this question, use only the data for single-person households (so $fsize=1$ ).
+\begin{enumerate}
+\item How many single-person households are there in the data set?
+\item Use OLS to estimate the model
+$$
+\text { nettfa }=\beta_0+\beta_1 \text { inc }+\beta_2 \text { age }+u
+$$
+and report the results using the usual format. Be sure to use only the single-person households in the sample. Interpret the slope coefficients. Are there any surprises in the slope estimates?
+\item Does the intercept from the regression in part (b) have an interesting meaning? Explain.
+\item Find the $p$-value for the test $\mathrm{H}_0: \beta_2=1$ against $\mathrm{H}_1: \beta_2<1$. Do you reject $\mathrm{H}_0$ at the $1 \%$ significance level?
+\item If you do a simple regression of nettfa on inc, is the estimated coefficient on inc much different from the estimate in part (b)? Why or why not?
+
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{verbatim}
+##############################################################
+data(k401ksubs, package='wooldridge')
+
+# Filter the data for single-person households
+single_person_households <- subset(k401ksubs, fsize == 1)
+
+# Count the number of single-person households
+num_single_person_households <- nrow(single_person_households)
+num_single_person_households
+
+# Estimate the model using OLS
+model <- lm(nettfa ~ inc + age, data = single_person_households)
+
+# Display the summary of the regression results
+summary(model)
+
+# Perform a one-sided t-test for H0: beta_2 = 1 against H1: beta_2 < 1
+# Extracting the estimate and standard error for the age coefficient
+beta_2_hat <- coef(summary(model))["age", "Estimate"]
+se_beta_2 <- coef(summary(model))["age", "Std. Error"]
+
+# Calculate the t-statistic
+t_stat <- (beta_2_hat - 1) / se_beta_2
+
+# Calculate the p-value for the one-sided test
+p_value <- pt(t_stat, df = df.residual(model), lower.tail = TRUE)
+p_value
+
+# Determine if you reject H0 at the 1% significance level
+reject_H0 <- p_value < 0.01
+reject_H0
+
+# Simple regression of nettfa on inc
+simple_model <- lm(nettfa ~ inc, data = single_person_households)
+
+# Display the summary of the simple regression
+summary(simple_model)
+\end{verbatim}
+
+}
+
+
+
+
+\end{enumerate}
+
+\end{document}

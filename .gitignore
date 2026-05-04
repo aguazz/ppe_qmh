@@ -1,0 +1,17 @@
+# Private instructor material: grades and student submissions.
+/11_GRADES/
+
+# LaTeX auxiliary files
+aux_files/
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb

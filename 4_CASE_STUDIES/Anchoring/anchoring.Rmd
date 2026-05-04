@@ -1,0 +1,237 @@
+---
+title: "Causality: The Anchoring Effect and Experimental Design"
+author: "Quantitative Methods for Humanities"
+date: "CUNEF Universidad, 2024"
+output: 
+  html_document:
+    css: my-theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+
+```{r global_options, include=TRUE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+The **anchoring effect** is a classic example of how irrelevant information can skew human judgment. Here, we revisit this bias using data from the ManyLabs replication project, which asked participants to estimate the height of Mount Everest after being exposed to a "high" or "low" anchor value.
+
+# Research Design
+
+Before analyzing the data, we clarify the structure of the experiment.
+
+## Q1. Treatment vs Outcome
+
+- **Treatment variable:** `anchor` (randomly assigned: "low" or "high").
+- **Outcome variable:** `everest_feet`, the participant’s numerical estimate of Everest’s height.
+
+## Q2. Threats to Internal Validity
+
+Two key concerns could undermine internal validity:
+
+1. **Contamination**: Participants may talk to each other, specially in the online setting.
+2. **Different treatment versions**: The lab setting, timing, and other factors may differ among different sessions.
+
+# Data Setup
+
+## Q3. Load Data and Inspect Randomization
+
+```{r}
+load("anchoring.RData")
+head(anchoring)
+summary(anchoring)
+```
+
+Let’s inspect whether treatment groups are balanced in age and sex, separately for lab and online participants.
+
+```{r}
+table(anchoring$lab_or_online)
+
+# Subsetting the data into lab and online
+online <- subset(anchoring, lab_or_online == "Online")
+lab <- subset(anchoring, lab_or_online == "In-lab")
+
+# Age, gender, and citizenchip by anchor (online only)
+tapply(online$age, online$anchor, mean, na.rm = TRUE)
+tapply(online$sex, online$anchor, function(x) prop.table(table(x)))
+
+# Age, gender, and citizenchip by anchor (lab only)
+tapply(lab$age, lab$anchor, mean, na.rm = TRUE)
+tapply(lab$sex, lab$anchor, function(x) prop.table(table(x)))
+```
+
+Lets visualize it
+
+```{r, fig.align='center', fig.width=10, fig.height=8}
+par(mfrow = c(2, 2), mar = c(4, 4, 3, 6), xpd = TRUE)
+
+# Mean age by anchor
+barplot(tapply(online$age, online$anchor, mean, na.rm = TRUE),
+        main = "Online: mean age by anchor",
+        ylab = "Mean age")
+
+barplot(tapply(lab$age, lab$anchor, mean, na.rm = TRUE),
+        main = "In-lab: mean age by anchor",
+        ylab = "Mean age")
+
+# Sex proportions by anchor
+barplot(prop.table(table(online$sex, online$anchor), 2),
+        beside = TRUE,
+        main = "Online: sex by anchor",
+        ylab = "Proportion",
+        legend.text = rownames(prop.table(table(online$sex, online$anchor), 2)),
+        args.legend = list(x = "topright", inset = c(-0.28, 0), bty = "n"))
+
+barplot(prop.table(table(lab$sex, lab$anchor), 2),
+        beside = TRUE,
+        main = "In-lab: sex by anchor",
+        ylab = "Proportion",
+        legend.text = rownames(prop.table(table(lab$sex, lab$anchor), 2)),
+        args.legend = list(x = "topright", inset = c(-0.28, 0), bty = "n"))
+
+par(mfrow = c(1, 1), xpd = FALSE)
+```
+
+What about citizenship distribution?
+
+```{r, fig.align='center', fig.width=11, fig.height=10}
+# Age, gender, and citizenchip by anchor (online only)
+tapply(online$citizenship, online$anchor, function(x) prop.table(table(x)))
+
+# Age, gender, and citizenchip by anchor (lab only)
+tapply(lab$citizenship, lab$anchor, function(x) prop.table(table(x)))
+
+# Plot
+par(mfrow = c(2, 1), mar = c(4, 8, 3, 8), xpd = TRUE)
+
+# Country distribution by anchor: online (log1 scale)
+barplot(prop.table(table(online$citizenship, online$anchor), 2),
+        beside = TRUE,
+        main = "Online: country by anchor",
+        xlab = "Proportion",
+        legend.text = rownames(prop.table(table(online$citizenship, online$anchor), 2)),
+        args.legend = list(x = "topright", inset = c(-0.35, 0), bty = "n", cex = 0.8))
+
+# Country distribution by anchor: lab (log1 scale)
+barplot(prop.table(table(lab$citizenship, lab$anchor), 2),
+        beside = TRUE,
+        main = "In-lab: country by anchor",
+        xlab = "Proportion",
+        legend.text = rownames(prop.table(table(lab$citizenship, lab$anchor), 2)),
+        args.legend = list(x = "topright", inset = c(-0.35, 0), bty = "n", cex = 0.8))
+
+par(mfrow = c(1, 1), xpd = FALSE)
+```
+
+**Interpretation:** If randomization holds, age and sex distributions should be similar across the "low" and "high" anchor groups.
+
+# Causal Estimation
+
+## Q4. Estimating the Causal Effect
+
+If the random assignment to anchor groups holds (especially in the lab), the **difference in means** between groups is likely to be an **unbiased estimator** of the causal effect of anchoring.
+
+We compute it next.
+
+## Q5. Judged Everest Height by Anchor
+
+```{r}
+tapply(anchoring$everest_feet, anchoring$anchor, mean, na.rm = TRUE)
+```
+
+Let’s compute the **standard deviation** to contextualize the mean difference.
+
+```{r}
+sd(anchoring$everest_feet, na.rm = TRUE)
+```
+
+## Q6. Interpretation
+
+The difference between the "low" and "high" anchor groups is about `r round(diff(tapply(anchoring$everest_feet, anchoring$anchor, mean, na.rm = TRUE)), 2)` feet. 
+
+The standard deviation of estimates (`r round(sd(anchoring$everest_feet, na.rm = TRUE), 2)` feet) is large, reflecting high variability in responses. Yet, the mean difference between groups is about **twice the standard deviation**, suggesting a large and meaningful effect: the arbitrary anchor (low vs. high) strongly influenced people's numeric estimates.
+
+### Formal Hypothesis Test (Beyond the scope of this course)
+
+We can formally test whether the difference in means between the two anchor groups is statistically significant using a two-sample *t-test*. Here’s the code and result:
+
+```{r}
+# Two-sample t-test for judged Everest height
+t.test(everest_feet ~ anchor, data = anchoring)
+```
+
+To assess statistical significance, we perform a two-sample *t-test* comparing the Everest height estimates across the two anchor conditions:
+
+- **Null hypothesis** ($H_0$): The mean judged height is the same in both groups.
+- **Alternative hypothesis** ($H_A$): The means differ between the groups.
+
+The test yields a p-value close to zero (well below any conventional threshold such as 0.05), so we **reject the null hypothesis**. This confirms that the anchoring treatment caused a statistically significant shift in estimated heights.
+
+# Causal Interpretation
+
+## Q7. Can We Infer Causality?
+
+If we believe that the **anchor assignment was random**, and no confounding factors affected both the anchor and the response, then **yes**, we can interpret the effect as causal.
+
+Otherwise, we risk attributing to the anchor what could be due to unobserved participant differences (e.g., prior knowledge, different versions of the treatment, etc).
+
+# External Validity
+
+## Q8. Generalizability Across Countries
+
+Even in well-run experiments, **external validity** can be limited. Let’s compare estimates across countries:
+
+```{r, fig.align='center', fig.width=8, fig.height=10}
+# Get unique countries
+countries <- unique(anchoring$citizenship)
+
+# Initialize vector
+diff_means <- numeric(length(countries))
+names(diff_means) <- countries
+
+# Loop over countries and compute difference (High - Low)
+for (c in countries) {
+  sub <- anchoring[anchoring$citizenship == c, ]
+  m_high <- mean(sub$everest_feet[sub$anchor == "high"], na.rm = TRUE)
+  m_low  <- mean(sub$everest_feet[sub$anchor == "low"], na.rm = TRUE)
+  diff_means[c] <- m_high - m_low
+}
+
+# Remove NAs and sort
+diff_means <- diff_means[!is.na(diff_means)]
+diff_means <- sort(diff_means)
+
+# Horizontal barplot
+par(mar = c(4, 12, 3, 2))
+barplot(diff_means,
+        horiz = TRUE,
+        las = 1,
+        main = "Difference in Everest estimates by country",
+        xlab = "High anchor mean - Low anchor mean")
+```
+
+As we see, average estimates of Everest's height vary widely by country. Cultural, educational, or even language differences can influence how participants interpret the same task. This underscores the challenge of **generalizing experimental findings** globally.
+
+# Final Thoughts
+
+This case is a classic illustration of experimental design in action. It shows how randomized experiments, even when simple, can identify **causal mechanisms** behind human behavior. However, the power of such studies depends on thoughtful design, faithful implementation, and careful consideration of external and internal threats to validity.
+
+# Exercises
+
+- Recompute the anchoring effect **only for lab participants**.
+- Compare the magnitude of the effect **between sexes**.
+- Visualize the distribution of estimates using a histogram or boxplot.
+- Conduct a **t-test** to assess the statistical significance of the effect.

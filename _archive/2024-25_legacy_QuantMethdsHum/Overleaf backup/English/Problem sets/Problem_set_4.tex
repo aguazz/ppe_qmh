@@ -1,0 +1,353 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\author{\empty}
+\usepackage{listings}
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,                % Enable line breaking
+  breakatwhitespace=false     % Don't break at whitespace
+}
+
+
+\title{Problem Set 3\\Multiple regression: additional aspects\\Econometrics}
+
+\date{\empty}
+
+\begin{document}
+	\maketitle
+	
+\begin{enumerate}
+	
+\item The following equation was obtained by OLS:
+
+$$
+\begin{aligned}
+\widehat{\text { rdintens }}= & 2.613+.00030 \text { sales }-.0000000070 \text { sales}^2 \\
+& (.429)\quad(.00014) \quad\quad\quad(.0000000037) \\
+n= & 32, R^2=.1484
+\end{aligned}
+$$
+where rdintens is the R\&D spending (as percent of sales) and sales are in millions.
+\begin{enumerate}
+\item At what point does the marginal effect of sales on rdintens become negative?
+\item Would you keep the quadratic term in the model? Explain.
+\item Define salesbil as sales measured in billions of dollars: salesbil $=$ sales $/ 1,000$. Rewrite the estimated equation with salesbil and salesbil ${ }^2$ as the independent variables. Be sure to report standard errors and the $R$-squared. [Hint: Note that salesbil ${ }^2=$ sales $^2 /(1,000)^2$.]
+\item For the purpose of reporting the results, which equation do you prefer?
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+\begin{enumerate}
+
+\item The marginal effect of sales on \( \text{rdintens} \) is obtained by taking the derivative of \( \widehat{\text{rdintens}} \) with respect to sales:
+
+\[
+\frac{d(\widehat{\text{rdintens}})}{d(\text{sales})} = 0.00030 - 2 \times 0.0000000070 \times \text{sales}.
+\]
+
+Set the derivative equal to zero to find the turning point:
+
+\[
+0 = 0.00030 - 2 \times 0.0000000070 \times \text{sales}.
+\]
+
+Solving for sales:
+
+\[
+2 \times 0.0000000070 \times \text{sales} = 0.00030,
+\]
+
+\[
+\text{sales} = \frac{0.00030}{2 \times 0.0000000070} = \frac{0.00030}{0.000000014} = 21,428.57 \text{ million dollars}.
+\]
+
+So, the marginal effect becomes negative when sales exceed 21,428.57 million dollars (or approximately 21.4 billion dollars).
+
+\item To determine whether the quadratic term should be kept in the model, we evaluate its statistical significance. The standard error of the coefficient on the quadratic term is 0.0000000037. The \( t \)-statistic is:
+
+\[
+t = \frac{-0.0000000070}{0.0000000037} \approx -1.89.
+\]
+
+At the 5\% significance level and 30 degrees of freedom, the critical \( t \)-value for a two-tailed test is approximately 2.042. Since \( |t| < 2.042 \), the quadratic term is not statistically significant at the 5\% level. However, it is close to significance, and given the nature of the problem (modeling a non-linear relationship), it might still be reasonable to keep the term for theoretical reasons.
+
+\item Define \( \text{salesbil} = \frac{\text{sales}}{1,000} \). Then:
+
+\[
+\text{sales} = 1,000 \times \text{salesbil},
+\]
+and
+\[
+\text{sales}^2 = (1,000 \times \text{salesbil})^2 = 1,000,000 \times \text{salesbil}^2.
+\]
+
+Substituting into the original equation:
+
+\[
+\widehat{\text{rdintens}} = 2.613 + 0.00030 \times (1,000 \times \text{salesbil}) - 0.0000000070 \times (1,000,000 \times \text{salesbil}^2).
+\]
+
+Simplifying:
+
+\[
+\widehat{\text{rdintens}} = 2.613 + 0.30 \times \text{salesbil} - 0.007 \times \text{salesbil}^2.
+\]
+
+The standard errors are transformed accordingly:
+\begin{itemize}
+    \item The standard error of the coefficient on \( \text{salesbil} \) becomes \( 0.00014 \times 1,000 = 0.14 \).
+\item The standard error of the coefficient on \( \text{salesbil}^2 \) becomes \( 0.0000000037 \times 1,000,000 = 0.0037 \).
+\end{itemize}
+
+
+The final equation with the transformed variables is:
+
+\[
+\widehat{\text{rdintens}} = 2.613 + 0.30 \times \text{salesbil} - 0.007 \times \text{salesbil}^2,
+\]
+with standard errors:
+\[
+(0.429) \quad (0.14) \quad (0.0037).
+\]
+
+The \( R^2 \) remains unchanged at 0.1484.
+
+\item The transformed equation using \( \text{salesbil} \) is preferred because the coefficients are more interpretable. The coefficient on \( \text{salesbil} \) represents the effect of a one billion dollar increase in sales, which is a more meaningful unit in the context of large corporations. Additionally, the coefficients are easier to read and interpret when dealing with billions rather than millions.
+
+\end{enumerate}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item The following model allows the return to education to depend upon the total amount of both parents' education, called pareduc:
+
+$$
+\log (\text { wage })=\beta_0+\beta_1 \text { educ }+\beta_2 \text { educ x pareduc }+\beta_3 \text { exper }+\beta_4 \text { tenure }+u
+$$
+\begin{enumerate}
+    \item  Show that, in decimal form, the return to another year of education in this model is
+
+$$
+\Delta \log (\text { wage }) / \Delta \text { educ }=\beta_1+\beta_2 \text { pareduc. }
+$$
+
+
+What sign do you expect for $\beta_2$ ? Why?
+\item Using the data in WAGE2, the estimated equation is
+
+$$
+\begin{aligned}
+\widehat{\log (\text { wage })}= & 5.65+.047 \text { educ }+.00078 \text { educ x pareduc }+ \\
+& (.13)\quad(.010) \quad\quad\quad(.00021) \\
+& .019 \text { exper }+.010 \text { tenure } \\
+& (.004) \quad\quad\quad(.003) \\
+n= & 722, R^2=.169
+\end{aligned}
+$$
+
+(Only 722 observations contain full information on parents' education.) Interpret the coefficient on the interaction term. It might help to choose two specific values for pareduc-for example, pareduc $=32$ if both parents have a college education, or pareduc $=24$ if both parents have a high school education-and to compare the estimated return to educ.
+\item When pareduc is added as a separate variable to the equation, we get:
+
+$$
+\begin{aligned}
+\widehat{\log (\text { wage })}= & 4.94+.097 \text { educ }+.033 \text { pareduc }-.0016 \text { educ x pareduc } \\
+& (.38) \quad(.027) \quad \quad \quad(.017)  \quad \quad \quad \quad(.0012)\\
+& +.020 \text { exper }+.010 \text { tenure } \\
+&  \quad(.004) \quad\quad\quad(.003) \\
+n= & 722, R^2=.174
+\end{aligned}
+$$
+
+
+Does the estimated return to education now depend positively on parent education? Test the null hypothesis that the return to education does not depend on parent education.
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+
+\item The return to an additional year of education is determined by taking the partial derivative of \( \log(\text{wage}) \) with respect to \( \text{educ} \):
+
+\[
+\frac{\partial \log(\text{wage})}{\partial \text{educ}} = \frac{\partial}{\partial \text{educ}} \left[ \beta_1 \text{educ} + \beta_2 (\text{educ} \times \text{pareduc}) \right].
+\]
+
+First, differentiate \( \beta_1 \text{educ} \) with respect to \( \text{educ} \):
+
+\[
+\frac{\partial (\beta_1 \text{educ})}{\partial \text{educ}} = \beta_1.
+\]
+
+Next, differentiate \( \beta_2 (\text{educ} \times \text{pareduc}) \) with respect to \( \text{educ} \):
+
+\[
+\frac{\partial (\beta_2 \times \text{educ} \times \text{pareduc})}{\partial \text{educ}} = \beta_2 \times \text{pareduc}.
+\]
+
+Adding the derivatives together gives:
+
+\[
+\frac{\partial \log(\text{wage})}{\partial \text{educ}} = \beta_1 + \beta_2 \times \text{pareduc}.
+\]
+
+This expression represents the marginal effect of an additional year of education on \( \log(\text{wage}) \), showing that the return to education depends on \( \text{pareduc} \).
+
+\item The estimated equation is:
+
+\[
+\widehat{\log(\text{wage})} = 5.65 + 0.047 \times \text{educ} + 0.00078 \times (\text{educ} \times \text{pareduc}) + 0.019 \times \text{exper} + 0.010 \times \text{tenure}.
+\]
+
+\[
+\text{(Standard errors)} \quad (0.13) \quad (0.010) \quad (0.00021) \quad (0.004) \quad (0.003).
+\]
+
+The coefficient \( 0.00078 \) on \( \text{educ} \times \text{pareduc} \) indicates how much the return to an additional year of education increases with each additional year of parental education. 
+
+To see this more clearly, we can compute the return to education for two specific values of \( \text{pareduc} \):
+\begin{itemize}
+    \item For \( \text{pareduc} = 32 \) (both parents have college education):
+  \[
+  \widehat{\frac{\Delta \log(\text{wage})}{\Delta \text{educ}}} = 0.047 + 0.00078 \times 32 = 0.07196.
+  \]
+  This suggests that the return to education is approximately 7.2\% when both parents have a college education.
+
+  \item For \( \text{pareduc} = 24 \) (both parents have high school education):
+  \[
+  \widehat{\frac{\Delta \log(\text{wage})}{\Delta \text{educ}}} = 0.047 + 0.00078 \times 24 = 0.06572.
+  \]
+  This suggests that the return to education is approximately 6.6\% when both parents have a high school education.
+\end{itemize}
+
+The positive interaction suggests that the return to education is higher when parents are more educated, which aligns with the theoretical expectation.
+
+\item The updated model is:
+
+\begin{align}
+\widehat{\log(\text{wage})} =& 4.94 + 0.097 \times \text{educ} + 0.033 \times \text{pareduc} - 0.0016 \times (\text{educ} \times \text{pareduc})\\
+& + 0.020 \times \text{exper} + 0.010 \times \text{tenure}.
+\end{align}
+
+\[
+\text{(Standard errors)} \quad (0.38) \quad (0.027) \quad (0.017) \quad (0.0012) \quad (0.004) \quad (0.003).
+\]
+
+In this model, the coefficient on the interaction term \( -0.0016 \) suggests that the return to education now decreases with parental education, contrary to the earlier findings. 
+
+To test whether the return to education depends on parental education, we test the null hypothesis \( H_0: \beta_2 = 0 \) against \( H_1: \beta_2 \neq 0 \). The \( t \)-statistic for \( \beta_2 \) is:
+
+\[
+t = \frac{-0.0016}{0.0012} \approx -1.33.
+\]
+
+The critical value for a two-tailed test at the 5\% significance level with 717 degrees of freedom is approximately 1.96. Since \( |t| < 1.96 \), we fail to reject the null hypothesis at the 5\% level. This suggests that there is not strong evidence that the return to education depends on parental education.
+
+
+\end{enumerate}
+}
+
+\end{enumerate}
+
+
+
+\section*{Computer Exercises}
+
+\begin{enumerate}
+    \item Use the data in WAGE1 for this exercise.
+    
+\begin{enumerate}
+    \item Use OLS to estimate the equation
+
+$$
+\log (\text { wage })=\beta_0+\beta_1 \text { educ }+\beta_2 \text { exper }+\beta_3 \text { exper }^2+u
+$$
+
+and report the results using the usual format.
+\item Is  ${exper}^2$ statistically significant at the $1 \%$ level?
+\item Using the approximation
+
+$$
+\% \Delta \widehat{\text { wage }}=100\left(\hat{\beta}_2+2 \hat{\beta}_3 \text { exper }\right) \Delta \text { exper }
+$$
+
+find the approximate return to the fifth year of experience. What is the approximate return to the twentieth year of experience?
+\item At what value of exper does additional experience actually lower predicted $\log ($ wage $)$ ? How many people have more experience in this sample?
+
+
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{verbatim}
+# install.packages("wooldridge")
+
+
+################################################
+data(wage1, package='wooldridge')
+
+# 1. Estimate the equation using OLS
+model <- lm(lwage ~ educ + exper + expersq, data = wage1)
+
+# Print the summary to report the results
+summary(model)
+
+# 2. Check if exper^2 (expersq) is statistically significant at the 1% level
+# Look at the p-value associated with expersq in the model summary
+summary(model)$coefficients["expersq", ]
+
+# 3. Calculate the approximate return to the fifth and twentieth years of experience
+beta_2 <- coef(model)["exper"]
+beta_3 <- coef(model)["expersq"]
+
+# Return to 5th year of experience
+return_5th_year <- 100 * (beta_2 + 2 * beta_3 * 5)
+return_5th_year
+
+# Return to 20th year of experience
+return_20th_year <- 100 * (beta_2 + 2 * beta_3 * 20)
+return_20th_year
+
+# 4. Calculate the value of exper at which additional experience lowers predicted log(wage)
+# We set the derivative of the wage equation with respect to exper to 0:
+# d(log(wage))/dexper = b_2 + 2*b_3*exper = 0
+# Solve for exper
+
+turning_point_exper <- -beta_2 / (2 * beta_3)
+turning_point_exper
+
+# Count how many people in the dataset have more experience than the turning point
+num_people_more_experience <- sum(wage1$exper > turning_point_exper)
+num_people_more_experience
+\end{verbatim}
+
+
+}
+
+
+
+
+    
+\end{enumerate}
+
+
+
+
+
+
+
+\end{document}

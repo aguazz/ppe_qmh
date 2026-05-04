@@ -1,0 +1,306 @@
+---
+title: "Linear Regression: Government Transfer and Poverty Reduction in Brazil"
+author: "Quantitative Methods for Humanities"
+date: "CUNEF Universidad"
+output:
+  html_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+This case study studies whether additional government transfers improved education, literacy, and poverty outcomes in Brazilian municipalities.
+
+Until 1991, some transfers depended on population cutoffs. Municipalities just above a cutoff received more resources than municipalities just below it. This allows us to use a **regression discontinuity design (RDD)**.
+
+# The Data
+
+The data set contains the following variables
+
+- `pop82`: Population in 1982.
+- `poverty80`: Poverty rate in 1980.
+- `poverty91`: Poverty rate in 1991.
+- `educ80`: Average years of education in 1980.
+- `educ91`: Average years of education in 1991.
+- `literate91`: Literacy rate in 1991.
+- `state`: State.
+- `region`: Region.
+- `id`: Municipality ID.
+- `year`: Year of measurement.
+
+```{r load-data}
+transfer <- read.csv("transfer.csv")
+head(transfer) # first observations
+nrow(transfer) # number of observations
+```
+
+# Q1. Regression Discontinuity Design Assumptions
+
+The key assumption is **continuity at the cutoff** with respect to any covariate: 
+
+> Municipalities just below and just above the population cutoff should behave similar with respect any pretreatment variable.
+
+In this application, municipalities slightly below 10,188 inhabitants should be similar to municipalities slightly above 10,188 inhabitants, except that the latter received more transfers.
+
+A violation would occur if municipalities manipulated population numbers to move above the cutoff, or if municipalities above the cutoff were already different before the policy.
+
+* **The main advantage is** that the design compares very similar municipalities near the threshold. 
+* **The main disadvantage** is that the estimate is local: it applies mainly to municipalities close to the cutoff.
+
+# Q2. Creating a Variable for Proximity to the Cutoff
+
+The cutoffs are 10,188, 13,584, and 16,980.
+
+```{r q2}
+transfer$cutoff <- 10188
+transfer$cutoff[abs(transfer$pop82 - 13584) < abs(transfer$pop82 - transfer$cutoff)] <- 13584
+transfer$cutoff[abs(transfer$pop82 - 16980) < abs(transfer$pop82 - transfer$cutoff)] <- 16980
+
+transfer$diff_cutoff <- transfer$pop82 - transfer$cutoff
+transfer$dist_cutoff <- 100 * transfer$diff_cutoff / transfer$cutoff
+transfer$above <- ifelse(transfer$diff_cutoff >= 0, 1, 0)
+
+head(transfer[, c("pop82", "cutoff", "diff_cutoff", "dist_cutoff", "above")])
+```
+
+`dist_cutoff` measures the distance from the closest cutoff as a percentage. Negative values are below the cutoff; positive values are above it.
+
+# Q3. Estimating Causal Effects Near the Cutoff
+
+We keep municipalities within 3 percentage points of the closest cutoff.
+
+```{r q3a}
+transfer3 <- subset(transfer, abs(dist_cutoff) <= 3)
+nrow(transfer3)
+```
+
+Because `dist_cutoff` is centered at zero, the coefficient on `above` is the estimated jump at the cutoff.
+
+```{r q3b}
+educ_rdd <- lm(educ91 ~ above * dist_cutoff, data = transfer3)
+lit_rdd <- lm(literate91 ~ above * dist_cutoff, data = transfer3)
+pov_rdd <- lm(poverty91 ~ above * dist_cutoff, data = transfer3)
+
+summary(educ_rdd)
+summary(lit_rdd)
+summary(pov_rdd)
+```
+
+```{r q3-results}
+rdd_results <- data.frame(
+  outcome = c("Education", "Literacy", "Poverty"),
+  estimate = c(coef(educ_rdd)["above"], coef(lit_rdd)["above"], coef(pov_rdd)["above"])
+)
+rdd_results$estimate <- round(rdd_results$estimate, 3)
+rdd_results
+```
+
+The estimates suggest that municipalities just above the cutoff had higher education, higher literacy, and lower poverty than municipalities just below the cutoff. This is consistent with a positive effect of government transfers. But be careful with statistical significance: so far non of the estimated average treatment effect are significantly different from zero based on their p-values.
+
+# Q4. Visualizing the Analysis
+
+The vertical line marks the cutoff. The two fitted lines are estimated separately below and above the cutoff.
+
+```{r q4, fig.align='center', fig.width=12, fig.height=4}
+cols <- ifelse(transfer3$above == 1, "red", "blue")
+
+par(mfrow = c(1, 3), mar = c(4, 4, 3, 1))
+
+plot(transfer3$dist_cutoff, transfer3$educ91, pch = 16, cex = 0.6,
+     col = cols, xlab = "Distance (%)", ylab = "Education", main = "Education")
+abline(v = 0, lty = 2)
+abline(lm(educ91 ~ dist_cutoff, data = subset(transfer3, above == 0)), col = "blue", lwd = 2)
+abline(lm(educ91 ~ dist_cutoff, data = subset(transfer3, above == 1)), col = "red", lwd = 2)
+
+plot(transfer3$dist_cutoff, transfer3$literate91, pch = 16, cex = 0.6,
+     col = cols, xlab = "Distance (%)", ylab = "Literacy", main = "Literacy")
+abline(v = 0, lty = 2)
+abline(lm(literate91 ~ dist_cutoff, data = subset(transfer3, above == 0)), col = "blue", lwd = 2)
+abline(lm(literate91 ~ dist_cutoff, data = subset(transfer3, above == 1)), col = "red", lwd = 2)
+
+plot(transfer3$dist_cutoff, transfer3$poverty91, pch = 16, cex = 0.6,
+     col = cols, xlab = "Distance (%)", ylab = "Poverty", main = "Poverty")
+abline(v = 0, lty = 2)
+abline(lm(poverty91 ~ dist_cutoff, data = subset(transfer3, above == 0)), col = "blue", lwd = 2)
+abline(lm(poverty91 ~ dist_cutoff, data = subset(transfer3, above == 1)), col = "red", lwd = 2)
+
+par(mfrow = c(1, 1))
+```
+
+The plots are noisy, but a positive jump for education and literacy, and a negative jump for poverty, would support the idea that transfers improved outcomes.
+
+# Q5. Difference-in-Means Analysis
+
+Now we compare average outcomes above and below the cutoff, using the same 3 percentage-point window.
+
+```{r q5}
+educ_dim <- lm(educ91 ~ above, data = transfer3)
+lit_dim <- lm(literate91 ~ above, data = transfer3)
+pov_dim <- lm(poverty91 ~ above, data = transfer3)
+
+summary(educ_dim)
+summary(lit_dim)
+summary(pov_dim)
+```
+
+```{r q5-results}
+comparison <- data.frame(
+  outcome = c("Education", "Literacy", "Poverty"),
+  difference_in_means = c(coef(educ_dim)["above"], coef(lit_dim)["above"], coef(pov_dim)["above"]),
+  rdd_estimate = c(coef(educ_rdd)["above"], coef(lit_rdd)["above"], coef(pov_rdd)["above"])
+)
+comparison$difference_in_means <- round(comparison$difference_in_means, 3)
+comparison$rdd_estimate <- round(comparison$rdd_estimate, 3)
+comparison
+```
+
+The difference-in-means comparison is simpler, but it assumes that municipalities above and below the cutoff are directly comparable inside the window.
+
+The RDD estimates are usually more appropriate because they also control for distance from the cutoff. This allows outcomes to vary smoothly with population.
+
+# Q6. Varying the Analysis Window
+
+We repeat the RDD analysis using windows from 1 to 5 percentage points.
+
+```{r q6}
+window_results <- data.frame(window = 1:5, education = NA, literacy = NA, poverty = NA, n = NA)
+
+for (w in 1:5) {
+  data_w <- subset(transfer, abs(dist_cutoff) <= w)
+  educ_w <- lm(educ91 ~ above * dist_cutoff, data = data_w)
+  lit_w <- lm(literate91 ~ above * dist_cutoff, data = data_w)
+  pov_w <- lm(poverty91 ~ above * dist_cutoff, data = data_w)
+
+  window_results$education[w] <- coef(educ_w)["above"]
+  window_results$literacy[w] <- coef(lit_w)["above"]
+  window_results$poverty[w] <- coef(pov_w)["above"]
+  window_results$n[w] <- nrow(data_w)
+}
+
+window_results[, c("education", "literacy", "poverty")] <-
+  round(window_results[, c("education", "literacy", "poverty")], 3)
+window_results
+```
+
+As the window becomes wider, we use more observations. This can improve precision, but it also includes municipalities farther from the cutoff. Similar estimates across windows would make the results more robust.
+
+```{r q6_plot}
+# Plot all municipalities within the widest window
+data_5 <- subset(transfer, abs(dist_cutoff) <= 5)
+
+plot(data_5$dist_cutoff, data_5$educ91,
+     xlab = "Distance from closest cutoff (%)",
+     ylab = "Average years of education in 1991",
+     main = "RDD estimates with different window sizes",
+     pch = 16, col = rgb(0, 0, 0, 0.25))
+
+# Cutoff
+abline(v = 0, lwd = 2)
+
+# Window limits
+abline(v = c(-1, 1), lty = 3)
+abline(v = c(-2, 2), lty = 3)
+abline(v = c(-3, 3), lty = 3)
+abline(v = c(-4, 4), lty = 3)
+abline(v = c(-5, 5), lty = 3)
+
+# Fit and plot one RDD line for each window
+colors <- c("red", "blue", "darkgreen", "purple", "orange")
+
+for (w in 1:5) {
+  data_w <- subset(transfer, abs(dist_cutoff) <= w)
+  model_w <- lm(educ91 ~ above * dist_cutoff, data = data_w)
+
+  left_side <- data.frame(
+    dist_cutoff = seq(-w, 0, length.out = 50),
+    above = 0
+  )
+
+  right_side <- data.frame(
+    dist_cutoff = seq(0, w, length.out = 50),
+    above = 1
+  )
+
+  lines(left_side$dist_cutoff,
+        predict(model_w, newdata = left_side),
+        col = colors[w], lwd = 2)
+
+  lines(right_side$dist_cutoff,
+        predict(model_w, newdata = right_side),
+        col = colors[w], lwd = 2)
+}
+
+legend("topleft",
+       legend = paste("Window", 1:5),
+       col = colors,
+       lwd = 2,
+       bty = "n")
+```
+
+# Q7. Validity Check Using Pre-Treatment Data
+
+We repeat the same analysis using outcomes measured before the transfers.
+
+```{r q7}
+educ80_rdd <- lm(educ80 ~ above * dist_cutoff, data = transfer3)
+pov80_rdd <- lm(poverty80 ~ above * dist_cutoff, data = transfer3)
+
+summary(educ80_rdd)
+summary(pov80_rdd)
+```
+
+```{r q7-results}
+pre_results <- data.frame(
+  outcome = c("Education, 1980", "Poverty, 1980"),
+  estimate = c(coef(educ80_rdd)["above"], coef(pov80_rdd)["above"])
+)
+pre_results$estimate <- round(pre_results$estimate, 3)
+pre_results
+```
+
+These are pre-treatment outcomes, so we should not see large jumps at the cutoff. Large pre-treatment differences would weaken the credibility of the RDD design. Let's visualize it.
+
+```{r q7-plots, fig.align='center', fig.width=8, fig.height=4}
+cols <- ifelse(transfer3$above == 1, "red", "blue")
+
+par(mfrow = c(1, 2), mar = c(4, 4, 3, 1))
+
+plot(transfer3$dist_cutoff, transfer3$educ80, pch = 16, cex = 0.6,
+     col = cols, xlab = "Distance (%)", ylab = "Education, 1980",
+     main = "Education, 1980")
+abline(v = 0, lty = 2)
+abline(lm(educ80 ~ dist_cutoff, data = subset(transfer3, above == 0)), col = "blue", lwd = 2)
+abline(lm(educ80 ~ dist_cutoff, data = subset(transfer3, above == 1)), col = "red", lwd = 2)
+
+plot(transfer3$dist_cutoff, transfer3$poverty80, pch = 16, cex = 0.6,
+     col = cols, xlab = "Distance (%)", ylab = "Poverty, 1980",
+     main = "Poverty, 1980")
+abline(v = 0, lty = 2)
+abline(lm(poverty80 ~ dist_cutoff, data = subset(transfer3, above == 0)), col = "blue", lwd = 2)
+abline(lm(poverty80 ~ dist_cutoff, data = subset(transfer3, above == 1)), col = "red", lwd = 2)
+
+par(mfrow = c(1, 1))
+```
+
+
+# Conclusion
+
+Overall, the RDD results are consistent with the idea that additional transfers improved social outcomes: education and literacy increase, while poverty decreases. The strongest evidence comes from comparing municipalities very close to the population cutoffs and checking that there were no large pre-treatment differences.

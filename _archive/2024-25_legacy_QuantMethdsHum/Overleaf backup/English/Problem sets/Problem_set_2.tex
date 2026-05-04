@@ -1,0 +1,694 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\author{\empty}
+\usepackage{listings}
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,                % Enable line breaking
+  breakatwhitespace=false     % Don't break at whitespace
+}
+
+
+\title{Problem Set 2\\Multiple Regression Analysis: Estimation\\Econometrics}
+
+\date{\empty}
+
+\begin{document}
+	\maketitle
+	
+\begin{enumerate}
+	
+\item Using the data in GPA2 on 4,137 college students, the following equation was estimated by OLS:
+$$
+\begin{aligned}
+\widehat{\text { colgpa }} & =1.392-.0135 \text { hsperc }+.00148 \text { sat } \\
+n & =4,137, R^2=.273
+\end{aligned}
+$$
+where colgpa is the grade point average in college (measured on a four-point scale), hsperc is the percentile in the high school graduating class (defined so that, for example, hsperc $=5$ means the top $5 \%$ of the class), and sat is the combined math and verbal scores on the student achievement test.
+\begin{enumerate}
+    \item Why does it make sense for the coefficient on hsperc to be negative?
+\item What is the predicted college GPA when $h s p e r c=20$ and sat $=1,050$ ?
+\item Suppose that two high school graduates, A and B , graduated in the same percentile from high school, but Student A's SAT score was 140 points higher (about one standard deviation in the sample). What is the predicted difference in college GPA for these two students? Is the difference large?
+\item Holding hsperc fixed, what difference in SAT scores leads to a predicted colgpa difference of .50 , or one-half of a grade point? Comment on your answer.
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item    The coefficient on \( \text{hsperc} \) is \( -0.0135 \), which is negative. This makes sense because \( \text{hsperc} \) is the percentile rank in the high school graduating class, where a lower percentile indicates better performance (e.g., top 5\% of the class). Therefore, as \( \text{hsperc} \) increases (indicating a worse rank), the predicted college GPA decreases.
+
+    \item What is the predicted college GPA when \( \text{hsperc} = 20 \) and \( \text{sat} = 1,050 \)?
+
+    The regression equation is:
+    \[
+    \widehat{\text{colgpa}} = 1.392 - 0.0135 \times \text{hsperc} + 0.00148 \times \text{sat}.
+    \]
+
+    Plugging in \( \text{hsperc} = 20 \) and \( \text{sat} = 1,050 \):
+
+    \[
+    \widehat{\text{colgpa}} = 1.392 - 0.0135 \times 20 + 0.00148 \times 1,050.
+    \]
+
+    Therefore:
+
+    \[
+    \widehat{\text{colgpa}} = 1.392 - 0.27 + 1.554 = 2.676.
+    \]
+
+    The predicted college GPA is approximately \( 2.676 \).
+
+    \item   The difference in SAT scores is \( 140 \) points. The coefficient for \( \text{sat} \) is \( 0.00148 \), so the predicted difference in GPA is:
+
+    \[
+    \text{Predicted GPA difference} = 0.00148 \times 140 = 0.2072.
+    \]
+
+    The predicted GPA difference is approximately \( 0.207 \). This difference is modest but not insignificant, as it corresponds to about one-fifth of a grade point on a four-point scale.
+
+    \item  To achieve a predicted GPA difference of \( 0.50 \), we set up the following equation:
+
+    \[
+    0.50 = 0.00148 \times \text{SAT difference}.
+    \]
+
+    Solving for the SAT difference:
+
+    \[
+    \text{SAT difference} = \frac{0.50}{0.00148} \approx 337.84.
+    \]
+
+    A difference of approximately \( 338 \) SAT points is needed to achieve a \( 0.50 \) difference in predicted GPA. This is a substantial difference in SAT scores, indicating that SAT has a relatively modest impact on predicted GPA compared to other factors.
+\end{enumerate}
+}
+
+\item The median starting salary for new law school graduates is determined by
+
+$$
+\begin{aligned}
+\log (\text { salary })= & \beta_0+\beta_1 L S A T+\beta_2 G P A+\beta_3 \log (\text { libvol })+\beta_4 \log (\text { cost }) \\
+& +\beta_5 \text { rank }+u
+\end{aligned}
+$$
+
+where LSAT is the median LSAT score for the graduating class, GPA is the median college GPA for the class, libvol is the number of volumes in the law school library, cost is the annual cost of attending law school, and rank is a law school ranking (with rank = 1 being the best).
+\begin{enumerate}
+    \item  Explain why we expect $\beta_5 \leq 0$.
+\item  What signs do you expect for the other slope parameters? Justify your answers.
+\item  Using the data in LAWSCH85, the estimated equation is
+
+$$
+\begin{aligned}
+\widehat{\log (\text { salary })}= & 8.34+.0047 \text { LAST }+.248 \text { GPA }+.095 \log (\text { libvol }) \\
+& +.038 \log (\text { cost })-.0033 \text { rank } \\
+n= & 136, R^2=.842
+\end{aligned}
+$$
+
+
+What is the predicted ceteris paribus difference in salary for schools with a median GPA different by one point? (Report your answer as a percentage.)
+\item  Interpret the coefficient on the variable $\log ($ libvol $)$.
+\item  Would you say it is better to attend a higher ranked law school? How much is a difference in ranking of 20 worth in terms of predicted starting salary?
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item Explain why we expect \( \beta_5 \leq 0 \).
+
+    The variable "rank" represents the law school ranking, where a lower rank (closer to 1) indicates a better school. Therefore, as "rank" increases (indicating a worse school), we expect the salary to decrease. This implies that \( \beta_5 \) should be negative or \( \beta_5 \leq 0 \).
+
+    \item What signs do you expect for the other slope parameters? Justify your answers.
+
+    \begin{itemize}
+        \item \( \beta_1 \) (LSAT): We expect \( \beta_1 > 0 \) because a higher LSAT score is associated with better academic performance and likely higher earning potential.
+        \item \( \beta_2 \) (GPA): We expect \( \beta_2 > 0 \) because a higher GPA indicates better academic achievement, which should translate to better job prospects and higher starting salaries.
+        \item \( \beta_3 \) (log(libvol)): We expect \( \beta_3 > 0 \) because more volumes in the law school library indicate better resources and facilities, which are likely associated with better law schools.
+        \item \( \beta_4 \) (log(cost)): We expect \( \beta_4 > 0 \) because higher tuition costs are often associated with better-ranked schools, which typically have higher starting salaries for graduates.
+    \end{itemize}
+
+    \item Using the data in LAWSCH85, the estimated equation is:
+
+    \[
+    \begin{aligned}
+    \widehat{\log (\text{salary})} = & \, 8.34 + 0.0047 \text{LSAT} + 0.248 \text{GPA} + 0.095 \log (\text{libvol}) \\
+    & + 0.038 \log (\text{cost}) - 0.0033 \text{rank}, \\
+    n = & \, 136, \, R^2 = 0.842.
+    \end{aligned}
+    \]
+
+    What is the predicted ceteris paribus difference in salary for schools with a median GPA different by one point?
+
+    The coefficient on GPA is \( 0.248 \), which implies that for a one-point increase in GPA, the log(salary) increases by \( 0.248 \). Converting this to a percentage gives:
+
+    \[
+    0.248 \times 100 = 24.8\%.
+    \]
+
+    Thus, the predicted difference in salary for a one-point difference in GPA is approximately \( 24.8\% \).
+
+    \item Interpret the coefficient on the variable \( \log(\text{libvol}) \).
+
+    The coefficient on \( \log(\text{libvol}) \) is \( 0.095 \). This indicates that a 1\% increase in the number of volumes in the law school library is associated with approximately a \( 0.095\% \) increase in starting salary, holding all other factors constant.
+
+    \item Would you say it is better to attend a higher-ranked law school? How much is a difference in ranking of 20 worth in terms of predicted starting salary?
+
+    The coefficient on "rank" is \( -0.0033 \), indicating that a one-unit increase in rank (worse ranking) is associated with a \( 0.33\% \) decrease in starting salary. For a difference in ranking of 20 positions, the predicted decrease in salary is:
+
+    \[
+    20 \times (-0.0033) \times 100 = -6.6\%.
+    \]
+
+    Therefore, a difference of 20 positions in ranking is associated with a \( 6.6\% \) decrease in predicted starting salary. This suggests that attending a higher-ranked law school has a significant positive effect on expected starting salary.
+\end{enumerate}
+
+}
+
+\item In a study relating college grade point average to time spent in various activities, you distribute a survey to several students. The students are asked how many hours they spend each week in four activities: studying, sleeping, working, and leisure. Any activity is put into one of the four categories, so that for each student, the sum of hours in the four activities must be 168.
+\begin{enumerate}
+    \item In the model
+
+$$
+G P A=\beta_0+\beta_1 \text { study }+\beta_2 \text { sleep }+\beta_3 \text { work }+\beta_4 \text { leisure }+u
+$$
+
+does it make sense to hold sleep, work, and leisure fixed, while changing study?
+\item Explain why this model violates Assumption MLR.3 (No perfect collinearity): In the sample (and therefore in the
+population), none of the independent variables is constant and there are no exact
+linear relationships among the independent variables.
+\item How could you reformulate the model so that its parameters have a useful interpretation and it satisfies Assumption MLR.3?
+
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+\begin{enumerate}
+    \item In the model
+    \[
+    GPA = \beta_0 + \beta_1 \text{study} + \beta_2 \text{sleep} + \beta_3 \text{work} + \beta_4 \text{leisure} + u,
+    \]
+    does it make sense to hold sleep, work, and leisure fixed, while changing study?
+
+    No, it does not make sense to hold sleep, work, and leisure fixed while changing study. The reason is that the sum of all four activities must be 168 hours for each student. If sleep, work, and leisure are fixed, any increase in study hours must be compensated by a decrease in at least one of the other activities. In other words, these variables are not independent: they are perfectly correlated in a way that the sum is constant.
+
+    \item Explain why this model violates Assumption MLR.3 (No perfect collinearity).
+
+    Assumption MLR.3 states that in the sample (and therefore in the population), none of the independent variables is constant, and there are no exact linear relationships among the independent variables. In this model, however, there is an exact linear relationship:
+
+    \[
+    \text{study} + \text{sleep} + \text{work} + \text{leisure} = 168.
+    \]
+
+    This equation implies that knowing the values of three of the variables allows you to determine the fourth exactly. Therefore, perfect multicollinearity exists among the explanatory variables, violating Assumption MLR.3.
+
+    \item How could you reformulate the model so that its parameters have a useful interpretation and it satisfies Assumption MLR.3?
+
+    To avoid the perfect collinearity problem, we could drop one of the four variables from the model. For example, we could rewrite the model as:
+
+    \[
+    GPA = \beta_0 + \beta_1 \text{study} + \beta_2 \text{sleep} + \beta_3 \text{work} + u.
+    \]
+
+    In this reformulated model, "leisure" is not included explicitly, but its effect is captured implicitly by the other variables. Since leisure can be calculated as:
+
+    \[
+    \text{leisure} = 168 - (\text{study} + \text{sleep} + \text{work}),
+    \]
+
+    the model no longer suffers from perfect multicollinearity. The parameters \( \beta_1, \beta_2, \) and \( \beta_3 \) can now be interpreted as the effects of study, sleep, and work on GPA, holding the other variables constant.
+
+    The interpretation is that \( \beta_1 \) represents the effect on GPA of increasing study hours by one unit, while reducing leisure by one unit, since the other variables are held constant.
+\end{enumerate}
+}
+
+\item In a college town, does the student population influence rental prices? Let \textit{rent} be the average monthly rent in a U.S. college town. Let \textit{pop} be the total population in that city, \textit{avginc} be the average income in the city, and \textit{pctstu} be the student population given as a percentage of the total population. A model to test this relationship is:
+
+\[
+\log (\text{rent}) = \beta_0 + \beta_1 \log (\text{pop}) + \beta_2 \log (\text{avginc}) + \beta_3 \text{pctstu} + u
+\]
+
+To estimate this relationship, you use a sample that includes 64 cities. These are the parameter estimates:
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline Parameter & Estimate \\
+\hline $\hat{\beta}_0$ & 0.43 \\
+\hline $\hat{\beta}_1$ & 0.066 \\
+\hline $\hat{\beta}_2$ & 0.507 \\
+\hline $\hat{\beta}_3$ & 0.0056 \\
+\hline
+\end{tabular}    
+\end{center}
+\begin{enumerate}
+    \item Comment on the interpretation of the OLS estimates of each slope parameter.
+
+\item Suppose you have the following additional information:
+\begin{center}
+\begin{tabular}{|c|l|}
+\hline & Value \\
+\hline $\sum_{i=1}^n \hat{u}_i{ }^2$ & 1000 \\
+\hline $\sum_{i=1}^n\left(\log (\text { rent })_i-\overline{\log (\text { rent })}\right)^2$ & 1845.018 \\
+\hline $\sum_{i=1}^n\left(\log (\text { pop })_i-\overline{\log (\text { pop })}\right)^2$ & 505 \\
+\hline $\sum_{i=1}^n\left(\log (\text { avginc })_i-\overline{\log (\text { avginc })}\right)^2$ & 4404 \\
+\hline $\sum_{i=1}^n\left(\text { pctstu }_i-\overline{\text { pctstu }}\right)^2$ & 780 \\
+\hline
+\end{tabular}
+\end{center}
+And the \( R^2 \) values of the following relationships:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline Regression & \( R^2 \) \\
+\hline $\widehat{\log (\text { rent })}=\hat{\beta}_0+\hat{\beta}_1 \log ($ pop $)+\hat{\beta}_2 \log ($ avginc $)+\hat{\beta}_3 p c t s t u$ & 0.458 \\
+\hline $\widehat{\log (\text{pop})} = \hat{\delta}_0 + \hat{\delta}_1 \log (\text{avginc}) + \hat{\delta}_2 \text{pctstu}$ & 0.15 \\
+\hline $\log (\operatorname{avg} i n c)=\hat{\gamma}_0+\hat{\gamma}_1 \log ($ pop $)+\hat{\gamma}_2 p c t s t u$ & 0.25 \\
+\hline $\text{pctstu} = \hat{\theta}_0 + \hat{\theta}_1 \log (\text{pop}) + \hat{\theta}_2 \log (\text{avginc})$ & 0.05\\
+\hline
+\end{tabular}
+\end{center}
+
+Calculate the standard error of the estimates \( \widehat{\beta}_1, \hat{\beta}_2 \), and \( \hat{\beta}_3 \).
+
+\item Define and calculate the explained sum of squares for the variable \( \log(\text{rent}) \).
+
+
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+\begin{enumerate}
+    \item Comment on the interpretation of the OLS estimates of each slope parameter.
+
+    The regression model is:
+    \[
+    \log (\text{rent}) = 0.43 + 0.066 \log (\text{pop}) + 0.507 \log (\text{avginc}) + 0.0056 \text{pctstu}.
+    \]
+    \begin{itemize}
+        \item \( \hat{\beta}_1 = 0.066 \): A 1\% increase in the total population (\( \log (\text{pop}) \)) is associated with an approximate 0.066\% increase in the average rent, holding other factors constant.
+        \item \( \hat{\beta}_2 = 0.507 \): A 1\% increase in the average income (\( \log (\text{avginc}) \)) is associated with an approximate 0.507\% increase in the average rent, holding other factors constant.
+        \item \( \hat{\beta}_3 = 0.0056 \): A 1 percentage point increase in the student population as a percentage of the total population (\( \text{pctstu} \)) is associated with an approximate 0.56\% increase in the average rent, holding other factors constant.
+    \end{itemize}
+
+    \item Calculate the standard error of the estimates \( \widehat{\beta}_1, \hat{\beta}_2 \), and \( \hat{\beta}_3 \).
+
+    The standard errors of the estimates are calculated using the formula:
+
+\[
+\operatorname{Var}\left(\widehat{\beta}_j\right) = \frac{\sigma^2}{SST_j\left(1 - R_j^2\right)},
+\]
+
+where:
+\begin{itemize}
+    \item  \( \sigma^2 \) is the variance of the error term.
+ \item \( SST_j \) is the total sample variation in the explanatory variable \( x_j \).
+ \item \( R_j^2 \) is the \( R^2 \) from a regression of the explanatory variable \( x_j \) on all other independent variables.
+\end{itemize}
+
+
+Given:
+\begin{itemize}
+    \item \( \sigma^2 = \frac{1000}{64 - 4} = 16.67 \)
+ \item \( SST_{\log(\text{pop})} = 505 \), \( R_{\log(\text{pop})}^2 = 0.15 \)
+ \item \( SST_{\log(\text{avginc})} = 4404 \), \( R_{\log(\text{avginc})}^2 = 0.25 \)
+ \item \( SST_{\text{pctstu}} = 780 \), \( R_{\text{pctstu}}^2 = 0.05 \)
+\end{itemize}
+
+The calculated standard errors are:
+\[
+\text{SE}(\hat{\beta}_1) \approx 0.197,
+\]
+\[
+\text{SE}(\hat{\beta}_2) \approx 0.071,
+\]
+\[
+\text{SE}(\hat{\beta}_3) \approx 0.150.
+\]
+
+
+    \item Define and calculate the explained sum of squares for the variable \( \log(\text{rent}) \).
+
+    The explained sum of squares (ESS) is defined as:
+    \[
+    \text{ESS} = \text{SST} - \text{SSR},
+    \]
+    where:
+    \begin{itemize}
+        \item \( \text{SST} = 1845.018 \) is the total sum of squares,
+        \item \( \text{SSR} = 1000 \) is the sum of squared residuals.
+    \end{itemize}
+
+    The calculated ESS is:
+    \[
+    \text{ESS} = 1845.018 - 1000 = 845.018.
+    \]
+\end{enumerate}
+}
+
+
+\item Consider the multiple regression model containing three independent variables, under Assumptions MLR. 1 through MLR.4:
+$$
+y=\beta_0+\beta_1 x_1+\beta_2 x_2+\beta_3 x_3+u
+$$
+You are interested in estimating the sum of the parameters on $x_1$ and $x_2$; call this $\theta_1=\beta_0+\beta_1$.  Show that $\hat{\theta}_1=\hat{\beta}_1+\hat{\beta}_2$ is an unbiased estimator of $\theta_1$.
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+An estimator is said to be unbiased if its expected value equals the true population parameter. That is:
+\[
+E(\hat{\theta}_1) = \theta_1.
+\]
+
+Start with the estimator \( \hat{\theta}_1 \):
+\[
+\hat{\theta}_1 = \hat{\beta}_1 + \hat{\beta}_2.
+\]
+Using the fact that \( \hat{\beta}_1 \) and \( \hat{\beta}_2 \) are unbiased estimators of \( \beta_1 \) and \( \beta_2 \), respectively:
+\[
+E(\hat{\theta}_1) = E(\hat{\beta}_1) + E(\hat{\beta}_2).
+\]
+Since \( E(\hat{\beta}_1) = \beta_1 \) and \( E(\hat{\beta}_2) = \beta_2 \), we have:
+\[
+E(\hat{\theta}_1) = \beta_1 + \beta_2 = \theta_1.
+\]
+Therefore, \( \hat{\theta}_1 \) is an unbiased estimator of \( \theta_1 \).
+
+}
+
+
+
+\item Suppose that average worker productivity at manufacturing firms ( $a$ vgprod) depends on two factors, average hours of training (avgtrain) and average worker ability (avgabil):
+$$
+\text { avgprod }=\beta_0+\beta_1 \text { avgtrain }+\beta_2 \text { avgabil }+u
+$$
+Assume that this equation satisfies the Gauss-Markov assumptions. If grants have been given to firms whose workers have less than average ability, so that avgtrain and avgabil are negatively correlated, what is the likely bias in $\widetilde{\beta}_1$ obtained from the simple regression of avgprod on avgtrain?
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+The goal is to analyze the bias in \( \widetilde{\beta}_1 \) (the estimated coefficient for avgtrain) when only avgprod is regressed on avgtrain (ignoring avgabil). The bias in \( \widetilde{\beta}_1 \) depends on the relationship between avgtrain and avgabil.
+
+Given that avgtrain and avgabil are negatively correlated, assume a linear relationship between them:
+\[
+\text{avgabil} = \delta_0 + \delta_1 \text{avgtrain} + v,
+\]
+where \( \delta_1 < 0 \) because the correlation is negative.
+
+Substituting this relationship into the true model gives:
+\[
+\text{avgprod} = \beta_0 + \beta_1 \text{avgtrain} + \beta_2 (\delta_0 + \delta_1 \text{avgtrain} + v) + u.
+\]
+
+Expanding the equation:
+\[
+\text{avgprod} = (\beta_0 + \beta_2 \delta_0) + (\beta_1 + \beta_2 \delta_1) \text{avgtrain} + (\beta_2 v + u).
+\]
+
+If avgprod is regressed only on avgtrain, the coefficient \( \widetilde{\beta}_1 \) will be biased. The bias is:
+\[
+\text{Bias}(\widetilde{\beta}_1) = \beta_2 \delta_1.
+\]
+
+Since \( \delta_1 < 0 \) (due to the negative correlation), the sign of the bias depends on \( \beta_2 \). If \( \beta_2 > 0 \), the bias will be negative. If \( \beta_2 < 0 \), the bias will be positive.
+
+
+}
+
+
+
+\item Which of the following can cause OLS estimators to be biased?
+\begin{itemize}
+    \item Heteroskedasticity.
+\item Omitting an important variable.
+\item A sample correlation coefficient of .95 between two independent variables both included in the model.
+\end{itemize}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+1. **Heteroskedasticity:**
+
+Heteroskedasticity refers to the situation where the variance of the error term is not constant across all observations. In the context of the Gauss-Markov assumptions, heteroskedasticity violates Assumption MLR.5, which states that the error term should have a constant variance (homoskedasticity).
+
+**Does heteroskedasticity cause bias?** No, heteroskedasticity does not cause bias in the OLS estimators. It affects the efficiency of the estimators (i.e., they are no longer the Best Linear Unbiased Estimators (BLUE)), but the estimators remain unbiased.
+
+**Conclusion:** Heteroskedasticity does **not** cause bias.
+
+2. **Omitting an Important Variable:**
+
+Omitting an important variable that is correlated with both the dependent variable and one or more included independent variables results in omitted variable bias. When an important variable is omitted from the model, the effect of that variable is absorbed by the error term, leading to biased and inconsistent estimates of the coefficients for the included independent variables.
+
+**Conclusion:** Omitting an important variable **does** cause bias.
+
+3. **A High Correlation Between Two Independent Variables (Multicollinearity):**
+
+Multicollinearity occurs when two or more independent variables in a regression model are highly correlated. In this scenario, a sample correlation coefficient of .95 between two independent variables indicates severe multicollinearity.
+
+**Does multicollinearity cause bias?** No, multicollinearity does not cause bias in the OLS estimators. However, it increases the standard errors of the coefficients, leading to less precise estimates and making it difficult to determine the individual effects of the correlated variables.
+
+**Conclusion:** High multicollinearity does **not** cause bias.
+
+Summary:
+
+Among the scenarios given:
+\begin{itemize}
+    \item (i) Heteroskedasticity: Does not cause bias.
+    \item (ii) Omitting an important variable: Causes bias.
+    \item (iii) High correlation between independent variables: Does not cause bias.
+\end{itemize}
+The only scenario that causes bias is (ii), omitting an important variable.
+
+}
+
+\end{enumerate}
+\section*{Computer Exercises}
+
+\begin{enumerate}
+
+\item A problem of interest to health officials (and others) is to determine the effects of smoking during pregnancy on infant health. One measure of infant health is birth weight; a birth weight that is too low can put an infant at risk for contracting various illnesses. Since factors other than cigarette smoking that affect birth weight are likely to be correlated with smoking, we should take those factors into account. For example, higher income generally results in access to better prenatal care, as well as better nutrition for the mother. An equation that recognizes this is
+$$
+b w g h t=\beta_0+\beta_1 \operatorname{cigs}+\beta_2 \text { faminc }+u
+$$
+\begin{enumerate}
+    \item What is the most likely sign for $\beta_2$ ?
+\item Do you think cigs and faminc are likely to be correlated? Explain why the correlation might be positive or negative.
+\item Now, estimate the equation with and without faminc, using the data in BWGHT. Report the results in equation form, including the sample size and $R$-squared. Discuss your results, focusing on whether adding faminc substantially changes the estimated effect of cigs on bwght.
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item The coefficient \( \beta_2 \) measures the effect of family income on birth weight, holding smoking constant. Higher family income generally leads to better prenatal care and better nutrition for the mother, which are associated with healthier pregnancies and higher birth weights.
+
+Therefore, it is most likely that \( \beta_2 > 0 \), indicating a positive relationship between family income and birth weight.
+
+\item Yes, it is likely that \textit{cigs} and \textit{faminc} are correlated. The correlation could be either positive or negative, depending on various socioeconomic factors.
+
+\begin{itemize}
+    \item **Negative Correlation:** It is plausible that higher family income is associated with better education and access to healthcare information, which would lead to lower smoking rates during pregnancy. In this case, \( \text{cigs} \) and \( \text{faminc} \) would be negatively correlated.
+    
+    \item **Positive Correlation:** On the other hand, it is possible that some wealthier families might have habits that include smoking, leading to a positive correlation. However, this is less likely in the context of prenatal care.
+\end{itemize}
+
+Overall, it is more reasonable to expect a **negative correlation** between \textit{cigs} and \textit{faminc}, given that higher income is usually associated with better awareness of the risks of smoking during pregnancy.
+
+\item 
+
+\begin{lstlisting}
+# install.packages("wooldridge")
+
+################################################3
+data(bwght, package='wooldridge')
+
+# Estimate the model without faminc
+model_without_faminc <- lm(bwght ~ cigs, data = bwght)
+
+# Estimate the model with faminc
+model_with_faminc <- lm(bwght ~ cigs + faminc, data = bwght)
+
+# Summary of the models
+summary(model_without_faminc)
+summary(model_with_faminc)
+
+# Extracting key information
+n <- nrow(bwght)  # Sample size
+
+# Coefficients and R-squared for the model without faminc
+coef_without_faminc <- coef(model_without_faminc)
+r_squared_without_faminc <- summary(model_without_faminc)$r.squared
+
+# Coefficients and R-squared for the model with faminc
+coef_with_faminc <- coef(model_with_faminc)
+r_squared_with_faminc <- summary(model_with_faminc)$r.squared
+
+# Reporting the results in equation form
+cat("Model without faminc: \n")
+cat(paste0("bwght = ", round(coef_without_faminc[1], 4), " + ", round(coef_without_faminc[2], 4), " * cigs\n"))
+cat(paste0("Sample size: ", n, ", R-squared: ", round(r_squared_without_faminc, 4), "\n\n"))
+
+cat("Model with faminc: \n")
+cat(paste0("bwght = ", round(coef_with_faminc[1], 4), " + ", round(coef_with_faminc[2], 4), " * cigs + ", round(coef_with_faminc[3], 4), " * faminc\n"))
+cat(paste0("Sample size: ", n, ", R-squared: ", round(r_squared_with_faminc, 4), "\n"))
+
+# The focus should be on comparing the coefficient of 'cigs' in the two models 
+# (with and without `faminc`). If adding `faminc` substantially changes 
+# the estimated effect of `cigs` on `bwght`, it suggests that `faminc` is 
+# an important confounding variable. Otherwise, if the coefficient of `cigs` 
+# remains relatively unchanged, it indicates that controlling for `faminc` 
+# does not significantly affect the relationship between `cigs` and 'bwght`.
+\end{lstlisting}
+\end{enumerate}
+
+}
+
+
+\item Use the data in HPRICE1 to estimate the model
+
+$$
+\text { price }=\beta_0+\beta_1 s q r f t+\beta_2 b d r m s+u
+$$
+
+where price is the house price measured in thousands of dollars.
+\begin{enumerate}
+    \item Write out the results in equation form.
+\item What is the estimated increase in price for a house with one more bedroom, holding square footage constant?
+\item What is the estimated increase in price for a house with an additional bedroom that is 140 square feet in size? Compare this to your answer in part (ii).
+\item What percentage of the variation in price is explained by square footage and number of bedrooms?
+\item The first house in the sample has $s q r f t=2,438$ and $b d r m s=4$. Find the predicted selling price for this house from the OLS regression line.
+\item The actual selling price of the first house in the sample was $\$ 300,000$ (so price $=300$ ). Find the residual for this house. Does it suggest that the buyer underpaid or overpaid for the house?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{lstlisting}
+###########################################################
+data(hprice1, package='wooldridge')
+
+## Estimate the model: price = beta 0 + beta 1 * sqrft + beta 2 * bdrms + u
+model <- lm(price ~ sqrft + bdrms, data = hprice1)
+
+# Display the summary of the regression results
+summary(model)
+
+# Extract coefficients for easier access
+coefficients <- coef(model)
+
+# Part (i): Write out the results in equation form
+cat("Estimated equation: price =", round(coefficients[1], 4), "+", round(coefficients[2], 4), "* sqrft +", round(coefficients[3], 4), "* bdrms \n\n")
+
+# Part (ii): What is the estimated increase in price for a house with one more bedroom, holding square footage constant?
+bedroom_increase <- coefficients["bdrms"]
+cat("Estimated increase in price for one more bedroom (holding sqrft constant):", round(bedroom_increase, 4), "thousand dollars\n\n")
+
+# Part (iii): What is the estimated increase in price for a house with an additional bedroom that is 140 square feet in size?
+additional_increase <- coefficients["bdrms"] + 140 * coefficients["sqrft"]
+cat("Estimated increase in price for an additional bedroom with 140 sqrft:", round(additional_increase, 4), "thousand dollars\n\n")
+
+# Part (iv): What percentage of the variation in price is explained by square footage and number of bedrooms?
+r_squared <- summary(model)$r.squared
+cat("R-squared:", round(r_squared * 100, 2), "% of the variation in price is explained by sqrft and bdrms\n\n")
+
+# Part (v): Find the predicted selling price for the first house (sqrft = 2438, bdrms = 4)
+predicted_price_first_house <- predict(model, newdata = data.frame(sqrft = 2438, bdrms = 4))
+cat("Predicted selling price for the first house:", round(predicted_price_first_house, 4), "thousand dollars\n\n")
+
+# Part (vi): The actual selling price was $300,000 (price = 300). Find the residual for this house.
+actual_price <- 300
+residual <- actual_price - predicted_price_first_house
+cat("Residual for the first house:", round(residual, 4), "thousand dollars\n\n")
+
+# Interpretation: Does the residual suggest the buyer underpaid or overpaid?
+if (residual > 0) {
+  cat("The positive residual suggests that the buyer underpaid for the house.\n")
+} else {
+  cat("The negative residual suggests that the buyer overpaid for the house.\n")
+}
+
+\end{lstlisting}
+
+}
+
+
+\item The data in ECONMATH contain grade point averages and standardized test scores, along with performance in an introductory economics course, for students at a large public university. The variable to be explained is score, the final score in the course measured as a percentage.
+\begin{itemize}
+    \item How many students received a perfect score for the course? What was the average score? Find the means and standard deviations of actmth and acteng, and discuss how they compare.
+\item Estimate a linear equation relating score to colgpa, actmth, and acteng, where colgpa is measured at the beginning of the term. Report the results in the usual form.
+\item Would you say the math or English ACT score is a better predictor of performance in the economics course? Explain.
+\item  Discuss the size of the $R$-squared in the regression.
+\end{itemize}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{lstlisting}
+#######################################################
+data(econmath, package = "wooldridge")
+
+# Display the first few rows to check the structure of the dataset
+head(econmath)
+
+# Question 1: How many students received a perfect score for the course? What was the average score?
+num_perfect_scores <- sum(econmath$score == 100)
+average_score <- mean(econmath$score)
+cat("Number of students with a perfect score:", num_perfect_scores, "\n")
+cat("Average score:", round(average_score, 2), "\n")
+
+# Find the means and standard deviations of actmth and acteng, and discuss how they compare.
+mean_actmth <- mean(econmath$actmth, na.rm = TRUE)
+sd_actmth <- sd(econmath$actmth, na.rm = TRUE)
+mean_acteng <- mean(econmath$acteng, na.rm = TRUE)
+sd_acteng <- sd(econmath$acteng, na.rm = TRUE)
+
+cat("Mean ACT Math:", round(mean_actmth, 2), "\n")
+cat("Standard Deviation ACT Math:", round(sd_actmth, 2), "\n")
+cat("Mean ACT English:", round(mean_acteng, 2), "\n")
+cat("Standard Deviation ACT English:", round(sd_acteng, 2), "\n")
+
+# Discuss how they compare
+cat("Discussion: The means and standard deviations of ACT Math and ACT English provide insight into the variability of the scores. Higher standard deviations suggest more spread in the scores.\n\n")
+
+# Question 2: Estimate a linear equation relating score to colgpa, actmth, and acteng
+model <- lm(score ~ colgpa + actmth + acteng, data = econmath)
+summary(model)
+
+# Report the results in the usual form:
+coefficients <- coef(model)
+cat("Estimated equation: score =", round(coefficients[1], 4), "+", round(coefficients[2], 4), "* colgpa +", round(coefficients[3], 4), "* actmth +", round(coefficients[4], 4), "* acteng\n")
+
+# Question 3: Would you say the math or English ACT score is a better predictor of performance in the economics course? Explain.
+cat("\nDiscussion: Based on the t-values and p-values from the regression output, we can assess which variable (actmth or acteng) has a stronger relationship with the course score. The variable with the larger t-value and smaller p-value is considered a better predictor.\n\n")
+
+# Question 4: Discuss the size of the R-squared in the regression.
+r_squared <- summary(model)$r.squared
+cat("R-squared:", round(r_squared, 4), "\n")
+cat("Discussion: The R-squared value indicates the proportion of the variance in the dependent variable (score) that is explained by the independent variables (colgpa, actmth, and acteng). A higher R-squared suggests that the model fits the data well.\n")
+
+
+\end{lstlisting}
+
+}
+
+
+
+\end{enumerate}
+\end{document}
