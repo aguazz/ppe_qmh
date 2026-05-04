@@ -17,7 +17,7 @@ This repository is organized by course use. In general, a teaching item should k
 |-- 8_QUESTION_BANKS/
 |-- 9_EXAMS/
 |-- 10_RUBRICS/
-|-- 11_GRADES/
+|-- 11_GRADES_AND_SUBMISSIONS/
 |-- LaTex/
 |-- _archive/
 |-- .gitignore
@@ -173,11 +173,11 @@ Shared datasets and QSS chapter code live here. If an activity has a small local
 ```
 
 ```text
-11_GRADES/
+11_GRADES_AND_SUBMISSIONS/
 `-- README.md
 ```
 
-This folder is intentionally kept at the repository root for convenience. Git tracks only `11_GRADES/README.md` so the folder appears on Overleaf and GitHub; private grading files, student submissions, feedback, and subfolders inside `11_GRADES/` are ignored through `.gitignore`.
+This folder is intentionally kept at the repository root for convenience. Git tracks only `11_GRADES_AND_SUBMISSIONS/README.md` so the folder appears on Overleaf and GitHub; private grading files, student submissions, feedback, and subfolders inside `11_GRADES_AND_SUBMISSIONS/` are ignored through `.gitignore`.
 
 ## Shared LaTeX Infrastructure
 
