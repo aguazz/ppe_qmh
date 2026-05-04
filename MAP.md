@@ -174,10 +174,10 @@ Shared datasets and QSS chapter code live here. If an activity has a small local
 
 ```text
 11_GRADES/
-`-- private instructor material, grades, and student submissions
+`-- README.md
 ```
 
-This folder is intentionally kept at the repository root for convenience, but it is ignored by Git through `.gitignore`.
+This folder is intentionally kept at the repository root for convenience. Git tracks only `11_GRADES/README.md` so the folder appears on Overleaf and GitHub; private grading files, student submissions, feedback, and subfolders inside `11_GRADES/` are ignored through `.gitignore`.
 
 ## Shared LaTeX Infrastructure
 

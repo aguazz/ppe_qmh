@@ -115,8 +115,9 @@ git branch --show-current
 If `.gitignore` is missing private or LaTeX auxiliary rules, propose adding:
 
 ```gitignore
-# Private instructor material
-/11_GRADES/
+# Private instructor material: keep the folder shell, ignore its contents.
+/11_GRADES/*
+!/11_GRADES/README.md
 
 # LaTeX auxiliary files
 aux_files/
@@ -166,7 +167,7 @@ Do not:
 - Delete files unless the user explicitly asks.
 - Rewrite Git history unless the user explicitly asks and understands the consequences.
 - Run package installs or network-heavy commands without approval.
-- Treat ignored private folders as safe to share.
+- Treat a tracked private-folder placeholder as evidence that the folder's private contents are safe to share.
 
 Do:
 

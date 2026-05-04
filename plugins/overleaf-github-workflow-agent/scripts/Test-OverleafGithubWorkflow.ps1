@@ -224,11 +224,25 @@ if ($gitAvailable) {
         }
 
         foreach ($privatePath in $PrivatePaths) {
-            $checkIgnore = Invoke-Git -Arguments @("check-ignore", "-q", "--", "$privatePath/")
-            if ($checkIgnore.Code -eq 0) {
-                Add-Check -Status "PASS" -Name "Ignored private path" -Details "$privatePath/ is ignored by Git."
+            $placeholderPath = "$privatePath/README.md"
+            $placeholderFullPath = Join-Path $script:ResolvedRepoRoot $placeholderPath
+            if (Test-Path -LiteralPath $placeholderFullPath) {
+                $placeholderCheck = Invoke-Git -Arguments @("check-ignore", "-q", "--", $placeholderPath)
+                if ($placeholderCheck.Code -ne 0) {
+                    Add-Check -Status "PASS" -Name "Private folder shell" -Details "$placeholderPath exists and is not ignored, so $privatePath/ can appear in Overleaf and GitHub."
+                } else {
+                    Add-Check -Status "WARN" -Name "Private folder shell" -Details "$placeholderPath exists but is ignored." -NextStep "Add !/$placeholderPath to .gitignore."
+                }
             } else {
-                Add-Check -Status "WARN" -Name "Ignored private path" -Details "$privatePath/ is not ignored by Git." -NextStep "Add /$privatePath/ to .gitignore before pushing."
+                Add-Check -Status "WARN" -Name "Private folder shell" -Details "$placeholderPath does not exist." -NextStep "Create a harmless tracked placeholder so the folder appears in Overleaf and GitHub."
+            }
+
+            $contentProbe = "$privatePath/__codex_private_probe__.tmp"
+            $contentCheck = Invoke-Git -Arguments @("check-ignore", "-q", "--", $contentProbe)
+            if ($contentCheck.Code -eq 0) {
+                Add-Check -Status "PASS" -Name "Private contents ignored" -Details "Files inside $privatePath/ are ignored by Git."
+            } else {
+                Add-Check -Status "WARN" -Name "Private contents ignored" -Details "Files inside $privatePath/ are not ignored by Git." -NextStep "Add /$privatePath/* to .gitignore before pushing private material."
             }
         }
 
@@ -255,10 +269,12 @@ $gitignorePath = Join-Path $script:ResolvedRepoRoot ".gitignore"
 if (Test-Path -LiteralPath $gitignorePath) {
     Add-Check -Status "PASS" -Name ".gitignore present" -Details ".gitignore exists at the repository root."
 
-    if (Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*/?11_GRADES/?\s*$") {
-        Add-Check -Status "PASS" -Name ".gitignore private rule" -Details "11_GRADES is covered."
+    $gradesIgnoreRule = Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*/?11_GRADES/\*\s*$"
+    $gradesPlaceholderRule = Test-FileContainsPattern -Path $gitignorePath -Pattern "(?m)^\s*!/?11_GRADES/README\.md\s*$"
+    if ($gradesIgnoreRule -and $gradesPlaceholderRule) {
+        Add-Check -Status "PASS" -Name ".gitignore private rule" -Details "11_GRADES contents are ignored while README.md is allowed."
     } else {
-        Add-Check -Status "WARN" -Name ".gitignore private rule" -Details "11_GRADES rule was not found." -NextStep "Add /11_GRADES/ to .gitignore."
+        Add-Check -Status "WARN" -Name ".gitignore private rule" -Details "The 11_GRADES placeholder/content pattern was not found." -NextStep "Use /11_GRADES/* and !/11_GRADES/README.md."
     }
 
     $latexPatterns = @(
