@@ -13,7 +13,7 @@ This repository is designed around four connected tools:
 - **Local editor:** use Positron or VS Code as the main workspace for editing `.tex`, `.R`, `.Rmd`, `.csv`, `.md`, and support files.
 - **AI assistance:** use Codex, Copilot, or another AI assistant locally to reorganize files, draft material, review code, update documentation, and maintain consistency.
 - **Overleaf:** use the Overleaf Git integration for LaTeX-oriented work and PDF compilation when convenient.
-- **Git/GitHub:** use Git to track course-material changes and, if configured, push a clean version to GitHub. Private grading material is excluded from pushes through a .gitignore file.
+- **Git/GitHub:** use Git to track course-material changes and, if configured, push a clean version to GitHub. The `11_GRADES/` folder shell is tracked, but private grading material inside it is excluded from pushes through a `.gitignore` file.
 
 At the time this README was written, the Git remote named `origin` points to the Overleaf Git remote. If a GitHub remote is also configured, use a separate remote name such as `github` to avoid confusion.
 
@@ -23,7 +23,7 @@ At the time this README was written, the Git remote named `origin` points to the
 - Keep each teaching item as self-contained as practical: source, PDF, local data, and local scripts together.
 - Keep shared LaTeX infrastructure in `LaTex/`, not mixed into every activity.
 - Keep generated PDFs next to their source `.tex` files when the goal is to overwrite PDFs efficiently after compiling.
-- Keep sensitive grading material in `11_GRADES/`, but never push it to Git.
+- Keep sensitive grading material in `11_GRADES/`, but never push the private contents to Git.
 - Keep legacy material in `_archive/` so it remains available without cluttering the active course structure.
 
 ## Folder Structure
@@ -39,7 +39,7 @@ At the time this README was written, the Git remote named `origin` points to the
 - `8_QUESTION_BANKS/`: quiz/question-bank LaTeX sources and archived question-bank exports.
 - `9_EXAMS/`: exam sources and PDFs, organized by academic year.
 - `10_RUBRICS/`: grading rubrics in PDF and editable formats.
-- `11_GRADES/`: private instructor material, grades, and student submissions. This folder is ignored by Git.
+- `11_GRADES/`: visible placeholder for private instructor material, grades, and student submissions. Only `11_GRADES/README.md` is tracked; private contents are ignored by Git.
 - `LaTex/`: shared LaTeX infrastructure only: preamble, style files, shared images, and animation frames.
 - `_archive/`: legacy material retained for reference.
 
@@ -156,17 +156,18 @@ Before pushing to GitHub, check:
 git status --short --ignored
 ```
 
-Make sure `11_GRADES/` appears as ignored and that no private student or grading files are staged.
+Make sure private files inside `11_GRADES/` appear as ignored and that no private student or grading files are staged. The only tracked file in that folder should be `11_GRADES/README.md`.
 
 ## Privacy And Git Ignore
 
-The root `.gitignore` excludes:
+The root `.gitignore` keeps the `11_GRADES/` folder visible in the repository while excluding its private contents:
 
 ```gitignore
-/11_GRADES/
+/11_GRADES/*
+!/11_GRADES/README.md
 ```
 
-This folder may remain in the local course folder for convenience, but it should not be committed or pushed. It contains private instructor material, grades, and student submissions.
+This works because Git cannot track an empty folder. The tracked `11_GRADES/README.md` file keeps the folder present on Overleaf and GitHub, while all other files and subfolders inside `11_GRADES/` remain local-only.
 
 If additional private folders are added later, add them to `.gitignore` immediately.
 
@@ -238,7 +239,7 @@ You can also run the audit script directly from the repo root:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\overleaf-github-workflow-agent\scripts\Test-OverleafGithubWorkflow.ps1
 ```
 
-The script is read-only by default. It checks Git, remotes, branch name, `.gitignore`, LaTeX tooling, LaTeX Workshop workspace settings, and whether private folders such as `11_GRADES/` are ignored.
+The script is read-only by default. It checks Git, remotes, branch name, `.gitignore`, LaTeX tooling, LaTeX Workshop workspace settings, and whether private contents inside folders such as `11_GRADES/` are ignored while the public placeholder remains tracked.
 
 Optional remote checks may contact Overleaf or GitHub and can prompt for credentials:
 
@@ -261,6 +262,6 @@ Before finishing a work session:
 1. Confirm the relevant `.tex` or `.Rmd` still runs or compiles when possible.
 2. Confirm generated PDFs are in the same folder as their source when appropriate.
 3. Run `git status --short`.
-4. Make sure `11_GRADES/` is ignored.
+4. Make sure only `11_GRADES/README.md` is tracked and private `11_GRADES/` contents are ignored.
 5. Update `MAP.md` if the folder structure changed.
 6. Commit only intentional course-material changes.
