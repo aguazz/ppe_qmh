@@ -1,0 +1,383 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\author{\empty}
+\usepackage{listings}
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,                % Enable line breaking
+  breakatwhitespace=false     % Don't break at whitespace
+}
+
+
+\title{Problem Set 5\\Regression Analysis with Time Series Data\\Econometrics}
+
+\date{\empty}
+
+\begin{document}
+	\maketitle
+	
+\begin{enumerate}
+	
+\item Decide if you agree or disagree with each of the following statements and give a brief explanation of your decision: 
+\begin{enumerate}
+    \item Like cross-sectional observations, we can assume that most time series observations are independently distributed.
+\item The OLS estimator in a time series regression is unbiased under the first three Gauss-Markov assumptions.
+\item A trending variable cannot be used as the dependent variable in multiple regression analysis.
+\item Seasonality is not an issue when using annual time series observations.
+\end{enumerate}
+
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item Disagree. Most time series processes are correlated over time, and many of them strongly correlated. This means they cannot be independent across observations, which simply represent different time periods. Even series that do appear to be roughly uncorrelated - such as stock returns - do not appear to be independently distributed, as you will see in Chapter 12 under dynamic forms of heteroskedasticity.
+ \item Agree. We do not need the homoskedasticity and no serial correlation assumptions.
+ \item Disagree. Trending variables are used all the time as dependent variables in a regression model. We do need to be careful in interpreting the results because we may simply find a spurious association between $y_t$ and trending explanatory variables. Including a trend in the regression is a good idea with trending dependent or independent variables. The usual $R$-squared can be misleading when the dependent variable is trending.
+ \item Agree. With annual data, each time period represents a year and is not associated with any season.
+\end{enumerate}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item Let $g G D P_t$ denote the annual percentage change in gross domestic product and let $i n t_t$ denote a shortterm interest rate. Suppose that $g G D P_t$ is related to interest rates by
+$$
+g G D P_t=\alpha_0+\delta_0 i n t_t+\delta_1 i i t_{t-1}+u_t
+$$
+where $u_t$ is uncorrelated with $\operatorname{int}_t$, int $t_{t-1}$, and all other past values of interest rates. Suppose that the Federal Reserve follows the policy rule:
+$$
+i n t_t=\gamma_0+\gamma_1\left(g G D P_{t-1}-3\right)+v_t
+$$
+where $\gamma_1>0$. (When last year's GDP growth is above $3 \%$, the Fed increases interest rates to prevent an "overheated" economy.) If $v_t$ is uncorrelated with all past values of $i n t_t$ and $u_t$, argue that int $_t$ must be correlated with $u_{t-1}$. (Hint: Lag the first equation for one time period and substitute for $g G D P_{t-1}$ in the second equation.) Which Gauss-Markov assumption does this violate?
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+
+        \item Start by lagging the first equation by one period:
+        \[
+        gGDP_{t-1} = \alpha_0 + \delta_0 \cdot int_{t-1} + \delta_1 \cdot int_{t-2} + u_{t-1}.
+        \]
+        
+        \item Next, substitute the expression for \( gGDP_{t-1} \) into the second equation (the policy rule):
+        \[
+        int_t = \gamma_0 + \gamma_1 \left[\left(\alpha_0 + \delta_0 \cdot int_{t-1} + \delta_1 \cdot int_{t-2} + u_{t-1}\right) - 3\right] + v_t.
+        \]
+        
+        Simplifying, we get:
+        \[
+        int_t = \gamma_0 + \gamma_1 \left(\alpha_0 - 3\right) + \gamma_1 \cdot \delta_0 \cdot int_{t-1} + \gamma_1 \cdot \delta_1 \cdot int_{t-2} + \gamma_1 \cdot u_{t-1} + v_t.
+        \]
+        
+        \item Notice that \( int_t \) now depends directly on \( u_{t-1} \) through the term \( \gamma_1 \cdot u_{t-1} \). Therefore, \( int_t \) is correlated with \( u_{t-1} \).
+        
+        \item The implication is that the error term \( u_t \) in the original model is correlated with \( int_t \). Specifically, since \( int_t \) depends on \( u_{t-1} \), and \( u_{t-1} \) is part of the error term from the previous period, there is a correlation between the error term \( u_t \) and one of the explanatory variables \( int_t \).
+
+        \item **Violation of Gauss-Markov Assumptions**: The Gauss-Markov assumption violated here is the assumption of no serial correlation. In other words, the assumption that the error term \( u_t \) is uncorrelated with itself across different time periods is violated because \( int_t \) is correlated with \( u_{t-1} \). When this assumption is violated, the OLS estimators are no longer BLUE (Best Linear Unbiased Estimators).
+
+\end{enumerate}
+
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item Suppose you have quarterly data on new housing starts, interest rates, and real per capita income. Specify a model for housing starts that accounts for possible trends and seasonality in the variables.
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+Let \( H_t \) represent the number of new housing starts in quarter \( t \), \( r_t \) represent the interest rate in quarter \( t \), and \( Y_t \) represent the real per capita income in quarter \( t \).
+
+    The model can be specified as:
+    \[
+    H_t = \beta_0 + \beta_1 r_t + \beta_2 Y_t + \beta_3 t + \sum_{j=1}^{3} \gamma_j Q_{jt} + u_t,
+    \]
+    where:
+    \begin{itemize}
+        \item \( \beta_0 \) is the intercept.
+        \item \( r_t \) is the interest rate, with coefficient \( \beta_1 \).
+        \item \( Y_t \) is the real per capita income, with coefficient \( \beta_2 \).
+        \item \( t \) is a time trend, included to account for any long-term trend in housing starts, with coefficient \( \beta_3 \).
+        \item \( Q_{jt} \) are dummy variables for quarters 1 through 3 (where \( Q_{1t} = 1 \) if the observation is in quarter 1, and 0 otherwise, similarly for quarters 2 and 3). Quarter 4 is treated as the base category, so its effect is captured in the intercept \( \beta_0 \). The coefficients \( \gamma_1, \gamma_2, \) and \( \gamma_3 \) capture seasonal effects.
+        \item \( u_t \) is the error term.
+    \end{itemize}
+
+    **Explanation**:
+    \begin{itemize}
+        \item The inclusion of the time trend \( t \) allows the model to capture any systematic growth or decline in housing starts over time that is not explained by interest rates or real per capita income. For example, if the housing market has been growing steadily over time, the trend variable will capture this growth.
+        
+        \item The dummy variables \( Q_{1t}, Q_{2t}, \) and \( Q_{3t} \) account for seasonality in housing starts. In many cases, housing starts are higher in certain seasons (e.g., spring and summer) than in others (e.g., winter). These quarterly dummies allow the model to adjust for such predictable seasonal patterns.
+
+        \item The interest rate \( r_t \) is expected to have a negative effect on housing starts, as higher interest rates increase the cost of borrowing, thereby reducing the demand for new homes.
+
+        \item Real per capita income \( Y_t \) is expected to have a positive effect on housing starts, as higher income levels generally lead to greater demand for housing.
+
+    \end{itemize}
+
+    **Model Interpretation**:
+    \begin{itemize}
+        \item \( \beta_1 \): Measures the impact of a one-unit increase in the interest rate on housing starts, holding other factors constant.
+        \item \( \beta_2 \): Measures the impact of a one-unit increase in real per capita income on housing starts, holding other factors constant.
+        \item \( \beta_3 \): Captures the long-term trend in housing starts over time.
+        \item \( \gamma_1, \gamma_2, \gamma_3 \): Measure the seasonal effects in quarters 1, 2, and 3 relative to quarter 4.
+    \end{itemize}
+    
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item The index of industrial production (IP) is a monthly time series that measures the quantity of industrial commodities produced in a given month. This problem uses data on this index for the United States. Let $Y_t = 1200\times \ln(IP_t/IP_{t-1})$. 
+\begin{enumerate}
+\item The forecaster states that $Y_{t}$ shows the monthly percentage change in IP, measured in percentage points per year. Is this correct? Why?
+    \item Suppose a forecaster estimates an auto-regressive model with 4 lags (AR(4)) for $Y_t$:
+$$
+\begin{aligned}
+\hat{Y}_t & =1.377+0.318 Y_{t-1}+0.123 Y_{t-2}+0.068 Y_{r-3}+0.001 Y_{t-t} . \\
+& \quad(0.062)\quad (0.078) \quad\quad(0.055) \quad \quad(0.068) \quad \quad(0.056)
+\end{aligned}
+$$
+Use this AR(4) to forecast the value of $Y_{t}$ in January 2001 using the following values of industrial production for July 2000 through December 2000):
+    \begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline Date & 2000-7 & 2000-8 & 2000-9 & 2000-10 & 2000-11 & 2000-12 \\
+IP & 147.595 & 148.650 & 148.973 & 148.660 & 148.206 & 147.300 \\
+\hline
+\end{tabular}
+\end{center}
+\item Worried about potential seasonal fluctuations in production. the forecaster adds $Y_{t-12}$ to the model. The estimated coefficient is $Y_{t-12}$ is -0.054 with a standard error of 0.053. Is this coefficient statistically significant?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item The term \( \ln(IP_t) - \ln(IP_{t-1}) \) represents the monthly percentage change in IP, but expressed in logarithmic terms. The factor 1200 is used to annualize this percentage change (since there are 12 months in a year), converting it into percentage points per year.
+
+    Thus, the forecaster's statement is correct: \( Y_t \) represents the monthly percentage change in IP, annualized to reflect percentage points per year.
+
+    \item  First, we calculate \( Y_t \) for each month from August 2000 to December 2000 using:
+
+    \[
+    Y_t = 1200 \times \ln\left(\frac{IP_t}{IP_{t-1}}\right).
+    \]
+
+    The calculations are as follows:
+
+    \[
+    Y_{\text{2000-8}} = 1200 \times \ln\left(\frac{148.650}{147.595}\right) \approx 8.544,
+    \]
+
+    \[
+    Y_{\text{2000-9}} = 1200 \times \ln\left(\frac{148.973}{148.650}\right) \approx 2.597,
+    \]
+
+    \[
+    Y_{\text{2000-10}} = 1200 \times \ln\left(\frac{148.660}{148.973}\right) \approx -2.527,
+    \]
+
+    \[
+    Y_{\text{2000-11}} = 1200 \times \ln\left(\frac{148.206}{148.660}\right) \approx -3.665,
+    \]
+
+    \[
+    Y_{\text{2000-12}} = 1200 \times \ln\left(\frac{147.300}{148.206}\right) \approx -7.355.
+    \]
+
+    Next, we use the AR(4) model to forecast \( Y_t \) for January 2001:
+
+    \[
+    \hat{Y}_{\text{2001-01}} = 1.377 + 0.318 \times (-7.355) + 0.123 \times (-3.665) + 0.068 \times (-2.527) + 0.001 \times 2.597.
+    \]
+
+    Calculating step-by-step:
+
+    \[
+    \hat{Y}_{\text{2001-01}} = 1.377 - 2.339 + (-0.451) + (-0.172) + 0.003 \approx -1.582.
+    \]
+
+    Therefore, the forecasted value for January 2001 is \( \hat{Y}_{\text{2001-01}} \approx -1.582 \).
+
+    \item The model with the additional lag \( Y_{t-12} \) is given by:
+
+
+\item  The model with the additional lag \( Y_{t-12} \) is given by:
+
+    \[
+    \hat{Y}_t = 1.377 + 0.318 Y_{t-1} + 0.123 Y_{t-2} + 0.068 Y_{t-3} + 0.001 Y_{t-4} - 0.054 Y_{t-12}.
+    \]
+
+    The standard error of the coefficient on \( Y_{t-12} \) is 0.053.
+
+    To determine if this coefficient is statistically significant, we perform a t-test:
+
+    \[
+    t = \frac{-0.054}{0.053} \approx -1.02.
+    \]
+
+    At a 5\% significance level, the critical value for a two-tailed test with a large sample size is approximately 1.96. Since \( |t| < 1.96 \), the coefficient on \( Y_{t-12} \) is not statistically significant, meaning it does not have a strong enough impact to warrant its inclusion in the model.
+
+\end{enumerate}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\end{enumerate}
+
+\section*{Computer Exercises}
+
+\begin{enumerate}
+
+\item Use the data in VOLAT for this exercise. The variable $r s p 500$ is the monthly return on the Standard \& Poor's 500 stock market index, at an annual rate. (This includes price changes as well as dividends.) The variable $i 3$ is the return on three-month T-bills, and pcip is the percentage change in industrial production; these are also at an annual rate.
+\begin{enumerate}
+    \item Consider the equation
+$$
+r s p 500_t=\beta_0+\beta_1 p c i p_t+\beta_2 i 3_t+u_t
+$$
+What signs do you think $\beta_1$ and $\beta_2$ should have?
+\item  Estimate the previous equation by OLS, reporting the results in standard form. Interpret the signs and magnitudes of the coefficients.
+\item  Which of the variables is statistically significant?
+\item  Does your finding from part (iii) imply that the return on the S\&P 500 is predictable? Explain.
+\end{enumerate}
+
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item - For $\beta_1$ (coefficient of pcip): We expect it to be positive because higher industrial production growth (pcip) signals better economic conditions, which should lead to higher returns on the S\&P 500.
+
+    - For $\beta_2$ (coefficient of i3): We expect it to be negative because an increase in short-term interest rates (i3) makes risk-free assets more attractive, reducing the demand for stocks and potentially leading to lower returns.
+
+    \item 
+    \begin{lstlisting}
+################################################3
+data(volat, package='wooldridge')
+
+# Part (ii): Estimate the equation by OLS and report the results
+model <- lm(rsp500 ~ pcip + i3, data = volat)
+summary(model)
+
+coefficients <- coef(summary(model))
+r_squared <- summary(model)$r.squared
+
+# Print key results
+cat("Estimated Equation:\n")
+cat("rsp500 = ", round(coefficients[1, 1], 4), " + ", round(coefficients[2, 1], 4), " * pcip + ", round(coefficients[3, 1], 4), " * i3\n\n")
+cat("P-values:\n")
+cat("pcip: ", round(coefficients[2, 4], 4), "\n")
+cat("i3: ", round(coefficients[3, 4], 4), "\n\n")
+cat("R-squared: ", round(r_squared, 4), "\n")
+
+# Interpretation of predictability
+if (coefficients[2, 4] < 0.05 | coefficients[3, 4] < 0.05) {
+  cat("At least one of the predictors is statistically significant, suggesting that the return on the S&P 500 may be predictable.\n")
+} else {
+  cat("Neither predictor is statistically significant, so there is no strong evidence of predictability.\n")
+}
+    \end{lstlisting}
+\end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item The file TRAFFIC2 contains 108 monthly observations on automobile accidents, traffic laws, and some other variables for California from January 1981 through December 1989. Use this data set to answer the following questions.
+\begin{enumerate}
+    \item  During what month and year did California's seat belt law take effect? When did the highway speed limit increase to 65 miles per hour?
+\item Regress the variable $\log($totacc$)$ on a linear time trend and 11 monthly dummy variables, using January as the base month. Interpret the coefficient estimate on the time trend. Would you say there is seasonality in total accidents?
+\item Add to the regression from part (b) the variables wkends, unem, spdlaw, and beltlaw. Discuss the coefficient on the unemployment variable. Does its sign and magnitude make sense to you?
+\item In the regression from part (c), interpret the coefficients on spdlaw and beltlaw. Are the estimated effects what you expected? Explain.
+\item The variable prcfat is the percentage of accidents resulting in at least one fatality. Note that this variable is a percentage, not a proportion. What is the average of prcfat over this period? Does the magnitude seem about right?
+\item Run the regression in part (iii) but use prcfat as the dependent variable in place of $\log($totacc). Discuss the estimated effects and significance of the speed and seat belt law variables.
+
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{lstlisting}
+######################################################
+data(traffic2, package = "wooldridge")
+
+# Load necessary packages
+library(dplyr)
+library(lubridate)
+
+# Load and inspect the dataset
+head(traffic2)
+
+# Part (i): During what month and year did California's seat belt law take effect? When did the highway speed limit increase to 65 miles per hour?
+
+# Seat belt law: The variable 'beltlaw' indicates when the seat belt law took effect (beltlaw = 1).
+# Speed limit increase: The variable 'spdlaw' indicates when the speed limit increased to 65 mph (spdlaw = 1).
+
+# Extract the month and year when these laws took effect
+seat_belt_law_date <- traffic2 %>% filter(beltlaw == 1) %>% select(year) %>% distinct()
+speed_limit_date <- traffic2 %>% filter(spdlaw == 1) %>% select(year) %>% distinct()
+
+cat("Seat belt law took effect in:", seat_belt_law_date$year, "\n")
+cat("Highway speed limit increased to 65 mph in:", speed_limit_date$year, "\n")
+
+# Part (ii): Regress log(totacc) on the linear time trend (t) and monthly dummy variables (feb to dec)
+model_part_ii <- lm(log(totacc) ~ t + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec, data = traffic2)
+summary(model_part_ii)
+
+# Part (iii): Regress log(totacc) on the time trend (t), monthly dummy variables (feb to dec), and additional covariates (wkends, unem, spdlaw, beltlaw)
+model_part_iii <- lm(log(totacc) ~ t + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec + wkends + unem + spdlaw + beltlaw, data = traffic2)
+summary(model_part_iii)
+
+# Part (iv): Interpret the coefficients on spdlaw and beltlaw in the regression from part (iii).
+
+# The coefficient on spdlaw shows the effect of increasing the speed limit to 65 mph on total accidents.
+# The coefficient on beltlaw shows the effect of introducing the seat belt law on total accidents.
+# Discuss whether the signs of these coefficients match expectations (e.g., a positive sign for spdlaw indicating more accidents due to higher speed limits).
+
+# Part (v): Calculate the average of prcfat and discuss whether the magnitude seems reasonable.
+
+avg_prcfat <- mean(traffic2$prcfat, na.rm = TRUE)
+cat("Average prcfat:", round(avg_prcfat, 2), "%\n")
+
+# The average percentage of accidents resulting in at least one fatality is about X%. Discuss whether this percentage seems reasonable based on the context.
+
+# Part (vi): Regress prcfat on the time trend (t), monthly dummy variables (feb to dec), and additional covariates (wkends, unem, spdlaw, beltlaw)
+model_prcfat <- lm(prcfat ~ t + feb + mar + apr + may + jun + jul + aug + sep + oct + nov + dec + wkends + unem + spdlaw + beltlaw, data = traffic2)
+summary(model_prcfat)
+
+# Discuss the estimated effects of spdlaw and beltlaw on prcfat.
+# If spdlaw has a significant positive coefficient, it suggests that increasing the speed limit leads to a higher percentage of fatal accidents.
+# If beltlaw has a significant negative coefficient, it suggests that the seat belt law reduces the percentage of fatal accidents.
+
+
+\end{lstlisting}
+}
+
+
+\end{enumerate}
+
+
+\end{document}

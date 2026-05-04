@@ -1,0 +1,133 @@
+---
+title: "Causality: Racial Discrimination in the Labor Market"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2024'
+output:
+  html_document: 
+    css: my-theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+    
+```{r global_options, include=F, echo = F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE)
+knitr::is_html_output()
+```
+
+# Prelude
+
+To run this rmarkdown notebook you need to have installed the rmarkdown package (`install.packages("rmarkdown")`) and load some libraries and data sets: 
+
+```{r}
+# You may need to install this packages... Uncomment to do so
+# install.packages("devtools")
+# devtools::install_github("kosukeimai/qss-package")
+library(qss)
+data("resume", package = "qss")
+```
+
+# Introduction
+
+To investigate the prevalence of racial discrimination in the U.S. labor market^[See “Are Emily and Greg more employable than Lakisha and Jamal? A field experiment on labor market discrimination.” American Economic Review, vol. 94, no. 4, pp. 991–1013.], the social scientists Marianne Bertrand and Sendhil Mullainathan started sending fictitious résumés in response to Boston and Chicago newspaper job^[Positions in sales, administrative support, clerical, or customer services.] ads. To manipulate perceived race, they randomly assigned African-American (e.g., Lakisha, Jamal) or White-sounding (e.g., Emily, Greg) names, leaving all other information in the résumés unchanged. The researches then compared whether callbacks rates where **significantly** lower for typical black names.
+
+In the following, we will explore and analyse the date ourselves to look if there are racial disparities.
+
+
+# The data
+
+The data collected (see the [prelude](#Prelude) of this document to load it) has `r nrow(resume)` observations and `r ncol(resume)` variables. The latter are:
+
+  * `firstname`: first name of the fictitious job applicant.
+  * `sex`: sex of applicant (`female` or `male`).
+  * `race`: race of applicant (`black` or `white`).
+  * `call`: whether a callback was made (`1`= yes, `0`= no).
+  
+This *data frame* object resume is an example of *experimental data*, that is, data collected from an *experimental research design*, in which a *treatment variable*, or a *causal variable* of interest, is manipulated in order to examine its *causal effects* on an *outcome variable*. In this particular case study:
+
+  * **Treatment variable:** race of the fictitious applicant.
+  * **Outcome variable:** whether the applicant receives a callback. 
+
+# Data exploration
+
+Let’s begin by taking a look at the first observations of the data set.
+
+```{r}
+head(resume)
+```
+
+We can also display a summary of basic statistics of each variable.
+
+```{r}
+summary(resume)
+```
+
+# Data analysis
+
+Recall that the goal is to determine whether or not the callback rates are significantly different for black versus white names. To do so, we can create a *contingency table* (also known as *cross tabulation*)
+
+```{r}
+(race.call.tab <- table(race = resume$race, call = resume$call)) # Parenthesis to display result besides storing it
+```
+
+We can also add subtotal margins and the grand total for enhanced information
+
+```{r}
+race.call.tab <- addmargins(race.call.tab)
+```
+
+The table shows that $157$, out of the $2435$ fictional black applicants, received callbacks. We can already observe a difference when compared to the $235$ white-sounding-names callbacks. However, **is this difference substantial enough to conclude in favor of racial discrimination?** It is sensible to assume that we can accept this hypothesis if the difference of callback ratios is *high enough* and the sample is *large enough*^[This "enoughs" can be rigorously determined using tools of statistical inference.]. We already know the sample size for both black and white-sounding names, namely $2435$, let us compute the ratios.
+
+```{r}
+# Different ways... same result
+# Method 1: Using contingent table to compute callbacks over applications
+B.call <- race.call.tab[1, 2]; B.total <- race.call.tab[1, 3]
+B.call.rate <- B.call / B.total
+W.call <- race.call.tab[2, 2]; W.total <- race.call.tab[2, 3]
+W.call.rate <- W.call / W.total
+# Method 2: Subsetting and computing the mean of the binary variable "call"
+B.call.rate <- mean(resume$call[resume$race == "black"]) # callback rate for black-sounding names
+W.call.rate <- mean(resume$call[resume$race == "white"]) # callback rate for white-sounding names
+```
+
+We has found that the black-sounding-names callback ratio is `r round(B.call.rate, 4)`, while the white counterpart scores `r round(W.call.rate, 4)`. That is, white-sounding names received approximately $50\%$ more callbacks for interviews. The function `prop.test` tests the hypothesis that a proportion is higher/lower than another one.
+
+```{r}
+call.test <- prop.test(c(B.call, W.call), c(B.total, W.total), alternative = "less")
+call.test$p.value
+```
+
+If the *p-value* of the test is lower a number $\alpha \in (0, 1)$ we can say that we accept the hypothesis: 
+"the callback ratio for stereotypical black names is lower than the one for stereotypical white names, with a level of confidence of $(1-\alpha)100\%$", which means that, if we were to repeat the experiment many times, the proportion of times we were validating such a hypothesis (using the $\text{p-value} < \alpha$ methodology) while in truth it is wrong, would be around $\alpha$. For $\alpha$ small, hence, it it sensible to assume that the hypothesis is valid with a great degree of certainty.
+
+Based on the p-value in our case, we can afford to state, with a confidence level greater than `r round(1-call.test$p.value, 6)*100`$\%$ and based on the data in hand, that there is racial discrimination in the U.S. job market, or at least in the positions the study covers<sup><a href="#footnote2" id="ref2">2</a></sup>.
+
+# Causation?
+
+We have just "proved" that there are racial disparities in the labor market. However, is this due to race in itself or there are other factors like racial gaps in educational attainment? With this question we are know stepping into the concept of causality. Knowing how to answer these kind of questions is a very powerful tool because it allows to deeply understand phenomena rather than just pointing out patterns. To give a rigorous treatment of this topic we need to introduce first a few notions, so we go back to the slides.
+
+# Exercises
+
+  * **Exercise:** Perform the same analysis for
+ 
+    + Female vs male names
+    + Black female names vs white female names
+    + Black male names vs white male names
+
+# Acknowledgement and copyright
+
+These notes have been taken from the book [Quantitative Social Science](https://press.princeton.edu/books/quantitative-social-science) by Kosuke Imai. 
+
+<p id="footnote2"> <a href="#ref2"></a></p>
+

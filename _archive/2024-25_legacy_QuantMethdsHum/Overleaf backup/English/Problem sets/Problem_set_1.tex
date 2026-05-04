@@ -1,0 +1,671 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\author{\empty}
+\usepackage{listings}
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\footnotesize,
+  breaklines=true,                % Enable line breaking
+  breakatwhitespace=false     % Don't break at whitespace
+}
+
+
+\title{Problem Set 1\\Simple Regression Model\\Econometrics}
+
+\date{\empty}
+
+\begin{document}
+	\maketitle
+	
+\begin{enumerate}
+	
+\item The following table contains the $A C T$ (equivalent to EVAU) scores and the GPA (grade point average) for eight college students. Grade point average is based on a four-point scale and has been rounded to one digit after the decimal.
+
+\begin{center}
+
+\begin{tabular}{|ccc|}
+\hline Student & GPA & ACT \\
+\hline 1 & 2.8 & 21 \\
+2 & 3.4 & 24 \\
+3 & 3.0 & 26 \\
+4 & 3.5 & 27 \\
+5 & 3.6 & 29 \\
+6 & 3.0 & 25 \\
+7 & 2.7 & 25 \\
+8 & 3.7 & 30 \\
+\hline
+\end{tabular}
+    
+\end{center}
+
+\begin{enumerate}
+    \item Estimate the relationship between GPA and ACT using OLS; that is, obtain the intercept and slope estimates in the equation
+$$
+\widehat{G P A}=\hat{\beta}_0+\hat{\beta}_1 A C T
+$$
+Comment on the direction of the relationship. Does the intercept have a useful interpretation here? Explain. How much higher is the GPA predicted to be if the $A C T$ score is increased by five points?
+
+\item Compute the fitted values and residuals for each observation, and verify that the residuals (approximately) sum to zero.
+
+\item What is the predicted value of GPA when $A C T=20$ ?
+
+\item How much of the variation in GPA for these eight students is explained by $A C T$ ? Explain.
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item Let \( y_i = GPA_i \), \( x_i = ACT_i \), and \( n = 8 \). Then:
+\[
+\bar{x} = 25.875, \quad \bar{y} = 3.2125, \quad \sum_{i=1}^n \left( x_i - \bar{x} \right) \left( y_i - \bar{y} \right) = 5.8125, \quad \text{and} \quad \sum_{i=1}^n \left( x_i - \bar{x} \right)^2 = 56.875.
+\]
+We obtain the slope as:
+\[
+\hat{\beta}_1 = \frac{5.8125}{56.875} \approx 0.1022,
+\]
+rounded to four decimal places.
+The intercept is calculated as:
+\[
+\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \bar{x} \approx 3.2125 - (0.1022 \times 25.875) \approx 0.5681.
+\]
+So, we can write the estimated regression equation as:
+\[
+\widehat{GPA} = 0.5681 + 0.1022 \times ACT.
+\]
+The intercept does not have a useful interpretation because $A C T$ is not close to zero for the population of interest. If $A C T$ is 5 points higher, $\widehat{G P A}$ increases by $.1022(5)=.511$.
+
+\item The fitted values and residuals - rounded to four decimal places - are given along with the observation number $i$ and GPA in the following table:
+\begin{center}
+\begin{tabular}{|c|l|c|r|}
+\hline$i$ & $G P A$ & $\widehat{G P A}$ & \multicolumn{1}{c|}{$\hat{u}$} \\
+\hline 1 & 2.8 & 2.7143 & .0857 \\
+2 & 3.4 & 3.0209 & .3791 \\
+3 & 3.0 & 3.2253 & -.2253 \\
+4 & 3.5 & 3.3275 & .1725 \\
+5 & 3.6 & 3.5319 & .0681 \\
+6 & 3.0 & 3.1231 & -.1231 \\
+7 & 2.7 & 3.1231 & -.4231 \\
+8 & 3.7 & 3.6341 & .0659 \\
+\hline
+\end{tabular}
+\end{center}
+You can verify that the residuals, as reported in the table, sum to -.0002 , which is pretty close to zero given the inherent rounding error.
+
+\item When $A C T=20, \widehat{G P A}=.5681+.1022(20) \approx 2.61$.
+
+\item The sum of squared residuals, $\sum_{i=1}^n \hat{u}_i^2$, is about 4347 (rounded to four decimal places), and the total sum of squares, $\sum_{i=1}^n\left(y_i-\bar{y}\right)^2$, is about 1.0288. So the $R$-squared from the regression is
+$$
+R^2=1-\mathrm{SSR} / \mathrm{SST} \approx 1-(.4347 / 1.0288) \approx .577
+$$
+
+
+Therefore, about $57.7 \%$ of the variation in $G P A$ is explained by $A C T$ in this small sample of students.
+\end{enumerate}
+
+}
+
+\item You have collected the folloing information about variables $\mathrm{y}-\mathrm{x}$:
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline$\sum_{i=1}^n\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)$ & -0.5 \\
+\hline$\sum_{i=1}^n\left(x_i-\bar{x}\right)^2$ & 2 \\
+\hline $\bar{y}$ & 4 \\
+\hline $\bar{x}$ & 3 \\
+\hline$\sum_{i=1}^n\left(y_i-\bar{y}\right)^2$ & 0.5 \\
+\hline$\sum_{i=1}^n\left(\hat{y}_i-\bar{y}\right)^2$ & 0.8 \\
+\hline$\sum_{i=1}^n\left(y_i-\hat{y}_i\right)^2$ & 0.3 \\
+\hline
+\end{tabular}
+\end{center}
+\begin{enumerate}
+    \item Estimate and interpret the coeficients of the following relation:
+    $$
+y=\beta_0+\beta_1 x+u
+$$
+
+\item Calculate and interpret the $R^2$
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item Given:
+\[
+\sum_{i=1}^n \left( x_i - \bar{x} \right) \left( y_i - \bar{y} \right) = -0.5, \quad \sum_{i=1}^n \left( x_i - \bar{x} \right)^2 = 2, \quad \bar{y} = 4, \quad \bar{x} = 3.
+\]
+
+Step 1: Calculate the slope \( \hat{\beta}_1 \):
+\[
+\hat{\beta}_1 = \frac{\sum_{i=1}^n \left( x_i - \bar{x} \right) \left( y_i - \bar{y} \right)}{\sum_{i=1}^n \left( x_i - \bar{x} \right)^2} = \frac{-0.5}{2} = -0.25.
+\]
+
+Step 2: Calculate the intercept \( \hat{\beta}_0 \):
+\[
+\hat{\beta}_0 = \bar{y} - \hat{\beta}_1 \cdot \bar{x} = 4 - (-0.25) \times 3 = 4 + 0.75 = 4.75.
+\]
+
+Therefore, the estimated relationship is:
+\[
+\hat{y} = 4.75 - 0.25x.
+\]
+
+Interpretation:
+\begin{itemize}
+    \item The slope \( \hat{\beta}_1 = -0.25 \) indicates that for each unit increase in \( x \), \( y \) decreases by \( 0.25 \) units.
+    \item The intercept \( \hat{\beta}_0 = 4.75 \) suggests that when \( x = 0 \), the predicted value of \( y \) is \( 4.75 \). However, the interpretation of the intercept depends on the context of the variables.
+\end{itemize}
+
+\item Given:
+\[
+\sum_{i=1}^n \left( y_i - \bar{y} \right)^2 = 0.8, \quad \sum_{i=1}^n \left( \hat{y}_i - \bar{y} \right)^2 = 0.5, \quad \sum_{i=1}^n \left( y_i - \hat{y}_i \right)^2 = 0.3.
+\]
+
+The \( R^2 \) is calculated as:
+\[
+R^2 = \frac{\sum_{i=1}^n \left( \hat{y}_i - \bar{y} \right)^2}{\sum_{i=1}^n \left( y_i - \bar{y} \right)^2} = \frac{0.5}{0.8} = 0.625.
+\]
+
+Interpretation:
+An \( R^2 \) value of 0.625 indicates that approximately 62.5\% of the variability in \( y \) (dependent variable) is explained by \( x \) (independent variable) in the model. This suggests a moderately strong relationship between the variables.
+
+
+
+\end{enumerate}
+}
+
+
+\item You have estimated the following regression models for the relationship between the salary of a CEO (salary) and the financial return on equity (roe):
+
+$$
+\begin{gathered}
+\text { salary } = 963.2 + 18.5 \times \text { roe } \\
+\log \widehat{(\text { salary })} = 6.71 + 0.014 \times \text { roe } \\
+\log (\widehat{\text { salary })} = 6.49 + 0.17 \times \log (\text { roe }) \\
+\widehat{\text { salary }} = 586.6 + 255.3 \times \log (\text { roe })
+\end{gathered}
+$$
+
+Interpret the estimated slope coefficient of each regression.
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item **First Regression**: \( \text{salary} = 963.2 + 18.5 \times \text{roe} \)
+
+    The slope coefficient \( 18.5 \) means that for every one-unit increase in \( \text{roe} \), the salary of the CEO is expected to increase by \( 18.5 \) units (in the same currency as salary). This is a linear relationship.
+
+    \item **Second Regression**: \( \log \widehat{(\text{salary})} = 6.71 + 0.014 \times \text{roe} \)
+
+    The slope coefficient \( 0.014 \) means that for every one-unit increase in \( \text{roe} \), the logarithm of the CEO’s salary is expected to increase by \( 0.014 \). In percentage terms, a one-unit increase in \( \text{roe} \) corresponds to approximately a \( 1.4\% \) increase in salary (since the percentage change is approximately \( 100 \times 0.014 \)).
+
+    \item **Third Regression**: \( \log(\widehat{\text{salary}}) = 6.49 + 0.17 \times \log(\text{roe}) \)
+
+    The slope coefficient \( 0.17 \) means that for a 1\% increase in \( \text{roe} \), the CEO’s salary is expected to increase by \( 0.17\% \). This indicates a logarithmic-logarithmic relationship between salary and roe.
+
+    \item **Fourth Regression**: \( \widehat{\text{salary}} = 586.6 + 255.3 \times \log(\text{roe}) \)
+
+    The slope coefficient \( 255.3 \) means that for every 1\% increase in \( \text{roe} \), the salary of the CEO is expected to increase by approximately \( 255.3 \) units (in the same currency as salary). 
+
+    \end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item You have estimated the following relationship between monthly net salary in Euros and the gender of a person (where "woman" is a binary variable equal to 1 if the observation is female and 0 if male):
+
+$$
+\widehat{\text{salary}} = 1200 - 100 \times \text{woman}
+$$
+
+\begin{enumerate}
+    \item Interpret the OLS estimate of the intercept coefficient.
+    \item Interpret the OLS estimate of the slope coefficient:
+    \item What is the predicted salary for a woman?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item The intercept \( 1200 \) represents the predicted salary for a male (since "woman" equals 0 for males). Therefore, the intercept indicates that the average predicted salary for a male is \( 1200 \) Euros per month.
+
+\item The slope coefficient \( -100 \) indicates that, on average, women earn \( 100 \) Euros less than men, holding everything else constant. If the value of "woman" is 1 (indicating female), the predicted salary decreases by \( 100 \) Euros.
+
+\item To find the predicted salary for a woman, substitute \( \text{woman} = 1 \) into the regression equation:
+
+$$
+\widehat{\text{salary}} = 1200 - 100 \times 1 = 1200 - 100 = 1100 \text{ Euros}.
+$$
+
+Thus, the predicted salary for a woman is \( 1100 \) Euros per month.
+
+    \end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item In the simple linear regression model $y=\beta_0+\beta_1 x+u$, suppose that $\mathrm{E}(u) \neq 0$. Letting $\alpha_0=\mathrm{E}(u)$, show that the model can always be rewritten with the same slope, but a new intercept and error, where the new error has a zero expected value.
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+Given the simple linear regression model:
+
+\[
+y = \beta_0 + \beta_1 x + u,
+\]
+
+where \( \mathrm{E}(u) \neq 0 \), we need to show that the model can be rewritten with the same slope but a new intercept and error term, where the new error has a zero expected value.
+
+Step 1: Define the Expected Value of \( u \):
+
+Let:
+\[
+\alpha_0 = \mathrm{E}(u).
+\]
+
+By definition, the expected value of \( u \) is \( \alpha_0 \), meaning \( \mathrm{E}(u) = \alpha_0 \).
+
+Step 2: Decompose \( u \) into Two Parts:
+
+We can express \( u \) as:
+\[
+u = \alpha_0 + \tilde{u},
+\]
+where \( \tilde{u} \) is a new error term with \( \mathrm{E}(\tilde{u}) = 0 \). Notice that \( \tilde{u} = u - \alpha_0 \) by construction.
+
+Step 3: Substitute \( u = \alpha_0 + \tilde{u} \) into the Original Model:
+
+Substituting into the original equation gives:
+\[
+y = \beta_0 + \beta_1 x + u = \beta_0 + \beta_1 x + \alpha_0 + \tilde{u}.
+\]
+
+Step 4: Rearrange the Model:
+
+We can now rewrite the model as:
+\[
+y = (\beta_0 + \alpha_0) + \beta_1 x + \tilde{u}.
+\]
+
+Let the new intercept be:
+\[
+\beta_0' = \beta_0 + \alpha_0.
+\]
+
+So the model becomes:
+\[
+y = \beta_0' + \beta_1 x + \tilde{u},
+\]
+where \( \tilde{u} \) is the new error term.
+
+Step 5: Verify the Expected Value of the New Error Term:
+
+By construction, \( \tilde{u} = u - \alpha_0 \), and:
+\[
+\mathrm{E}(\tilde{u}) = \mathrm{E}(u - \alpha_0) = \mathrm{E}(u) - \alpha_0 = \alpha_0 - \alpha_0 = 0.
+\]
+
+Conclusion:
+
+The model has the same slope \( \beta_1 \), but a new intercept \( \beta_0' = \beta_0 + \alpha_0 \), and the new error term \( \tilde{u} \) has an expected value of zero \( \mathrm{E}(\tilde{u}) = 0 \).
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item Suppose you are interested in estimating the effect of hours spent in a final exam preparation  (in hours) on the final grade. The population is all students enrolled in that course. 
+\begin{enumerate}
+    \item Suppose you are given a grant to run a controlled experiment. Explain how you would structure the experiment in order to estimate the causal effect of hours on sat.
+    \item Consider the more realistic case where students choose how much time to spend in a preparation course, and you can only randomly sample grade and hours from the population. Write the population model as
+$$
+\text {grade}=\beta_0+\beta_1 \text {hours}+u
+$$
+where, as usual in a model with an intercept, we can assume $\mathrm{E}(u)=0$. List at least two factors contained in $u$. Are these likely to have positive or negative correlation with hours?
+\item What should be the sign of $\beta_1$ if the preparation course is effective?
+\item What is the interpretation of $\beta_0$ ?
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item We would want to randomly assign the number of hours in the preparation course so that hours is independent of other factors that affect performance in terms of grade. Then, we would collect information on grade for each student in the experiment, yielding a data set $\left\{\left(\right.\right.$ grade $_i$, hours $\left.\left._i\right): i=1, \ldots, n\right\}$, where $n$ is the number of students we can afford to have in the study. We should try to get as much variation in hours ${ }_i$ as is feasible.
+
+    \item Here are two factors: innate ability and general health on the day of the exam. If we think students with higher native intelligence think they do not need to prepare for the exam, then ability and hours will be negatively correlated. Ruling out chronic health problems, health on the day of the exam should be roughly uncorrelated with hours spent in a preparation course.
+    \item If preparation courses are effective, $\beta_1$ should be positive: other factors equal, an increase in hours should increase grade.
+ \item The intercept, $\beta_0$, has a useful interpretation in this example: because $\mathrm{E}(u)=0, \beta_0$ is the average grade for students in the population with hours $=0$.
+
+    \end{enumerate}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item According to the capital asset pricing model (CAPM), the expected excess return on an asset is proportional to the expected excess return on a portfolio of all available assets (the ``market portfolio''). That is, the CAPM says that
+$$
+R-R_f=\beta\left(R_m-R_f\right)
+$$
+where $R_m$ is the expected return on the market portfolio and $\beta$ is the coefficient in the population regression of $R-R_f$ on $R_{m}-R_f$. In practice, the risk-free return is often taken to be the rate of interest on short-term U.S. government debt. According to the CAPM. a stock with a $\beta<1$ has less risk than the market portfolio and therefore has a lower expected excess return than the market portfolio. In contrast, a stock with a $\beta>1$ is riskier than the market portfolio and thus commands a higher expected excess return.
+\begin{enumerate}
+    \item Suppose that the value of $\beta$ is greater than 1 for a particular stock. Show that the variance of $\left(R-R_f\right)$ for this stock is greater than the variance of $\left(R_m-R_f\right)$.
+\item Suppose that the value of $\beta$ is less than 1 for a particular stock. Is it possible that variance of $\left(R-R_f\right)$ for this stock is greater than the variance of ( $\left.R_m-R_t\right)$ ? (Hint: Don't forget the regression error.)
+\item  In a given year, the rate of return on 3-month Treasury bills is $3.5 \%$ and the rate of return on a large diversified portfolio of stocks (the S\&P 500 ) is $7.3\%$. For each company listed in the following table use the estimated value of $\beta$ to estimate the stock's expected rate of return.
+$$
+\begin{aligned}
+&\begin{array}{|c|c|}
+\hline \text { Company } & \text { Estimated } \beta \\
+\hline \text { Kellogg (breakfast cereal) } & -0.03 \\
+\hline \text { Wall-Mart (discount retailer) } & 0.65 \\
+\hline \text { Waste Management (Waste disposal) } & 0.70 \\
+\hline \text { Sprint Nextel (telecommunications) } & 0.78 \\
+\hline \text { Barnes and Noble (book retailer) } & 1.02 \\
+\hline \text { Microsoft (software) } & 1.27 \\
+\hline \text { Best Buy (electronic equipment retailer) } & 2.15 \\
+\hline \text { Amazon (online retailer) } & 2.65 \\
+\hline
+\end{array}\\
+\end{aligned}
+$$
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{enumerate}
+    \item We need to show that if \( \beta > 1 \), then the variance of \( (R - R_f) \) is greater than the variance of \( (R_m - R_f) \) for a particular stock.    The variance of \( (R - R_f) \) is given by:
+\[
+\mathrm{Var}(R - R_f) = \mathrm{Var}(\beta (R_m - R_f) + u).
+\]
+Using the properties of variance, we can express the variance as:
+\[
+\mathrm{Var}(R - R_f) = \beta^2 \mathrm{Var}(R_m - R_f) + \mathrm{Var}(u).
+\]
+Notice that \( \beta^2 \mathrm{Var}(R_m - R_f) \) is the part of the variance that is directly related to the market portfolio. Since \( \beta > 1 \) implies \( \beta^2 > 1 \), we have:
+
+\[
+\beta^2 \mathrm{Var}(R_m - R_f) > \mathrm{Var}(R_m - R_f).
+\]
+
+Thus:
+\[
+\mathrm{Var}(R - R_f) = \beta^2 \mathrm{Var}(R_m - R_f) + \mathrm{Var}(u) > \mathrm{Var}(R_m - R_f).
+\]
+Conclusion: When \( \beta > 1 \), the variance of \( (R - R_f) \) is greater than the variance of \( (R_m - R_f) \), which confirms that a stock with a higher \( \beta \) is indeed riskier than the market portfolio.
+
+\item We need to determine whether it is possible for the variance of \( (R - R_f) \) to be greater than the variance of \( (R_m - R_f) \) when \( \beta < 1 \) for a particular stock. The variance of \( (R - R_f) \) is given by:
+\[
+\mathrm{Var}(R - R_f) = \mathrm{Var}(\beta (R_m - R_f) + u).
+\]
+
+Using the properties of variance, we can express the variance as:
+\[
+\mathrm{Var}(R - R_f) = \beta^2 \mathrm{Var}(R_m - R_f) + \mathrm{Var}(u).
+\]
+Consider the Case Where \( \beta < 1 \). If \( \beta < 1 \), then \( \beta^2 < 1 \), which implies:
+\[
+\beta^2 \mathrm{Var}(R_m - R_f) < \mathrm{Var}(R_m - R_f).
+\]
+Notice that the total variance of \( (R - R_f) \) includes the error variance \( \mathrm{Var}(u) \). Therefore:
+\[
+\mathrm{Var}(R - R_f) = \beta^2 \mathrm{Var}(R_m - R_f) + \mathrm{Var}(u).
+\]
+Even though \( \beta^2 \mathrm{Var}(R_m - R_f) \) is less than \( \mathrm{Var}(R_m - R_f) \), the error variance \( \mathrm{Var}(u) \) could be large enough to make the overall variance \( \mathrm{Var}(R - R_f) \) greater than \( \mathrm{Var}(R_m - R_f) \).
+
+\item The expected returns for each company are calculated as follows:
+$$
+\begin{aligned}
+\text{Kellogg (breakfast cereal)}: & \quad 3.5\% + (-0.03) \times (7.3\% - 3.5\%) = 3.386\%, \\
+\text{Wall-Mart (discount retailer)}: & \quad 3.5\% + 0.65 \times (7.3\% - 3.5\%) = 5.97\%, \\
+\text{Waste Management (Waste disposal)}: & \quad 3.5\% + 0.70 \times (7.3\% - 3.5\%) = 6.16\%, \\
+\text{Sprint Nextel (telecommunications)}: & \quad 3.5\% + 0.78 \times (7.3\% - 3.5\%) = 6.464\%, \\
+\text{Barnes and Noble (book retailer)}: & \quad 3.5\% + 1.02 \times (7.3\% - 3.5\%) = 7.376\%, \\
+\text{Microsoft (software)}: & \quad 3.5\% + 1.27 \times (7.3\% - 3.5\%) = 8.326\%, \\
+\text{Best Buy (electronic equipment retailer)}: & \quad 3.5\% + 2.15 \times (7.3\% - 3.5\%) = 11.67\%, \\
+\text{Amazon (online retailer)}: & \quad 3.5\% + 2.65 \times (7.3\% - 3.5\%) = 13.57\%.
+\end{aligned}
+$$
+
+    \end{enumerate}
+
+}
+
+\end{enumerate}
+
+\section*{Computer Exercises}
+
+\begin{enumerate}
+
+\item The data set in CEOSAL2 contains information on chief executive officers for U.S. corporations. The variable salary is annual compensation, in thousands of dollars, and ceoten is prior number of years as company CEO.
+\begin{enumerate}
+    
+    \item Find the average salary and the average tenure in the sample.
+    \item How many CEOs are in their first year as CEO (that is, ceoten $=0$ )? What is the longest tenure as a CEO?
+    \item Estimate the simple regression model
+$$
+\log (\text { salary })=\beta_0+\beta_1 \text { ceoten }+u
+$$
+and report your results in the usual form. What is the (approximate) predicted percentage increase in salary given one more year as a CEO?
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{lstlisting}
+# install.packages("wooldridge")
+
+data(ceosal2, package='wooldridge')
+
+# Calculate the average salary
+average_salary <- mean(ceosal2$salary)
+average_salary
+
+# Count the number of CEOs in their first year as CEO (ceoten = 0)
+num_first_year_ceos <- sum(ceosal2$ceoten == 0)
+num_first_year_ceos
+
+# Find the longest tenure as a CEO
+longest_tenure <- max(ceosal2$ceoten)
+longest_tenure
+
+# Estimate the simple regression model
+model <- lm(lsalary ~ ceoten, data = ceosal2)
+
+# Report the regression results
+summary(model)
+
+# Extract the coefficient for ceoten (beta_1)
+beta_1 <- coef(model)["ceoten"]
+
+# Calculate the approximate percentage increase in salary for one more year as a CEO
+percentage_increase <- beta_1 * 100
+
+# Print the results
+percentage_increase
+\end{lstlisting}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\item Use the data in WAGE2 to estimate a simple regression explaining monthly salary (wage) in terms of IQ score (IQ).
+\begin{enumerate}
+    \item Find the average salary and average IQ in the sample. What is the sample standard deviation of IQ? (IQ scores are standardized so that the average in the population is 100 with a standard deviation equal to 15.)
+    \item Estimate a simple regression model where a one-point increase in $I Q$ changes wage by a constant dollar amount. Use this model to find the predicted increase in wage for an increase in $I Q$ of 15 points. Does $I Q$ explain most of the variation in wage?
+    \item Now, estimate a model where each one-point increase in $I Q$ has the same percentage effect on wage. If $I Q$ increases by 15 points, what is the approximate percentage increase in predicted wage?
+\end{enumerate}
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{lstlisting}
+data(wage2, package='wooldridge')
+
+# Calculate the average salary
+average_salary <- mean(wage2$wage, na.rm = TRUE)
+
+# Calculate the average IQ
+average_IQ <- mean(wage2$IQ, na.rm = TRUE)
+
+# Calculate the sample standard deviation of IQ
+sd_IQ <- sd(wage2$IQ, na.rm = TRUE)
+
+# Print the results
+average_salary
+average_IQ
+sd_IQ
+
+# Estimate the simple regression model
+model <- lm(wage ~ IQ, data = wage2)
+
+# View the regression results
+summary(model)
+
+# Extract the coefficient for IQ (the predicted increase in wage for a one-point increase in IQ)
+coef_IQ <- coef(model)["IQ"]
+
+# Calculate the predicted increase in wage for an increase in IQ of 15 points
+predicted_increase <- coef_IQ * 15
+
+# Print the results
+coef_IQ
+predicted_increase
+
+# Check the R-squared value to see if IQ explains most of the variation in wage
+r_squared <- summary(model)$r.squared
+r_squared
+
+# Estimate the log-linear regression model (log of wage vs. IQ)
+model_log <- lm(log(wage) ~ IQ, data = wage2)
+
+# View the regression results
+summary(model_log)
+
+# Extract the coefficient for IQ (percentage effect on wage for a one-point increase in IQ)
+coef_log_IQ <- coef(model_log)["IQ"]
+
+# Calculate the approximate percentage increase in predicted wage for a 15-point increase in IQ
+percentage_increase <- coef_log_IQ * 15 * 100
+
+# Print the results
+coef_log_IQ
+percentage_increase
+\end{lstlisting}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\item To complete this exercise you need to generate data from the uniform and normal distributions.
+\begin{enumerate}
+    \item Start by generating 500 observations on $x_i$-the explanatory variable-from the uniform distribution with range $[0,10]$ distribution and  multiply those observations by 10. What are the sample mean and sample standard deviation of the $x_i$ ?
+\item Randomly generate 500 errors, $u_i$, from the $\operatorname{Normal}(0,\sigma^2=36)$ distribution. Is the sample average of the $u_i$ exactly zero? Why or why not? What is the sample standard deviation of the $u_i$ ?
+\item Now generate the $y_i$ as
+$$
+y_i=1+2 x_i+u_i \equiv \beta_0+\beta_1 x_i+u_i
+$$
+that is, the population intercept is one and the population slope is two. Use the data to run the regression of $y_i$ on $x_i$. What are your estimates of the intercept and slope? Are they equal to the population values in the above equation? Explain.
+\item Obtain the OLS residuals, $\hat{u}_i$, and verify that equations
+$$
+\sum_{i=1}^n \hat{u}_i=0, \quad \sum_{i=1}^n x_i \hat{u}_i=0 .
+$$
+holds (subject to rounding error).
+
+\end{enumerate}
+
+
+{\color{blue}
+\noindent \textbf{Solution:}
+
+\begin{lstlisting}
+# Set seed for reproducibility
+set.seed(123)
+
+# Generate 500 observations from a uniform distribution on [0, 10]
+x_i <- runif(500, min = 0, max = 10) * 10
+
+# Calculate the sample mean of x_i
+sample_mean <- mean(x_i)
+
+# Calculate the sample standard deviation of x_i
+sample_sd <- sd(x_i)
+
+# Print the results
+sample_mean
+sample_sd
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Step 1: Generate 500 errors from the Normal(0, 36) distribution
+u_i <- rnorm(500, mean = 0, sd = sqrt(36))
+
+# Calculate the sample mean and sample standard deviation of u_i
+sample_mean_u <- mean(u_i)
+sample_sd_u <- sd(u_i)
+
+# Print the sample mean and sample standard deviation of u_i
+sample_mean_u
+sample_sd_u
+
+# Explanation:
+# The sample average of u_i is not exactly zero because it is a random sample,
+# and although the expected value is zero, the sample mean will vary around zero.
+
+# Step 2: Generate y_i = 1 + 2 * x_i + u_i
+y_i <- 1 + 2 * x_i + u_i
+
+# Step 3: Run the regression of y_i on x_i
+model <- lm(y_i ~ x_i)
+
+# View the regression summary
+summary(model)
+
+# Extract the estimated intercept and slope
+estimated_intercept <- coef(model)["(Intercept)"]
+estimated_slope <- coef(model)["x_i"]
+
+# Print the estimated intercept and slope
+estimated_intercept
+estimated_slope
+
+# Step 1: Obtain the OLS residuals
+residuals_u_hat <- resid(model)  # OLS residuals
+
+# Step 2: Verify that the sum of the residuals is approximately zero
+sum_residuals <- sum(residuals_u_hat)
+
+# Step 3: Verify that the sum of x_i multiplied by the residuals is approximately zero
+sum_x_u_hat <- sum(x_i * residuals_u_hat)
+
+# Print the results
+sum_residuals
+sum_x_u_hat
+\end{lstlisting}
+
+}
+
+\end{enumerate}
+
+
+\end{document}

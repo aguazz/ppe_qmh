@@ -1,0 +1,570 @@
+---
+title: "The Disputed Authorship of *The Federalist Papers*"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2025'
+output:
+  html_document: 
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+    
+```{r global_options, include=T, echo = F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE)
+```
+
+# Prelude
+
+Before running this Rmarkdown notebook, ensure that the `rmarkdown` package is installed (`install.packages("rmarkdown")`). Additionally, you should install all the required packages and load the necessary data sets for this notebook:
+
+```{r}
+# You may need to install these packages... Uncomment to do so
+# install.packages(c("tm", "SnowballC", "wordcloud")) 
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Introduction
+
+*The Federalist*, whose title page is displayed in Figure 1, consists of 85 essays attributed to Alexander Hamilton, John Jay, and James Madison from 1787 to 1788 in order to encourage people in New York to ratify the newly drafted US Constitution. Because both Hamilton and Madison helped draft the Constitution, scholars regard *The Federalist Papers* as a primary document reflecting the intentions of the authors of the Constitution.
+
+<div style="text-align: center;">
+  ![Figure 1: The Title Page of The Federalist, Vol. 1. Source: [Library of Congress](https://www.congress.gov/resources/display/content/The+Federalist+Papers#TheFederalistPapers-1).](the_federalist.png){width=20%}
+</div>
+
+<div style="margin-top: 20px;"></div>
+
+*The Federalist Papers* were originally published in various New York state newspapers under the pseudonym of "Publius". For this reason, [the authorship of each paper has been the subject of scholarly research](https://en.wikipedia.org/wiki/The_Federalist_Papers#Authorship). According to the [Library of Congress](https://www.congress.gov/resources/display/content/The+Federalist+Papers#TheFederalistPapers-1). some of the papers' authorship are clear while other ones are in dispute.
+In this work, we are going to analyze the text of *The Federalist Papers* to
+predict their authorship.
+
+<div style="text-align: center;">
+
+#### **Authorship Attribution**
+
+</div>
+
+
+| **Author**            | **Number of Essays** | **Essay Numbers**                                  |
+|----------------------|-------------------|--------------------------------------------------|
+| Alexander Hamilton | 51                | 1, 6–9, 11–13, 15–17, 21–36, 59–61, 65–85         |
+| James Madison     | 15                | 10, 14, 37–48, 58                                |
+| Hamilton & Madison | 3                 | 18–20                                           |
+| John Jay         | 5                 | 2–5, 64                                         |
+| Disputed         | 11                | 49–57, 62, 63                                   |
+
+<div style="margin-top: -50px;"></div>
+
+# The Data
+
+The 85 essays are scraped from the Library of Congress website and stored as `fpXX.txt` (XX representing essay numbers 01–85). Each file contains the text of its respective essay. The following text is the first and last sentences of The Federalist Paper No. 1 as an example.
+
+> AFTER an unequivocal experience of the inefficiency of the subsisting federal government, you are called upon to deliberate on a new Constitution for the United States of America.  
+> *...*  
+>  
+> This shall accordingly constitute the subject of my next address.
+
+<div style="margin-top: -50px;"></div>
+
+# Preprocessing
+
+Before analyzing the data, we must preprocess it using the `tm` package, which offers various natural language processing tools in R. It removes unnecessary white spaces and supports stemming, which reduces words to their root form (e.g., government → govern). Stemming requires the `SnowballC` package.
+
+```{r}
+library(tm, SnowballC)
+```
+
+We start by loading the text corpus^[A corpus is a collection of text documents used for natural language processing, while corpora is the plural form, referring to multiple collections of texts.] into R using the `Corpus()` function. The `DirSource()` function specifies the directory and filename pattern. Here, files are stored in the `federalist` subdirectory (which must be created beforehand), and the `pattern` argument filters files by name, such as `"fp"` (e.g., `fp01.txt`, `fp10.txt`).
+
+```{r}
+## load the raw corpus
+corpus.raw <- Corpus(DirSource(directory = "federalist", pattern = "fp"))
+corpus.raw
+```
+
+We preprocess the corpus using the `tm_map()` function, which applies transformations to text data. The first argument is the corpus, and the second is the transformation function. 
+
+We follow this common key text-data preprocessing steps:
+  
+  * Converting words to lowercase using `tolower()`^[Wrapped in `content_transformer()` to transform the `corpus` object to plain text, since `tolower()` is from the base R package and do not work directly with `corpus` objects. However, older versions of the tm package might not require the use of the `content_transformer()` function.].  
+  * Removing extra white spaces with `stripWhitespace()`.  
+  * Eliminating punctuation using `removePunctuation()`.  
+  * Removing numbers with `removeNumbers()`.
+  
+```{r}
+## make lower case
+corpus.prep <- tm_map(corpus.raw, content_transformer(tolower))
+## remove white space
+corpus.prep <- tm_map(corpus.prep, stripWhitespace)
+## remove punctuation
+corpus.prep <- tm_map(corpus.prep, removePunctuation)
+## remove numbers
+corpus.prep <- tm_map(corpus.prep, removeNumbers)
+```
+
+These steps clean the text for further analysis. We here summarize in the next table these and other useful functions in processing text data.
+
+<div style="text-align: center;">
+
+#### **Commonly Used Functions to Preprocess Raw Texts**
+
+</div>
+
+
+| **Function**            | **Description**                                      |
+|-------------------------|------------------------------------------------------|
+| `tolower()`            | Transform to lower case                               |
+| `stripWhitespace()`    | Remove white space                                    |
+| `removePunctuation()`  | Remove punctuation                                    |
+| `removeNumbers()`      | Remove numbers                                        |
+| `removeWords()`        | Remove specified words                                |
+| `stemDocument()`       | Stem the words in a document for specified language   |
+
+
+Next, we remove the so-called "stop words", that is, common words like "a", "the", and "and". These words appear frequently in any text but provide little meaningful information for the analysis. We use the `stopwords()` function to retrieve a list of stop words for the chosen language. The English list starts as follows:
+
+```{r}
+head(stopwords("english"))
+```
+
+We then pass this list through the `removeWords()` function. Finally, we stem^["Stemming words" refers to the process of reducing words to their root or base form, which helps group words with similar meanings together. For example, government → govern, running → run, easily → easi]
+each word.
+
+```{r}
+## remove stop words
+corpus <- tm_map(corpus.prep, removeWords, stopwords("english"))
+## finally stem remaining words
+corpus <- tm_map(corpus, stemDocument)
+```
+
+To extract a specific essay, use double square brackets `[[ ]]` with its index. The `content()` function then prints the text of the selected document.
+
+```{r}
+## showing the whole content
+# content(corpus[[10]]) # essay no. 10
+## showing just the first 20 words of the transformed text (using the string package)
+stringr::word(content(corpus[[10]]), start = 1, end = 20)
+```
+
+Compare with the raw content below. In there, `\n` means a line break.
+
+```{r}
+## showing just the first 50 words of the row text (using the string package)
+cat(stringr::word(content(corpus.raw[[10]]), start = 1, end = 50))
+```
+
+The text confirms that preprocessing was applied as intended: all letters were converted to lowercase, punctuation removed, stop words and extra spaces eliminated, and words stemmed (e.g., *numerous* → *numer*, *promised* → *promis*).
+
+<div style="margin-top: -50px;"></div>
+
+# Document-term matrix
+
+A simple way to analyze text is by counting word occurrences, known as **term frequency (tf)**. This is stored in a **document-term matrix (DTM)**, where rows represent documents and columns represent unique terms, with each entry indicating a term’s count in a document. Flipping rows and columns creates a **term-document matrix (TDM)**. In R, use `DocumentTermMatrix()` for a DTM or `TermDocumentMatrix()` for a TDM.
+
+```{r}
+dtm <- DocumentTermMatrix(corpus)
+dtm
+```
+
+The `DocumentTermMatrix()` function returns a specialized matrix, so R displays a summary instead of the full matrix. This summary includes the number of documents, terms, nonzero (nonsparse) entries, sparse entries, and **sparsity**—the percentage of zero entries, which is typically high (e.g., 89% in *The Federalist Papers*). It also provides the longest term length and the weighting method, which in this case is **term frequency (tf)**.
+
+To inspect the actual values, use `inspect()`, which prints detailed matrix information. You can subset it like a data frame using square brackets `[,]`, e.g., to view the first 5 rows and 8 columns:
+
+```{r}
+inspect(dtm[1:5, 1:8])
+```
+
+Alternatively, we can coerce this object into a standard matrix object using the
+`as.matrix()` function, and print it directly.
+
+```{r}
+dtm.mat <- as.matrix(dtm)
+```
+
+<div style="margin-top: -50px;"></div>
+
+# Topic discovery
+
+We analyze the **document-term matrix (DTM)** by visualizing word frequency, relying on the **bag-of-words** assumption, which ignores word order and grammar. While this approach may miss subtle meanings, **term frequency (tf)** distributions help infer document topics.
+
+A **word cloud** is a common way to visualize word importance, with frequently used words appearing larger. The `wordcloud()` function from the **`wordcloud`** package generates these visualizations. Since DTMs often have many terms, we limit the display to the **top 20 words** using `max.words = 20`.
+
+Topic discovery is an **unsupervised learning** task, meaning we lack predefined topic labels. Instead, we infer topics from word distributions across documents. In contrast, **supervised learning** uses labeled data, such as human-coded topics, to train predictive models.
+
+To explore topics in *The Federalist Papers*, we generate word clouds for essays **12 and 24**, both written by **Alexander Hamilton**. Before computing term frequencies (per 1000 words), we use the **unstemmed corpus (`corpus.prep`)** to retain original word forms. We then subset the **term-frequency matrix** to include only relevant words for analysis.
+
+```{r, fig.width=9, fig.height=2}
+library(wordcloud)
+# Set up a 1-row, 2-column plotting layout 
+# (this is to display the word clouds side by side)
+par(mfrow = c(1, 2), mar = c(0.5, 0.5, 0.5, 0.5))  # Adjust margins (bottom, left, top, right)
+# Plot word clouds
+wordcloud(colnames(dtm.mat), dtm.mat[12, ], max.words = 20, scale = c(1.5, .5)) # essay no. 12
+wordcloud(colnames(dtm.mat), dtm.mat[24, ], max.words = 20, scale = c(1.5, .5)) # essay no. 24
+```
+
+The word clouds reveal thematic differences: 
+
+  * **Paper No. 12** emphasizes economic terms like *revenu* (revenue), *commerc* (commerce), *trade*, *tax*, and *land*; 
+  * **Paper No. 24** focuses on security-related words such as *power*, *peac* (peace), *garrison*, and *armi* (army).  
+
+Since `stemDocument()` reduces words to their root form, we can restore full words using `stemCompletion()`. This function takes stemmed words as its first argument and matches them to full words from the unstemmed corpus (`corpus.prep`).
+
+```{r}
+stemCompletion(c("revenu", "commerc", "peac", "army"), corpus.prep)
+```
+
+The discovered topics align with the paper titles: 
+
+  * **Paper No. 12**, *The Utility of the Union in Respect to Revenue*, discusses the economic benefits of unification, while 
+  * **Paper No. 24**, *The Powers Necessary to the Common Defense Further Considered*, focuses on national defense and legislative control over the military.
+
+#### **Term Frequency–Inverse Document Frequency (TF-IDF)**  
+
+While term frequency (`tf`) shows how often a word appears in a document, its significance diminishes if the word is common across many documents. To adjust for this, we compute **TF-IDF**, defined as:
+
+\[
+\text{tf-idf}(w, d) = \text{tf}(w, d) \times \text{idf}(w)
+\]
+
+where:  
+  - **`tf(w, d)`** is the term frequency, i.e., the number of times word `w` appears in document `d`. If `tf(w, d) > 0`, it can be log-scaled.  
+  - **`idf(w) = log(N / df(w))`**, where `N` is the total number of documents and `df(w)` is the number of documents containing `w`. Frequently occurring words across documents receive lower **IDF**, reducing their weight.
+
+To compute **TF-IDF** in R, use:
+
+```{r}
+dtm.tfidf <- weightTfIdf(dtm) # tf-idf calculation
+```
+
+Below, we identify the 10 most important terms in The Federalist Papers Nos. 12 and 24 using TF-IDF. The `sort()` function helps rank terms by highest TF-IDF values. Since `dtm_tfidf` is a `DocumentTermMatrix` object, we first convert it to a matrix before sorting. Setting decreasing = TRUE ranks terms from most to least important.
+
+```{r}
+dtm.tfidf.mat <- as.matrix(dtm.tfidf) # convert to matrix
+## 10 most important words for paper no. 12
+head(sort(dtm.tfidf.mat[12, ], decreasing = TRUE), n = 10)
+## 10 most important words for paper no. 24
+head(sort(dtm.tfidf.mat[24, ], decreasing = TRUE), n = 10)
+```
+
+The results highlight economic terms in *Paper No. 12* and security-related terms in *Paper No. 24*, though these associations depend on the researcher's interpretation.
+
+  * Term frequency analysis follows the **bag-of-words** assumption, ignoring word order. To assess a term's importance, we use **TF-IDF**, which scales term frequency by its inverse document frequency, reducing the weight of common words.
+
+  * **The bag-of-words (BoW) assumption:** is a common approach in text analysis where a document is represented as a collection of words, disregarding word order, syntax, and grammar. Under this assumption, only the frequency of words matters, not their position in the text.
+  
+#### Clustering
+
+Clustering is an **unsupervised machine learning** technique that groups similar data points (in this case, essays) based on shared features. Unlike classification, where labels are known, clustering identifies patterns without prior labels, making it useful for **topic discovery** in text analysis.  
+
+A common method is **k-means clustering**, which partitions data into **k clusters** by minimizing the variance within each cluster. The algorithm iteratively assigns points to the nearest cluster center and updates these centers until convergence.  
+
+Here, we apply **k-means** to *Hamilton’s essays*, using **TF-IDF** to weigh term importance. After testing, we select **4 clusters**, ensuring convergence within **10 iterations** for meaningful groupings.
+
+```{r}
+set.seed(42)
+k <- 4 # number of clusters
+## subset the Federalist papers written by Hamilton
+hamilton <- c(1, 6:9, 11:13, 15:17, 21:36, 59:61, 65:85)
+dtm.tfidf.hamilton <- dtm.tfidf.mat[hamilton, ]
+## run k-means
+km.out <- kmeans(dtm.tfidf.hamilton, centers = k, nstart = 10)
+km.out$iter # check the convergence; number of iterations may vary
+```
+
+Next, we summarize the results by extracting the **10 most important terms** at each cluster’s centroid. We also list the *Federalist Papers* assigned to each cluster. Since this process is repeated for all clusters, we use a **loop** to automate it.
+
+```{r}
+## label each centroid with the corresponding term
+colnames(km.out$centers) <- colnames(dtm.tfidf.hamilton)
+for (i in 1:k) { # loop for each cluster
+cat("CLUSTER", i, "\n")
+cat("Top 10 words:\n") # 10 most important terms at the centroid
+print(head(sort(km.out$centers[i, ], decreasing = TRUE), n = 10))
+cat("\n")
+cat("Federalist Papers classified:\n") # extract essays classified
+print(rownames(dtm.tfidf.hamilton)[km.out$cluster == i])
+cat("\n")
+}
+```
+
+
+Analyzing the **top 10 terms** in each cluster suggests clear themes: 
+  
+  * **Cluster 1** contains only one document,
+  * **Cluster 2** focuses on war and military (*war, armi, militia,*), 
+  * **Cluster 3** addresses judicial systems, and
+  * **Cluster 4** relates to economy. 
+  
+  These topics align well with the actual content of *The Federalist Papers*, supporting the validity of **k-means clustering**.
+
+While *The Federalist Papers* are manageable for manual reading, automated text analysis is crucial for large corpora beyond human capacity. Advanced techniques enable researchers to efficiently extract meaningful insights from vast textual datasets.
+
+<div style="margin-top: -50px;"></div>
+
+# Authorship predicton
+
+Some *Federalist Papers* have disputed authorship. To predict the authors of these **11 papers**, we analyze the **66 essays** known to be written by **Hamilton or Madison**. Since each paper covers different topics, we focus on **function words** (articles, prepositions, conjunctions), which reflect writing style rather than subject matter.
+
+We examine the frequency of **10 specific words**: *although, always, commonly, consequently, considerable, enough, there, upon, while, whilst*. These words were selected based on prior research.  
+
+Using the **unstemmed corpus (`corpus.prep`)**, we compute **term frequency per 1000 words** for each document and extract only the relevant terms for authorship analysis.
+
+```{r}
+## document-term matrix converted to matrix for manipulation
+dtm1 <- as.matrix(DocumentTermMatrix(corpus.prep))
+tfm <- dtm1 / rowSums(dtm1) * 1000 # term frequency per 1000 words
+## words of interest
+words <- c("although", "always", "commonly", "consequently", "considerable", 
+           "enough", "there", "upon", "while", "whilst")
+## select only these words
+tfm <- tfm[, words]
+```
+
+Next, we compute the **average term frequency** for each word, separately for **Hamilton** and **Madison**, across all documents attributed to them.
+
+```{r}
+## essays written by Madison (“Hamilton” was defined earlier):
+madison <- c(10, 14, 37:48, 58)
+## average among Hamilton/Madison essays
+tfm.ave <- rbind(colMeans(tfm[hamilton, ]), colMeans(tfm[madison, ]))
+rownames(tfm.ave) <- c("Hamilton", "Madison") # assigning row names as author
+tfm.ave
+```
+
+The results indicate that **Hamilton** frequently uses *there* and *upon*, while **Madison** favors *consequently* and *whilst*. 
+
+<div style="margin-top: -50px;"></div>
+
+### A simple Bayesian authorship test
+
+Bayes' Rule allows us to update our belief about an essay’s author based on the frequency of certain words.
+
+Define the random variables $A$ (Authorship) and $F$ (Frequencies) indicating:
+
+* $A = 0$ -> the essay was written by Hamilton; $A = 1$ -> the essay was written by Madison;
+* $F = r$: the frequencies of the predefined Bag of Words is $r = (r_1, r_2, \dots, r_n)$, where $n$ is the total number of words in the bag.
+  
+Bayes’ Theorem states:
+
+$$
+P(A = 0 | F = r) = \frac{P(F = x | A = 0) P(A = 0)}{P(F = r)}
+$$
+
+Where:
+
+  * $P(A = 0 | F = r)$ is the **posterior probability** that Hamilton ($A = 1$ for Madison) wrote the essay given that the observed frequencies of the selected Bag of Words (BoW) is $r$.
+  * $P(F = r | A = 0)$ is the probability of observing frequencies $r$ given that Hamilton ($A = 1$ for Madison) wrote the essay.
+  * $P(A = 0)$ is the **prior probability** that Hamilton ($A = 1$ for Madison) wrote the essay (before seeing the BoW frequencies).
+  * $P(F = r)$ is the overall probability of observing the BoW frequencies given in the vector $r$.
+
+#### Estimate Prior Probabilities
+
+Prior probabilities can vary based on existing knowledge and beliefs about authorship. From an **uninformed perspective**, a reasonable assumption is to use the proportion of essays known to be written by Hamilton or Madison relative to the total number of known essays.
+
+Since we have **66 known essays**, from which we know 51 were written by Hamilton and 15 by Madison, we estimate the prior probabilities as the following ratios:
+
+```{r}
+p_hamilton <- 51 / 66  # prior probability of Hamilton
+p_madison <- 15 / 66   # prior probability of Madison
+```
+
+#### Compute Likelihoods
+
+For each word, we compute the probability of its occurrence given the author. This is simply the **average frequency** of the word in known essays:
+
+```{r}
+# Extract mean frequency of key words for each author (already compute earlier)
+hamilton_freq <- tfm.ave["Hamilton",]
+madison_freq  <- tfm.ave["Madison",]
+```
+
+#### Choosing model (the Poisson distribution?)
+
+Before computing the posterior distribution we need to agree on a model that allows to do so. Since, in this case, we chose to establish the comparison based on words' counting per 1000 words, we need a model useful to answer questions like
+
+  * if we pick 1,000 words at random from Madison’s writing, how likely are to find 6 instances of "upon" among them? More than 12 instances? How surprising would it be to find 40 or more?
+  
+Or, more general,
+
+  * What is the probability that $x$ instances of a specific word occur among 1,000 randomly chosen words from an essays known to be written by an author?
+  
+There are several models that may be a good fit:
+
+  * **Poisson distribution**: Models the number of occurrences of an event in a fixed interval (e.g., text length) when events happen independently and at a constant mean rate $\lambda$.  
+  * **Binomial distribution**: Models the number of successes in $n$ independent Bernoulli trials, where each trial results in success with probability $p$.  
+  * **Negative binomial distribution**: Models the number of failures before reaching a specified number $x$ of successes in a sequence of independent Bernoulli trials, where each trial results in success with probability $p$.  
+
+The chosen model should accurately represent both our prior beliefs and the observed data patterns. We will **assume that word frequencies in each essay follow a Poisson distribution**, as this model fairly captures the variability and structure of the *Federalist Papers* data. For a treatment with the Negative Binomial distribution see the work of Mosteler and Wallace^[Mosteller, F. (2010). Who Wrote the Disputed Federalist Papers, Hamilton or Madison?. In: Fienberg, S., Hoaglin, D., Tanur, J. (eds) The Pleasures of Statistics. Springer, New York, NY. https://doi.org/10.1007/978-0-387-77956-0_4]
+
+If the random variable distributes like a Poisson with parameter $\lambda$, that is, $X\sim \text{Poisson}(\lambda)$, then
+
+$$
+P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!},\quad  k = 1, 2, \dots,
+$$
+
+where:
+
+  * $k$ is the observed word count in an essay.
+  * $\lambda$ is the expected frequency of the word based on the author's writing style.
+  
+Here are some **Discussion Questions**:
+
+  1. Can you identify a limitation of using the Poisson distribution for modeling word occurrences? 
+  *(Hint: Does the Poisson distribution allow only integer values? What about the real-valued word frequencies in our dataset?)*
+  
+  2. How do we determine the value of $\lambda$ for a given word and author? 
+  *(Hint: Think about what $\lambda$ represents — the expected frequency of a word. How can we estimate this from the author's known essays?)*
+  **Note:** Choosing an appropriate parameter is often nontrivial, which is one of the advantages of the Poisson distribution — it provides a simple and interpretable way to model word occurrences.
+
+#### Finding the best parameter(s)
+
+As previously discussed, a key advantage of using the Poisson distribution is that its parameter, $\lambda$, represents the average occurrences of each word in a 1,000-word text. We have already computed these averages in `hamilton_freq` and `madison_freq` for Hamilton and Madison, respectively.  
+
+Next, we demonstrate that the Poisson distribution, with this parameter selection, provides a reasonable fit to the data.
+
+```{r, fig.width=15}
+plot_word_author <- function(author, word, color) {
+  # Find author index of papers
+  if(author == "Hamilton") { author_index <- hamilton} else { author_index <- madison }
+  
+  # Get observed word frequencies
+  observed_counts <- tfm[author_index , word]
+  
+  # Compute Poisson density samples
+  poisson_density <- dpois(0:(max(observed_counts)+1), lambda = tfm.ave[author,word])
+  
+  # Define histogram breaks
+  breaks <- seq(0, max(observed_counts) + 2, by = 1) - 0.5
+  
+  # Determine y-axis limit
+  y_max <- max(c(poisson_density, hist(observed_counts, plot = FALSE, breaks = breaks)$density))
+  
+  # Generate histogram
+  hist(observed_counts, breaks = breaks, col = color, probability = TRUE, 
+       ylim = c(0, y_max), main = paste("Word:", word, "-", author), 
+       xlab = "Word Count", ylab = "Density", border = "white")
+  
+  # Overlay Poisson distribution
+  points(0:(max(observed_counts)+1), poisson_density, col = "red", lwd = 3, pch = 19)
+}
+
+# Set up a 2-row, 5-column layout for 10 words (Hamilton top, Madison bottom)
+par(mfrow = c(2, 5), mar = c(2, 1, 2, 1))
+# Define colors for authors
+color <- c(Hamilton = "blue", Madison = "darkgreen")
+
+# Loop through words and generate plots for both authors
+for (i in 1:2) {
+  for (author in c("Hamilton", "Madison")) {
+    for (word in words[((i-1)*5+1):(i*5)]) {
+      plot_word_author(author, word, color[author])   
+    }
+  }  
+}
+```
+
+Next, to avoid overfitting and due to the small sample size, we ensure that every words has at least an occurring probability of 10% in future texts, that is, we caped $\lambda$ from below guarantee that zero ocurrence is, at most, 90% probable, that is $(P(X = 0) \geq 0.9)$, which still allows for occasional occurrences in **new data**.
+
+Using the **Poisson probability mass function**, we set:
+
+$$
+P(X = 0) = e^{-\lambda} = 0.9
+$$
+Solving for $\lambda$:
+$$
+\lambda = -\log(0.9)
+$$
+This ensures a small, but nonzero, expected frequency for words that were not observed in the training data.
+
+```{r,  fig.align='center'}
+# Illustrate the difference in taking lmabda = 0 vs lambda = -ln(0.95)
+plot_word_author("Hamilton", "whilst", color["Hamilton"])
+points(0:1,  dpois(0:1, lambda = -log(0.9)), col = "orange", lwd = 3, pch = 19)
+legend("topright", legend = c(expression(lambda == 0), expression(lambda == -log(0.9))), 
+       col = c("red", "orange"), pch = 19, title = "Poisson Density")
+
+# Updating lambdas
+lambda_hamilton <- pmax(hamilton_freq, -log(0.9))
+lambda_madison <- pmax(madison_freq, -log(0.9))
+```
+
+#### Computing posterior probabilities
+
+We next create the following function that takes the BoW frequencies of a disputed essay as the input and returns the posterior authorship probability of each author, by applying Bayes’ Theorem. 
+
+```{r}
+# Function to compute posterior probabilities
+bayes_authorship <- function(essay_word_count, essay_length) {
+  
+  # Compute likelihoods assuming independence of words and scaling the lambda to adjust essay length
+  likelihood_hamilton <- prod(dpois(essay_word_count, 
+                                    lambda = lambda_hamilton * 1000 / essay_length))
+  likelihood_madison <- prod(dpois(essay_word_count, 
+                                   lambda = lambda_madison * 1000 / essay_length))
+
+  # Apply Bayes' Rule
+  posterior_hamilton <- (likelihood_hamilton * p_hamilton) /
+                        (likelihood_hamilton * p_hamilton + likelihood_madison * p_madison)
+
+  posterior_madison <- 1 - posterior_hamilton  # Since only two authors
+
+  return(c(Hamilton = posterior_hamilton, Madison = posterior_madison))
+  
+}
+```
+
+#### Predict the Author for a Disputed Essay
+
+Extract word frequencies from a disputed essay and compute probabilities:
+
+```{r}
+# Gathering data of disputed essays
+disputed <- c(49:57, 62, 63)
+disputed_essay_count <- dtm1[disputed, words]
+disputed_essay_length <- rowSums(dtm1)[disputed]
+
+# Initializing posterior probabilities matrix
+posterior_disputed <- matrix(nrow = length(disputed), ncol = 2)
+
+# Computing posterior distributions
+for (i in 1:length(disputed)) {
+  posterior_disputed[i, ] <- bayes_authorship(disputed_essay_count[i,], disputed_essay_length[i])
+}
+
+# Updating row and col names
+rownames(posterior_disputed) <- rownames(tfm)[disputed]
+colnames(posterior_disputed) <- c("Hamilton", "Madison")
+round(posterior_disputed,4)
+```
+
+To decide about the authorship we can use the rule
+
+  * If $P(\text{Hamilton}\ |\ \text{words frequencies}) > 0.5$, the essay was **more likely written by Hamilton**,
+  * If $P(\text{Madison}\ |\ \text{words frequencies}) > 0.5$, the essay was **more likely written by Madison**,
+  
+which is implemented next
+
+```{r}
+for (i in 1:length(disputed)) {
+   cat("Essay number", disputed[i], "was likely to be written by", 
+       ifelse(posterior_disputed[i,"Hamilton"] >= 0.5, "Hamilton", "Madison"), "\n")
+}
+  
+```
+
+# Acknowledgement and Copyright
+
+These notes are inspired from the book [Quantitative Social Science](https://press.princeton.edu/books/quantitative-social-science) by Kosuke Imai.

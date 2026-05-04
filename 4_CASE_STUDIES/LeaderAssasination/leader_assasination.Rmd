@@ -1,0 +1,284 @@
+---
+title: "Causality: Success of Leader Assassination"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2025'
+output:
+  html_document: 
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+
+```{r global_options, include=TRUE, echo=FALSE}
+# Global chunk options for reproducibility
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+<div style="margin-top: -60px;"></div>
+# Prelude
+
+To run this R Markdown notebook you need the **rmarkdown** package and a CSV reader. We'll also load the assassination dataset.
+
+```{r}
+# You may need to install these packages… Uncomment if necessary
+# install.packages("readr")
+library(readr)
+
+# Read the dataset (ensure 'leaders.csv' is in your working directory)
+leaders <- read.csv("leaders.csv", stringsAsFactors = FALSE)
+```
+
+<div style="margin-top: -60px;"></div>
+# Introduction
+
+The role of individual leaders in shaping national trajectories has long fascinated political scientists and historians. Some argue that a leader’s personal attributes—charisma, decisiveness, ideology—can tip the balance of wars, democratization, or collapse. Others emphasize the strength of institutions, culture, and social structures: leaders may be important, but systemic constraints limit their influence.
+
+This tension between **leader-centric** and **institutional** explanations is hard to adjudicate, since leadership transitions in real life are rarely random. However, a grim yet compelling **natural experiment** arises when assassination attempts succeed or fail by chance. If success is effectively random, then comparing subsequent outcomes allows us to estimate the **causal effect** of removing a sitting leader.
+
+In this case study, we use a dataset of assassination attempts against national leaders. Each row is one attempt; key variables include whether the leader died (`result`), measures of democracy (`politybefore` and `polityafter`), and indicators of war before and after. By contrasting countries where the leader was killed with those where the attempt failed, we can assess:
+
+1. How random is assassination success?
+2. Do leader removals shift democracy?
+3. Do they trigger civil or international war?
+
+<div style="margin-top: -60px;"></div>
+# Data Description
+
+The dataset `leaders.csv` has 250 observations on 11 variables, summarized below:
+
+| Variable         | Description                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------ |
+| `country`        | Country where the attempt occurred                                                         |
+| `year`           | Year of the assassination attempt                                                          |
+| `leadername`     | Name of the leader targeted                                                                |
+| `age`            | Age of the targeted leader                                                                 |
+| `politybefore`   | Average Polity score (−10 to +10) in the 3 years prior                                     |
+| `polityafter`    | Average Polity score in the 3 years after                                                  |
+| `civilwarbefore` | 1 if in civil war in prior 3 years, 0 otherwise                                            |
+| `civilwarafter`  | 1 if in civil war in following 3 years, 0 otherwise                                        |
+| `interwarbefore` | 1 if in international war in prior 3 years, 0 otherwise                                    |
+| `interwarafter`  | 1 if in international war in following 3 years, 0 otherwise                                |
+| `result`         | Outcome of attempt (e.g., "dies within a day after the attack", "wounded", "failed", etc.) |
+
+<div style="margin-top: -60px;"></div>
+# Data exploration
+
+```{r}
+# Summaries of key numeric variables
+summary(leaders[, c("age", "politybefore", "polityafter")])
+
+# Distribution of result categories
+table(leaders$result)
+```
+
+<div style="margin-top: -60px;"></div>
+# Data analysis
+
+<div style="margin-top: -60px;"></div>
+## 1. Number of Attempts and Countries
+
+```{r Q1, results='hide'}
+# Compute total attempts, distinct countries, and average per year
+total_attempts <- nrow(leaders)
+num_countries   <- length(unique(leaders$country))
+num_years       <- length(unique(leaders$year))
+avg_per_year    <- round(total_attempts / num_years, 2)
+```
+
+There are **`r total_attempts`** assassination attempts in our sample, spanning **`r num_countries`** distinct countries, for an average of **`r avg_per_year`** attempts per year (over **`r num_years`** years).
+
+<div style="margin-top: -60px;"></div>
+## 2. Success Rate of Assassination Attempts
+
+```{r Q2, results='hide'}
+# Define success: any category in which the leader dies
+dead_categories <- c(
+  "dies between a day and a week",
+  "dies between a week and a month",
+  "dies within a day after the attack",
+  "dies, timing unknown"
+)
+
+leaders$success   <- ifelse(leaders$result %in% dead_categories, 1, 0)
+```
+
+From a total of `r length(leaders$success)` assassination attempts, there were `r sum(leaders$success == 1)` resulting in leader's death, making a `r round(mean(leaders$success), 3)* 100`% of success.
+
+```{r success_barplot, echo=FALSE, fig.cap="Number of Failed vs. Successful Attempts"}
+barplot(table(leaders$success),
+        names.arg = c("sucess", "failure"),
+        main = "Assassination Outcomes",
+        ylab = "Number of Attempts")
+```
+
+<div style="margin-top: -60px;"></div>
+## 3. Pre-Attempt Characteristics and Conflict by Outcome
+
+```{r Q3_4, results='hide'}
+# Compute pre-attempt statistics by outcome
+polity_before_means  <- tapply(leaders$politybefore, leaders$success, mean)
+age_means            <- tapply(leaders$age,           leaders$success, mean)
+civil_before_means   <- tapply(leaders$civilwarbefore, leaders$success, mean)
+inter_before_means   <- tapply(leaders$interwarbefore, leaders$success, mean)
+warbefore_means      <- with(leaders, tapply(
+                          ifelse(civilwarbefore==1 | interwarbefore==1, 1, 0),
+                          success, mean))
+```
+
+* **Average Polity (before):**
+
+  * Failed: `r round(polity_before_means["0"], 2)`
+  * Success: `r round(polity_before_means["1"], 2)`
+
+* **Average Age:**
+
+  * Failed: `r round(age_means["0"], 1)` years
+  * Success: `r round(age_means["1"], 1)` years
+
+* **Civil War (before):**
+
+  * Failed: `r round(civil_before_means["0"] * 100, 1)`%
+  * Success: `r round(civil_before_means["1"] * 100, 1)`%
+
+* **International War (before):**
+
+  * Failed: `r round(inter_before_means["0"] * 100, 1)`%
+  * Success: `r round(inter_before_means["1"] * 100, 1)`%
+
+* **Any War (before):**
+
+  * Failed: `r round(warbefore_means["0"] * 100, 1)`%
+  * Success: `r round(warbefore_means["1"] * 100, 1)`%
+
+```{r pre_attempt_panel, echo=FALSE, fig.cap="Pre-Attempt Polity, Age, and Conflict by Outcome"}
+par(mfrow = c(2, 3), mar = c(4, 4, 2, 1))
+
+boxplot(politybefore ~ success, data = leaders,
+        names = c("Failed", "Success"),
+        main = "Polity Before",
+        ylab = "Score")
+
+boxplot(age ~ success, data = leaders,
+        names = c("Failed", "Success"),
+        main = "Leader Age",
+        ylab = "Years")
+
+barplot(civil_before_means,
+        names.arg = c("Failed", "Success"),
+        main = "Civil War Before",
+        ylab = "Proportion", ylim = c(0,1))
+
+barplot(inter_before_means,
+        names.arg = c("Failed", "Success"),
+        main = "International War Before",
+        ylab = "Proportion", ylim = c(0,1))
+
+barplot(warbefore_means,
+        names.arg = c("Failed", "Success"),
+        main = "Any War Before",
+        ylab = "Proportion", ylim = c(0,1))
+
+par(mfrow = c(1, 1))
+```
+
+Similar medians, means, and spreads for Polity and Age, together with similar pre‐attempt conflict rates, support the assumption that success is effectively random with respect to both regime type, leader characteristics, and conflict environment.
+
+<div style="margin-top: -60px;"></div>
+## 5. Effects of Assassination
+
+```{r Q5, results='hide'}
+# Create indicator for war after attempt
+leaders$warafter <- ifelse(leaders$civilwarafter == 1 | leaders$interwarafter == 1, 1, 0)
+
+# Compute pre- and post-attempt averages by outcome
+polity_before_means <- tapply(leaders$politybefore, leaders$success, mean)
+polity_after_means  <- tapply(leaders$polityafter,  leaders$success, mean)
+
+warbefore_means     <- tapply(
+  ifelse(leaders$civilwarbefore == 1 | leaders$interwarbefore == 1, 1, 0),
+  leaders$success, mean)
+
+warafter_means      <- tapply(leaders$warafter, leaders$success, mean)
+```
+
+* **Failed Attempts (success = 0):**
+
+  * Polity before: `r round(polity_before_means["0"], 2)`
+
+  * Polity after:  `r round(polity_after_means["0"], 2)`
+
+  * **Change:**     `r round(polity_after_means["0"] - polity_before_means["0"], 2)`
+
+  * War before:    `r round(warbefore_means["0"] * 100, 1)`%
+
+  * War after:     `r round(warafter_means["0"] * 100, 1)`%
+
+  * **Change:**     `r round((warafter_means["0"] - warbefore_means["0"]) * 100, 1)` pp
+
+* **Successful Attempts (success = 1):**
+
+  * Polity before: `r round(polity_before_means["1"], 2)`
+
+  * Polity after:  `r round(polity_after_means["1"], 2)`
+
+  * **Change:**     `r round(polity_after_means["1"] - polity_before_means["1"], 2)`
+
+  * War before:    `r round(warbefore_means["1"] * 100, 1)`%
+
+  * War after:     `r round(warafter_means["1"] * 100, 1)`%
+
+  * **Change:**     `r round((warafter_means["1"] - warbefore_means["1"]) * 100, 1)` pp
+
+
+```{r Q5_plots, echo=FALSE, fig.cap="Before and After: Polity and War by Outcome"}
+par(mfrow = c(2, 2), mar = c(4, 4, 2, 1))
+
+# Polity change boxplots
+boxplot(leaders$politybefore[leaders$success==0],
+        leaders$polityafter[leaders$success==0],
+        names = c("Before","After"),
+        main  = "Failed Attempts: Polity",
+        ylab  = "Score")
+boxplot(leaders$politybefore[leaders$success==1],
+        leaders$polityafter[leaders$success==1],
+        names = c("Before","After"),
+        main  = "Successful Attempts: Polity",
+        ylab  = "Score")
+
+# War proportion barplots
+barplot(c(warbefore_means["0"], warafter_means["0"]),
+        names.arg = c("Before","After"),
+        main      = "Failed Attempts: War",
+        ylab      = "Proportion",
+        ylim      = c(0,1))
+barplot(c(warbefore_means["1"], warafter_means["1"]),
+        names.arg = c("Before","After"),
+        main      = "Successful Attempts: War",
+        ylab      = "Proportion",
+        ylim      = c(0,1))
+
+par(mfrow = c(1, 1))
+```
+
+Comparing before‐and‐after within each group reveals that failed attempts see a small decline in Polity (−`r round(polity_after_means["0"] - polity_before_means["0"], 2)` points) and a slight rise in conflict (+`r round((warafter_means["0"] - warbefore_means["0"])*100, 1)` pp). Successful removals, by contrast, show an increase in Polity (+`r round(polity_after_means["1"] - polity_before_means["1"], 2)` points) and a decrease in war incidence (−`r round((warafter_means["1"] - warbefore_means["1"])*100, 1)` pp), consistent with a causal effect of leader assassination on democratization and stability.
+
+<div style="margin-top: -60px;"></div>
+# Acknowledgement and copyright
+
+These notes adapt material on natural experiments and causal inference from
+Quantitative Social Science by Kosuke Imai.
+
+<p style="font-size: small;">© 2025 CUNEF Universidad</p>
+

@@ -1,0 +1,300 @@
+---
+title: "Causality: Changing Minds on Gay Marriage"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2024'
+output:
+  html_document: 
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+
+```{r global_options, include=TRUE, echo=FALSE}
+# Global chunk options for reproducibility
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Prelude
+
+To run this R Markdown notebook you need the **rmarkdown** package (`install.packages("rmarkdown")`) and to load the data from the local CSV file.
+Make sure your working directory points to the folder containing **gay.csv**.
+
+```{r}
+# Uncomment to install rmarkdown if necessary
+# install.packages("rmarkdown")
+# Load the data
+gay <- read.csv("gay.csv", stringsAsFactors = TRUE)
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Introduction
+
+In this case study, we analyze two field experiments that canvassed U.S. households on support for same-sex marriage. **Study 1 is the original** experiment, and **Study 2 is a follow-up replication that only uses gay canvassers**.
+
+Within each study, **Wave 1 represents a baseline survey conducted before any canvassing**, and **Waves 2–7 (in Study 1) or Waves 2–4 (in Study 2) are follow-up surveys** administered at approximately two-month intervals to track both short- and long-term changes in attitudes. 
+
+Canvassers were randomly assigned to households and revealed their sexual orientation (gay vs. straight) during ≈20-minute conversations. Here, **"recycling script" refers to a neutral conversation** prompt—canvassers discuss residential recycling and environmental practices without addressing same-sex marriage. In contrast, the **"same-sex marriage (SSM) script" is a structured dialogue specifically designed to persuade or inform households about legalizing and supporting same-sex marriage**, delivered by either a gay or straight canvasser. 
+
+This case study tests the **contact hypothesis**, which posits that personal interactions with members of a stigmatized out-group (here, gay individuals) can reduce prejudice and change attitudes.
+
+**Note:** Although the study was later retracted over data‐fabrication allegations, our focus is methodological: demonstrating how to analyze experimental data with causal inference tools.
+
+<div style="margin-top: -60px;"></div>
+
+# The data
+
+The data frame **gay** contains `r nrow(gay)` observations and `r ncol(gay)` variables:
+
+| Variable          | Description                                                                                               |
+| ----------------- | --------------------------------------------------------------------------------------------------------- |
+| `study`           | Indicates experiment: 1 = original study, 2 = replication                                                 |
+| `treatment`       | Original treatment labels (long strings): e.g., "No Contact", "Same-Sex Marriage Script by Gay Canvasser" |                       |
+| `wave`            | Survey wave: 1 = baseline (pre-treatment); 2–7 = follow-ups at \~2-month intervals                        |
+| `ssm`             | Outcome: 1–5 Likert scale for support of same-sex marriage (higher = more supportive)                     |
+
+This is an *experimental design*:
+
+* **Treatment:** `treatment_short` (manipulation)
+* **Outcome:** `ssm` (response)
+* Randomization should balance baseline covariates across `treatment_short` levels.
+
+<div style="margin-top: -60px;"></div>
+
+## Data manipulation
+
+For a shorter notation and more convenient manipulation of the variables, we recode the long-strings `treatment` variable into shorter entries. We store the values into a new variable called `treatment_short`, while keep the original values untouched in the `treatment` variable 
+
+```{r}
+# Recode long treatment labels into short, analyzable codes
+gay$treatment_short <- factor(
+  gay$treatment,
+  levels = c(
+    "No Contact",
+    "Recycling Script by Gay Canvasser",
+    "Same-Sex Marriage Script by Gay Canvasser",
+    "Recycling Script by Straight Canvasser",
+    "Same-Sex Marriage Script by Straight Canvasser"
+  ),
+  labels = c(
+    "control",
+    "recycle_gay",
+    "ssm_gay",
+    "recycle_str",
+    "ssm_str"
+  )
+)
+```
+
+<div style="margin-top: -60px;"></div>
+
+## Data exploration
+
+Inspect the first rows and summary statistics:
+
+```{r}
+# Peek at data structure and values
+head(gay)
+summary(gay)
+```
+
+> *Comment:* Check that `treatment_short` values match the intended mapping and look for missing or unexpected values.
+
+<div style="margin-top: -60px;"></div>
+
+## Data analysis
+
+We proceed through five steps: (1) randomization check, (2) short-term average treatment effects, (3) placebo comparison, (4) long-term persistence, (5) replication analysis.
+
+<div style="margin-top: -60px;"></div>
+
+## 1. Randomization Check (Study 1, Wave 1)
+
+Verify that baseline support for SSM (`ssm`) is similar across treatment groups before any intervention.
+
+```{r}
+# Baseline subset for Study 1, wave 1
+baseline1 <- gay[gay$study == 1 & gay$wave == 1, ]
+
+# Group means
+tapply(baseline1$ssm, baseline1$treatment_short, mean)
+
+# Group standard deviations
+tapply(baseline1$ssm, baseline1$treatment_short, sd)
+```
+
+**Interpretation:** Similar means and variances across `control`, `recycle_gay`, and `ssm_gay` (and analogues) indicate successful randomization.
+
+<div style="margin-top: -60px;"></div>
+
+## 2. Average Treatment Effects (Study 1, Wave 2)
+
+Compute the mean difference in support at two months post-treatment (wave 2) relative to control.
+
+```{r}
+# Wave 2 subset for Study 1
+w2_1 <- gay[gay$study == 1 & gay$wave == 2, ]
+
+# ATE: SSM script by gay canvasser vs. control
+ate_gay <- mean(w2_1$ssm[w2_1$treatment_short == "ssm_gay"]) -
+           mean(w2_1$ssm[w2_1$treatment_short == "control"])
+
+# ATE: SSM script by straight canvasser vs. control
+ate_straight <- mean(w2_1$ssm[w2_1$treatment_short == "ssm_str"]) -
+                mean(w2_1$ssm[w2_1$treatment_short == "control"])
+
+# Display ATEs
+ate_gay
+ate_straight
+```
+
+**Interpretation:**
+
+* **ATE (ssm_gay):** `r round(ate_gay, 4)` points on a 1–5 scale.
+* **ATE (ssm_str):** `r round(ate_straight, 4)` points on a 1–5 scale.
+
+<div style="margin-top: -60px;"></div>
+
+## 3. Comparison with Placebo Contact (Study 1, Wave 2)
+
+Use recycling script as a control to isolate content effects from contact effects.
+
+<div style="margin-top: -60px;"></div>
+
+### (a) Purpose
+
+The recycling script provides interpersonal engagement without SSM messaging, serving as a placebo.
+
+<div style="margin-top: -60px;"></div>
+
+### (b) SSM vs. Recycling, Gay Canvasser
+
+```{r}
+# Compare ssm_gay vs recycle_gay
+gay_comp <- w2_1[w2_1$treatment_short %in% c("ssm_gay", "recycle_gay"), ]
+mean(gay_comp$ssm[gay_comp$treatment_short == "ssm_gay"]) -
+  mean(gay_comp$ssm[gay_comp$treatment_short == "recycle_gay"])
+```
+
+**Interpretation:** The estimated ATE treatment effect of a SSM message provided a gay canvasser is `r `round(gay_comp, 4)` (points on a 1–5 scale), which is very low
+
+<div style="margin-top: -60px;"></div>
+
+### (c) SSM vs. Recycling, Straight Canvasser
+
+```{r}
+# Compare ssm_str vs recycle_str
+str_comp <- w2_1[w2_1$treatment_short %in% c("ssm_str", "recycle_str"), ]
+mean(str_comp$ssm[str_comp$treatment_short == "ssm_str"]) -
+  mean(str_comp$ssm[str_comp$treatment_short == "recycle_str"])
+```
+
+**Interpretation:** The estimated ATE treatment effect of a SSM message provided a gay canvasser is `r `round(str_comp, 4)` (points on a 1–5 scale), considerable higher than the gay counterpart.
+
+<div style="margin-top: -60px;"></div>
+
+## 4. Long-Term Effects (Study 1, Waves 2–7)
+
+Evaluate persistence of treatment effects up to one year post-intervention (wave 7).
+
+```{r}
+waves <- 2:7
+ate_gay <- numeric(length(waves))
+ate_str <- numeric(length(waves))
+for (i in seq_along(waves)) {
+  w <- waves[i]
+  sub <- gay[gay$study == 1 & gay$wave == w, ]
+  ate_gay[i] <- mean(sub$ssm[sub$treatment_short == "ssm_gay"]) -
+                mean(sub$ssm[sub$treatment_short == "control"])
+  ate_str[i] <- mean(sub$ssm[sub$treatment_short == "ssm_str"]) -
+                mean(sub$ssm[sub$treatment_short == "control"])
+}
+# Summarize all waves
+data.frame(
+  wave = waves,
+  ate_gay = round(ate_gay, 3),
+  ate_straight = round(ate_str, 3)
+)
+```
+
+We next make a plot to better answer some key questions, like:
+
+* Are effects stable, increasing, or decaying over time?
+* When do they peak?
+
+```{r}
+# Plot ATE across waves for gay vs. straight canvassers
+plot(waves, ate_gay, type = "b", pch = 16,
+     ylim = range(c(ate_gay, ate_str)),
+     xlab = "Wave", ylab = "ATE (vs. Control)",
+     main = "Study 1: ATE of SSM Script by Gay vs. Straight Canvasser")
+lines(waves, ate_str, type = "b", pch = 17, lty = 2)
+legend("topright",
+       legend = c("SSM – Gay", "SSM – Straight"),
+       pch = c(16, 17), lty = c(1, 2),
+       bty = "n")
+```
+
+<div style="margin-top: -60px;"></div>
+
+## 5. Replication Analysis (Study 2)
+
+Study 2 only uses gay canvassers with the SSM script. Repeat baseline checks and ATE estimation.
+
+<div style="margin-top: -60px;"></div>
+
+### (a) Baseline Randomization (Wave 1)
+
+```{r}
+baseline2 <- gay[gay$study == 2 & gay$wave == 1, ]
+# Counts and means by group
+table(baseline2$treatment_short)
+tapply(baseline2$ssm, baseline2$treatment_short, mean)
+```
+
+<div style="margin-top: -60px;"></div>
+
+### (b) ATE at Wave 2
+
+```{r}
+w2_2 <- gay[gay$study == 2 & gay$wave == 2, ]
+ate2_w2 <- mean(w2_2$ssm[w2_2$treatment_short == "ssm_gay"]) -
+           mean(w2_2$ssm[w2_2$treatment_short == "control"])
+ate2_w2
+```
+
+<div style="margin-top: -60px;"></div>
+
+### (c) Follow-Up Effects (Waves 3–4)
+
+```{r}
+waves2 <- 2:4
+ate2 <- sapply(waves2, function(w) {
+  sub <- gay[gay$study == 2 & gay$wave == w, ]
+  mean(sub$ssm[sub$treatment_short == "ssm_gay"]) -
+    mean(sub$ssm[sub$treatment_short == "control"])
+})
+data.frame(wave = waves2, ate_gay = round(ate2, 3))
+```
+
+**Conclusion:**
+Assess consistency of Study 2 effect sizes and longevity compared to Study 1.
+
+<div style="margin-top: -60px;"></div>
+
+# References
+
+These notes adapt the original gay canvassing experiments.
+See Sheets & Kalla (2017), “Reducing exclusionary attitudes through interpersonal contact.”

@@ -1,0 +1,224 @@
+\documentclass[11pt,a4paper,english]{article}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage[slantedGreek]{mathpazo}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsfonts}
+\usepackage{setspace}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{amsmath,scalerel}%
+\usepackage{subcaption}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{natbib}
+\addtolength{\topmargin}{-1in}
+\addtolength{\textheight}{1.2in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\oddsidemargin}{-0.75in}
+\addtolength{\textwidth}{1.5in}
+\renewcommand{\baselinestretch}{1.3}
+\usepackage{epstopdf}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{color,soul}
+
+\bibliographystyle{ba}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Econometrics project instructions}
+\lhead{\includegraphics[scale=0.15]{figs/logo_project.png}
+Econometrics, 2024/2025}
+\rfoot{Page \thepage}
+
+\begin{document}
+
+\section*{Instructions}
+\begin{itemize}
+\item The project can be done in groups of \hl{at most three students}. It is \hl{mandatory to include all names in a pdf}, but upload it only once (from whichever account). In case only one name is on the pdf, only that person will be graded.
+
+\item The project is worth 10\% of the final grade and in case of fail is non-retrievable.
+
+\item The project must be uploaded in PDF format to CANVAS by \hl{15/12/2024}. 
+
+\item The project must be \textbf{max} 10 pages (can be shorter) and done using the \textbf{selected dataset}. 
+
+\item You \textbf{MUST} include a copy of R codes.
+
+\end{itemize}
+
+\newpage
+\section*{Econometrics Project: Understanding the Determinants of Birth Weight}
+
+\textbf{Objective}: The goal of this project is to analyze the factors influencing birth weight using the `bwght2` dataset. You will perform data analysis and estimate regression models learned throughout the course. By the end of the project, you should be able to identify key factors that affect birth weight and interpret the results in a meaningful way.
+
+\noindent \textbf{Data set}: The data set \textbf{bwght2} contains 1832 observations on 23 variables:
+\begin{itemize}[itemsep=-1ex]
+    \item mage: mother's age, years
+\item meduc: mother's educ, years
+\item monpre: month prenatal care began
+\item npvis: total number of prenatal visits
+\item fage: father's age, years
+\item feduc: father's educ, years
+\item bwght: birth weight, grams
+\item omaps: one minute apgar score
+\item fmaps: five minute apgar score
+\item cigs: avg cigarettes per day
+\item drink: avg drinks per week
+\item lbw: $=1$ if bwght $<=2000$
+\item vlbw: $=1$ if bwght <= 1500
+\item male: $=1$ if baby male
+\item mwhte: $=1$ if mother white
+\item mblck: $=1$ if mother black
+\item moth: $=1$ if mother is other
+\item fwhte: $=1$ if father white
+\item fblck: $=1$ if father black
+\item foth: $=1$ if father is other
+\item lbwght: $\log($bwght)
+\item magesq: mage$^2$
+\item npvissq: npvis$^2$
+\end{itemize}
+
+
+
+\subsection*{Project Structure}
+
+\subsection*{1. Data Overview and Preliminary Analysis}
+
+\begin{enumerate}[itemsep=-0.5ex]
+    \item \textbf{Data Description:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Provide a brief description of the dataset. What variables are included? What are some potential questions or hypotheses that could be explored with this data?
+        \end{itemize}
+        \textbf{Hint:} Use the \texttt{summary()} function in R to get a quick overview of the data.
+        
+    \begin{verbatim}
+    summary(bwght2)
+    \end{verbatim}
+    
+    
+    \item \textbf{Descriptive Statistics:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Calculate and report the mean, standard deviation, minimum, and maximum values for key variables like \texttt{bwght} (birth weight), \texttt{mage} (mother’s age), \texttt{meduc} (mother’s education), \texttt{npvis} (number of prenatal visits), \texttt{cigs} (cigarettes per day), and \texttt{drink} (drinks per week).
+        \item Generate histograms or boxplots to visualize the distribution of birth weight (\texttt{bwght}) and other continuous variables (e.g., \texttt{mage}, \texttt{meduc}, \texttt{cigs}, \texttt{drink}).
+    \end{itemize}
+    \textbf{Hint:} Use the \texttt{mean()}, \texttt{sd()}, \texttt{min()}, and \texttt{max()} functions for summary statistics. For histograms, use:
+    \begin{verbatim}
+    hist(bwght2$bwght, main="Histogram of Birth Weight", xlab="Birth Weight")
+    \end{verbatim}
+\end{enumerate}
+    \subsection*{2. Exploratory Data Analysis}
+
+\begin{enumerate}[itemsep=-0.5ex]
+    \item \textbf{Group Comparisons:}  Compare average birth weight (\texttt{bwght}) across different groups, such as:
+    \begin{itemize}[itemsep=-0.5ex]
+                   \item By maternal race (\texttt{mwhte}, \texttt{mblck}, \texttt{moth}).
+            \item By whether the mother smokes or drinks (\texttt{cigs}, \texttt{drink}).
+            \item By gender of the baby (\texttt{male}).
+        \end{itemize}
+        \textbf{Hint:} Use \texttt{aggregate()} for grouped summary statistics:
+    \begin{verbatim}
+    aggregate(bwght ~ mwhte, data=bwght2, FUN=mean)
+    \end{verbatim}
+   \end{enumerate}
+
+\subsection*{3. Simple Regression Analysis}
+
+\begin{enumerate}[itemsep=-0.5ex]
+    \item \textbf{Estimating Simple Regressions:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Estimate the relationship between birth weight (\texttt{bwght}) and key predictors one at a time:
+        \begin{itemize}[itemsep=-0.5ex]
+            \item \texttt{bwght} on \texttt{cigs}
+            \item \texttt{bwght} on \texttt{drink}
+            \item \texttt{bwght} on \texttt{meduc}
+        \end{itemize}
+        \item For each regression, report the estimated coefficients, standard errors, and R-squared values. Interpret the results.
+    \end{itemize}
+    \textbf{Hint:} Use the \texttt{lm()} function for linear regression:
+    \begin{verbatim}
+    model <- lm(bwght ~ cigs, data=bwght2)
+    summary(model)
+    \end{verbatim}
+    
+    \item \textbf{Interpreting the Coefficient:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item What is the impact of a one-unit increase in \texttt{cigs} on birth weight? What about a one-unit increase in \texttt{meduc}?
+    \end{itemize}
+    
+    \item \textbf{Testing Significance:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Perform t-tests to check whether the coefficients are statistically significant at the 5\% level.
+    \end{itemize}
+    \textbf{Hint:} The significance can be checked directly from the \texttt{summary()} output, looking at the p-values.
+\end{enumerate}
+
+\subsection*{4. Multivariate Regression Analysis}
+
+\begin{enumerate}[itemsep=-0.5ex]
+    \item \textbf{Estimating a Multivariate Model:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Estimate the following model:
+        \[
+        \text{bwght} = \beta_0 + \beta_1 \text{cigs} + \beta_2 \text{drink} + \beta_3 \text{meduc} + \beta_4 \text{npvis} + u
+        \]
+        \item Report the estimated coefficients, standard errors, R-squared, and adjusted R-squared. Interpret the coefficients and compare them to the results from the simple regressions.
+    \end{itemize}
+    \textbf{Hint:} Use:
+    \begin{verbatim}
+    multivariate_model <- lm(bwght ~ cigs + drink + meduc + npvis, data=bwght2)
+    summary(multivariate_model)
+    \end{verbatim}
+    
+    \item \textbf{Model Selection:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Test for the joint significance of \texttt{cigs} and \texttt{drink} using an F-test. What does this tell you about the combined effect of these variables?
+    \end{itemize}
+    \textbf{Hint:} Use the \texttt{anova()} function to perform the F-test:
+    \begin{verbatim}
+    reduced_model <- lm(bwght ~ meduc + npvis, data=bwght2)
+    anova(reduced_model, multivariate_model)
+    \end{verbatim}
+    
+\end{enumerate}
+
+\subsection*{5. Log Transformation and Non-Linear Effects}
+
+\begin{enumerate}[itemsep=-0.5ex]
+    \item \textbf{Log-Linear Model:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Estimate a log-linear model where the dependent variable is the log of birth weight (\texttt{lbwght}). Include the key variables used before:
+        \[
+        \text{lbwght} = \beta_0 + \beta_1 \text{cigs} + \beta_2 \text{drink} + \beta_3 \text{meduc} + \beta_4 \text{npvis} + u
+        \]
+        \item Compare the results with the linear model. How does interpreting the coefficients differ when using a log-transformed dependent variable?
+    \end{itemize}
+    \textbf{Hint:} Use:
+    \begin{verbatim}
+    log_model <- lm(lbwght ~ cigs + drink + meduc + npvis, data=bwght2)
+    summary(log_model)
+    \end{verbatim}
+    
+    \item \textbf{Non-Linear Relationships:}
+    \begin{itemize}[itemsep=-0.5ex]
+        \item Explore the non-linear effects by including \texttt{magesq} (mother’s age squared) and \texttt{npvissq} (number of prenatal visits squared) in the model. Are these variables significant? Do they improve the model?
+        \item Using the estimated equation, can you estimate what is the the number of prenatal visits that maximizes log(bwght)?
+    \end{itemize}
+    \textbf{Hint:} Include the squared terms in the model:
+    \begin{verbatim}
+    nonlinear_model <- lm(log(bwght) ~ cigs + drink + meduc + npvis 
+                                    + npvissq, data=bwght2)
+    summary(nonlinear_model)
+    \end{verbatim}
+    To find the number of prenatal visits that maximizes \texttt{log(bwght)}, use:
+    \begin{verbatim}
+    optimal_visits <- -coef(nonlinear_model)["npvis"] / 
+                             (2 * coef(nonlinear_model)["npvissq"])
+    \end{verbatim}
+    
+\end{enumerate}
+
+
+\end{document}
