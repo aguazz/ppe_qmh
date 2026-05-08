@@ -1,0 +1,5 @@
+interface:
+  display_name: "Linear Regression Expert"
+  short_description: "Regression interpretation and assessment specialist"
+  brand_color: "#EA580C"
+  default_prompt: "Use $linear-regression-expert to build or review a QMH regression exercise."
