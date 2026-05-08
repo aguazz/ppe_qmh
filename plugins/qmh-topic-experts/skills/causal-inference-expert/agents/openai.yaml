@@ -1,0 +1,5 @@
+interface:
+  display_name: "Causal Inference Expert"
+  short_description: "Causality and study-design specialist"
+  brand_color: "#DC2626"
+  default_prompt: "Use $causal-inference-expert to draft or review a causal inference item for QMH."

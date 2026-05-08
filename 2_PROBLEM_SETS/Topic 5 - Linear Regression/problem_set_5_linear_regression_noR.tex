@@ -56,16 +56,12 @@
 
     \ifsolutions \color{blue} \textbf{Solution:} \\
     \begin{enumerate}[label=(\alph*)]
-        \item The intercept, 5.8, is the predicted grade for a student who spends 0 hours per week in student associations. The slope, 0.22, means that increasing association participation by one hour per week is associated with an increase of 0.22 points in the predicted grade, on average.
+        \item The intercept, 5.8, is the predicted average grade for a student who spends 0 hours per week in student associations. The slope, 0.22, means that increasing association participation by one hour per week is associated with an increase of 0.22 points in the predicted average grade, on average.
         \item For 6 hours:
         \[
             \widehat{\text{grade}} = 5.8 + 0.22 \times 6 = 5.8 + 1.32 = 7.12.
         \]
-        \item Using \(\widehat u = \widehat Y - Y\),
-        \[
-            \widehat u = 7.12 - 6.7 = 0.42.
-        \]
-        The residual is positive because the model overpredicts this student's grade by 0.42 points.
+        The residual is $\widehat u = 7.12 - 6.7 = 0.42$, meaning that the model overpredicts this student's grade by 0.42 points.
         \item This would be an extrapolation, because 18 hours is outside the observed range of the predictor in the sample. The prediction is therefore less reliable than a prediction made within the range 0 to 12.
     \end{enumerate}
     \fi \color{black}
@@ -151,43 +147,46 @@
     %% Problem 3
     %%%%
     \item \textbf{Predicting Support for Rent Control Policies.}
-    
+
     A political scientist studies whether citizens who spend a larger share of their income on rent are more likely to support rent control policies. The variable \texttt{rent\_burden} measures the percentage of monthly income spent on rent. The variable \texttt{urban} is a dummy equal to 1 if the respondent lives in a large city and 0 otherwise.
-    
+
     The researcher estimates the following model using survey data:
     \[
-        \widehat{\text{support}}
+        \widehat{\texttt{support}}
         = 22 + 0.85\,\text{rent\_burden} + 9\,\text{urban}.
     \]
     Support for rent control is measured on a 0--100 scale. The sample used to estimate the model contains values of \texttt{rent\_burden} between 10 and 55.
-    
+
     \begin{enumerate}[label=(\alph*)]
         \item Interpret the coefficient on \texttt{rent\_burden}.
         \item Interpret the coefficient on \texttt{urban}.
-        \item Predict the support for rent control of a non-urban respondent who spends 35\% of their income on rent.
+        \item What is the predicted difference between the a non-urban and an urban respondent who spend the same percentage of their income on rent?
         \item A new respondent spends 65\% of their income on rent. Is this prediction within range or outside range? Why does this matter?
         \item The researcher worries that the relationship between rent burden and support for rent control is not linear. Write a transformed linear model that allows rent burden to have a nonlinear effect while remaining a linear regression model in the parameters.
     \end{enumerate}
-    
+
     \ifsolutions \color{blue} \textbf{Solution:} \\
     \begin{enumerate}[label=(\alph*)]
-        \item The coefficient 0.85 means that a one percentage-point increase in the share of income spent on rent is associated with a 0.85-point increase in predicted support for rent control, holding urban residence fixed. For example, a 10 percentage-point increase in rent burden is associated with an \(0.85 \times 10 = 8.5\)-point increase in predicted support.
-        
-        \item The coefficient 9 means that, holding rent burden fixed, respondents living in large cities are predicted to have support for rent control that is 9 points higher than respondents not living in large cities.
-        
+        \item The coefficient 0.85 means that a one percentage-point increase in the share of income spent on rent is associated with a 0.85-point increase in predicted average support for rent control, holding urban residence fixed. For example, a 10 percentage-point increase in rent burden is associated with an \(0.85 \times 10 = 8.5\)-point increase in predicted support.
+
+        \item The coefficient 9 means that, holding rent burden fixed, respondents living in large cities are predicted to have average support for rent control that is 9 points higher than respondents not living in large cities.
+
         \item For a non-urban respondent, \(\texttt{urban}=0\):
         \[
-            \widehat{\text{support}} = 22 + 0.85(35) + 9(0) = 51.75.
+            \widehat{\texttt{support}}(\text{non-urban}) = 22 + 0.85\texttt{rent\_burden} + 9(0) = 51.75.
         \]
-        
-        \item For an urban respondent, \(\texttt{urban}=1\):
+        For an urban respondent, \(\texttt{urban}=1\):
         \[
-            \widehat{\text{support}} = 22 + 0.85(35) + 9(1) = 60.75.
+            \widehat{\texttt{support}}(\text{urban}) = 22 + 0.85\texttt{rent\_burden} + 9(1) = 60.75.
         \]
-        The predictions differ because the urban respondent receives the additional 9 points associated with living in a large city.
-        
+        The difference:
+        \[
+        \widehat{\texttt{support}}(\text{non-urban}) - \widehat{\texttt{support}}(\text{urban}) = 9.
+        \]
+        That is, the predictions differ in 9 percentage points.
+
         \item This is outside range, because 65 is higher than the maximum value of \texttt{rent\_burden} observed in the estimation sample, which is 55. This matters because the model would be extrapolating beyond the data used to estimate the relationship.
-        
+
         \item One possible transformed linear model is
         \[
             \text{support}
@@ -203,9 +202,9 @@
     %% Problem 4
     %%%%
     \item \textbf{Civic Education Workshops: Regression and Difference in Means.}
-    
+
     A political science department runs a randomized experiment to study whether civic education workshops increase citizens' political knowledge. Some citizens are randomly assigned to attend a short workshop about local institutions, while others are not invited. Let \(Y\) be the number of correct answers in a political knowledge quiz for a citizen, and let \(T=1\) if the citizen was assigned to the workshop and \(T=0\) otherwise.
-    
+
     The data are summarized as follows:
     \begin{center}
     \begin{tabular}{lccc}
@@ -217,7 +216,7 @@
         \bottomrule
     \end{tabular}
     \end{center}
-    
+
     \begin{enumerate}[label=(\alph*)]
         \item Consider the regression \(Y = \beta_0 + \beta_1T + u\). What are the OLS estimates \(\widehat\beta_0\) and \(\widehat\beta_1\)?
         \item Interpret \(\widehat\beta_1\) as a difference in means. Under random assignment, what is its causal interpretation?
@@ -230,7 +229,7 @@
         Interpret \(\beta_3\).
         \item According to the interaction model, what is the treatment effect for a citizen with \(\text{interest}=4\)? Give the formula.
     \end{enumerate}
-    
+
     \ifsolutions \color{blue} \textbf{Solution:} \\
     \begin{enumerate}[label=(\alph*)]
         \item With a binary regressor, the intercept is the mean of the control group and the slope is the treated mean minus the control mean. Therefore,
@@ -239,13 +238,13 @@
             \qquad
             \widehat\beta_1 = 6.1 - 5.2 = 0.9.
         \]
-        
+
         \item The estimate \(0.9\) is the difference in average political knowledge between citizens assigned to the workshop and citizens not assigned to the workshop. Under random assignment, it estimates the average treatment effect of the civic education workshop on the number of correct answers in the political knowledge quiz.
-        
+
         \item Random assignment is important because it makes the treatment and control groups comparable, on average. Therefore, systematic differences in political knowledge can be attributed to the workshop rather than to pre-existing differences between citizens.
-        
+
         \item \(\beta_3\) measures how the treatment effect changes when baseline political interest increases by one unit. If \(\beta_3>0\), the workshop effect is larger among citizens with higher baseline political interest. If \(\beta_3<0\), the workshop effect is smaller among those citizens.
-        
+
         \item The treatment effect is the predicted difference between \(T=1\) and \(T=0\), holding baseline political interest fixed:
         \[
             (\beta_0 + \beta_1 + \beta_2\text{interest} + \beta_3\text{interest})
@@ -295,21 +294,8 @@
             0.30 + (-0.001)(80) = 0.30 - 0.08 = 0.22.
         \]
         The estimated jump is 0.22, or 22 percentage points.
-        \item Just below the cutoff, \(T=0\):
-        \[
-            \widehat Y = -0.55 + 0.015(80) = -0.55 + 1.20 = 0.65.
-        \]
-        \item Just above the cutoff, \(T=1\):
-        \[
-            \widehat Y = -0.55 + 0.015(80) + 0.30 - 0.001(80)
-            = 0.65 + 0.22 = 0.87.
-        \]
-        \item The difference is
-        \[
-            0.87 - 0.65 = 0.22,
-        \]
-        which equals the estimated jump from part (a).
-        \item The key assumption is that students just below and just above the cutoff are similar in all relevant respects except for receiving the scholarship. Equivalently, potential outcomes should be continuous at the cutoff in the absence of treatment.
+
+        \item The key assumption is that students just below and just above the cutoff are similar in all relevant respects except for receiving the scholarship (the treatment). Equivalently, potential outcomes should be continuous at the cutoff in the absence of treatment.
         \item The design compares students very close to the cutoff, so it can be credible for estimating the local effect of the scholarship around 80 points. However, this effect may not generalize to students with much lower or much higher exam scores, who may differ in motivation, preparation, financial need, or university plans.
     \end{enumerate}
     \fi \color{black}

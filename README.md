@@ -4,7 +4,7 @@ Course repository for **Quantitative Methods for Humanities**, PPE 2nd year.
 
 This is the working folder for the course: syllabus, slides, problem sets, R practice, case studies, datasets, bibliography, exams, rubrics, and instructor-only grading material. The repository is meant to be used locally in **Positron** or **VS Code**, with AI assistance, while remaining connected to **Overleaf** for LaTeX editing/compilation and to **Git/GitHub** for version control and backup.
 
-For a detailed tree of the current folder layout, see [MAP.md](MAP.md).
+For a detailed tree of the current folder layout, see [MAP.md](MAP.md). For the repo-local Codex agents and skills, see [AGENTS.md](AGENTS.md).
 
 ## Working Model
 
@@ -212,20 +212,30 @@ git status --short
 
 For larger reorganizations, update `MAP.md` and this README in the same change.
 
-## Local Codex Workflow Agent
+## Local Codex Agents
 
-This repository includes a repo-local Codex plugin for checking and guiding the Overleaf/GitHub/local-editor workflow:
+This repository includes repo-local Codex plugins and agents documented in [AGENTS.md](AGENTS.md). They are registered through the local marketplace file and stored under `plugins/`:
 
 ```text
 .agents/plugins/marketplace.json
-plugins/overleaf-github-workflow-agent/
+plugins/
 ```
 
-The plugin contributes the `overleaf-github-workflow` skill and a read-only audit script. Use it when you want Codex to inspect the local setup, explain what is missing, and propose safe next commands for connecting:
+The current agent families are:
+
+- **Overleaf GitHub Workflow Agent:** audits and guides the local Positron or VS Code, AI assistant, Overleaf, Git, GitHub, and LaTeX workflow.
+- **QMH Topic Experts:** reusable course experts for Intro R, Probability, Causal Inference, and Linear Regression.
+- **QMH Project Grading:** private-workflow agents for preprocessing Canvas group-project submissions and grading processed submissions against the project rubric.
+
+Use an agent by naming its trigger in a Codex prompt:
 
 ```text
-Positron or VS Code + AI assistant + Overleaf + Git + GitHub + LaTeX
+Use $probability-expert to create or review a QMH probability question with an answer key.
+Use $project-submission-preprocessor to organize the latest QMH project submissions folder.
+Use $project-grading-agent to grade the latest processed QMH project submissions.
 ```
+
+The workflow agent contributes the `overleaf-github-workflow` skill and a read-only audit script. Use it when you want Codex to inspect the local setup, explain what is missing, and propose safe next commands for connecting:
 
 Good Codex prompt:
 

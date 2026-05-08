@@ -1,0 +1,5 @@
+interface:
+  display_name: "Intro R Expert"
+  short_description: "Beginner R course-material specialist"
+  brand_color: "#276DC3"
+  default_prompt: "Use $intro-r-expert to draft or review a beginner R exercise for the QMH course."
