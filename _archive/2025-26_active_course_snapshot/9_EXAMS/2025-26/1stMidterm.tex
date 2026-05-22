@@ -1,0 +1,342 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+%\printanswers % Comment out to hide answers
+
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\makeatother
+\setcounter{footnote}{1}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule
+    \hspace{-\arraycolsep}%
+}
+
+\unframedsolutions
+\renewcommand{\solutiontitle}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{1st Midterm}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2025/26}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{March 24, 2026}
+\newcommand{\university}{CUNEF Universidad}
+
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 50 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Your work must be well organized and coherent. Pay attention to notation, definitions of events, etc.
+
+            \item \textbf{You must answer each question inside the designated box}; answers outside will not be considered.
+
+            \item The use of calculators is allowed.
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+
+        \end{enumerate}
+    }}
+\end{center}
+%--- Instructions ---%
+
+\vspace{0.3cm}
+
+The following questions are about a policy currently used by some social media platforms before elections:
+\textbf{warning labels on false or misleading posts}. A platform wants to know whether such labels help reduce the spread of misinformation. To study this issue, it first describes the posts circulating on the platform (question 1), then studies an automatic screening system (question 2), and finally runs a randomized experiment on users (question 3).
+\vspace{0.2cm}
+
+%--- Questions ---%
+\begin{questions}
+
+%========================================================
+\question[3]
+The platform manually reviews 400 public posts about an upcoming election.
+
+\begin{center}
+\begin{tabular}{ccc}
+ & Misleading ($M$) & Not misleading \\
+\hline
+Political ($P$) & 88 & 132 \\
+Non-political & 52 & 128 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Compute $P(P)$, $P(M)$, and $P(P \cap M)$.
+
+    \begin{solutionorbox}[4.5cm]
+    \textbf{Solution:} We compute probabilities by dividing frequencies by the total number of posts:
+    \[
+    P(P)=\frac{220}{400}=0.55, \qquad
+    P(M)=\frac{140}{400}=0.35, \qquad
+    P(P\cap M)=\frac{88}{400}=0.22.
+    \]
+    \end{solutionorbox}
+
+    \item Are the events $P$ = ``the post is political'' and $M$ = ``the post is misleading'' independent?
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} Two events are independent if
+    \[
+    P(P\cap M)=P(P)P(M).
+    \]
+    Here,
+    \[
+    P(P)P(M)=0.55 \times 0.35 = 0.1925,
+    \]
+    while
+    \[
+    P(P\cap M)=0.22.
+    \]
+    Since
+    \[
+    0.22 \neq 0.1925,
+    \]
+    the events $P$ and $M$ are \textbf{not independent}.
+    \end{solutionorbox}
+
+    \item Compute $P(M \mid P)$. Interpret this quantity in one sentence.
+
+    \begin{solutionorbox}[4.5cm]
+    \textbf{Solution:} By definition of conditional probability,
+    \[
+    P(M\mid P)=\frac{P(M\cap P)}{P(P)}=\frac{88/400}{220/400}=\frac{88}{220}=0.4.
+    \]
+    Interpretation: among political posts, \textbf{40\% are misleading}.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\question[3]
+During the same week, the platform observes that:
+\begin{itemize}[leftmargin = 0.6cm]
+    \item 75\% of posts come from established news pages,
+    \item 25\% come from anonymous or influencer accounts.
+\end{itemize}
+Among established news pages, $10\%$ of posts are misleading, while 50\% of posts are misleading among anonymous or influencer accounts.
+
+The platform then uses an automatic screening system, which has the following performance:
+\begin{itemize}[leftmargin = 0.6cm]
+    \item If a post is misleading, the system flags it as misleading with probability $0.8$.
+    \item If a post is not misleading, the system flags it as misleading with probability $0.2$.
+\end{itemize}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Define and denote with letters all the events you will need to answer the subsequent questions.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:}  Let
+    \begin{itemize}[leftmargin = 0.6cm]
+        \item $E$ = a post comes from an established news page,
+        \item $A$ = a post comes from an anonymous or influencer account,
+        \item $M$ = a post is misleading,
+        \item $F$ = a post is flagged by the system as misleading.
+    \end{itemize}
+    \end{solutionorbox}
+
+    \item Write down the information we are given in the problem in terms of probabilities of the events defined in the previous part.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} We are given:
+    \[
+    P(E)=0.75, \qquad P(A)=0.25,
+    \]
+    \[
+    P(M\mid E)=0.1, \qquad P(M\mid A)=0.5,
+    \]
+    \[
+    P(F\mid M)=0.8, \qquad P(F\mid M^c)=0.2.
+    \]
+    \end{solutionorbox}
+    
+    \item Use the Law of Total Probability to compute the probability of a post being misleading. Show your reasoning.
+
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} Since $E$ and $A$ form a partition of the sample space, by the Law of Total Probability,
+    \[
+    P(M)=P(M\mid E)P(E)+P(M\mid A)P(A).
+    \]
+    Therefore,
+    \[
+    P(M)=0.1(0.75)+0.5(0.25)=0.075+0.125=0.2.
+    \]
+    \end{solutionorbox}
+
+    \item Compute the probability that a randomly selected post is flagged as misleading.
+
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} Using the events $M$ and $M^c$, the Law of Total Probability gives
+    \[
+    P(F)=P(F\mid M)P(M)+P(F\mid M^c)P(M^c).
+    \]
+    Since $P(M)=0.2$, we have
+    \[
+    P(M^c)=1-0.2=0.8.
+    \]
+    Hence,
+    \[
+    P(F)=0.8(0.2)+0.2(0.8)=0.16+0.16=0.32.
+    \]
+    \end{solutionorbox}
+
+    \item If a post was flagged as misleading, what is the probability that it is actually misleading? Use Bayes' formula.
+
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} We want the probability that a post is actually misleading given that it was flagged, that is, $P(M\mid F)$.
+    By Bayes' formula,
+    \[
+    P(M\mid F)=\frac{P(F\mid M)P(M)}{P(F)}.
+    \]
+    Substituting the values found above,
+    \[
+    P(M\mid F)=\frac{0.8\cdot 0.2}{0.32}=\frac{0.16}{0.32}=0.5.
+    \]
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[4]
+The platform now runs a randomized controlled trial on 200 users. Each user is shown one post that has already been verified as false.
+
+\begin{itemize}[leftmargin = 0.6cm]
+    \item \textbf{Treatment group}: the false post appears with a warning label.
+    \item \textbf{Control group}: the same type of false post appears with no warning label.
+\end{itemize}
+
+Define the outcome variable $Y_i$ as:
+\[
+Y_i =
+\begin{cases}
+1 & \text{if user } i \text{ says they would share the post,} \\
+0 & \text{otherwise.}
+\end{cases}
+\]
+
+The results are:
+
+\begin{center}
+\begin{tabular}{ccc}
+Group & \# of users & \# who would share \\
+\hline
+Treatment ($T=1$) & 100 & 20 \\
+Control ($T=0$) & 100 & 40 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+
+    \item Define clearly $Y_i(1)$, $Y_i(0)$, and $TE_i$. State the fundamental problem of causal inference.
+
+    \begin{solutionorbox}[8.5cm]
+    \textbf{Solution:} \begin{itemize}[leftmargin = 0.6cm]
+        \item $Y_i(1)$ is the potential outcome for user $i$ if the user is assigned to the treatment group, that is, if the false post appears with a warning label.
+        
+        \item $Y_i(0)$ is the potential outcome for user $i$ if the user is assigned to the control group, that is, if the false post appears without a warning label.
+        
+        \item The individual treatment effect is
+        \[
+        TE_i = Y_i(1)-Y_i(0).
+        \]
+    \end{itemize}
+
+    The \textbf{fundamental problem of causal inference} is that, for each individual $i$, we can observe only one of the two potential outcomes, either $Y_i(1)$ or $Y_i(0)$, but never both. Therefore, the individual treatment effect $TE_i$ is never directly observed.
+    \end{solutionorbox}
+
+    \item Define clearly $ATE$ and $SATE$. What is the difference between them?
+
+    \begin{solutionorbox}[7.8cm]
+    \textbf{Solution:} \begin{itemize}[leftmargin = 0.6cm]
+        \item The average treatment effect is
+        \[
+        ATE = \mathbb{E}[Y(1)-Y(0)],
+        \]
+        that is, the average causal effect in the population of interest.
+        
+        \item The sample average treatment effect is
+        \[
+        SATE = \frac{1}{n}\sum_{i=1}^n \bigl(Y_i(1)-Y_i(0)\bigr),
+        \]
+        that is, the average causal effect for the individuals in our sample.
+    \end{itemize}
+    While $ATE$ is the average treatment effect in the population, $SATE$ is the average treatment effect for the units in our sample. If the sample is representative of the population, then $SATE$ can be used to approximate or learn about $ATE$.
+    \end{solutionorbox}
+    
+    \item Propose and compute an estimator for $SATE$ provided the experiment design.
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} A natural estimator of $SATE$ in a randomized controlled trial is the \textbf{difference in sample means} between treatment and control:
+    \[
+    \widehat{SATE}=\bar Y_1-\bar Y_0.
+    \]
+    Here,
+    \[
+    \bar Y_1=\frac{20}{100}=0.2
+    \qquad \text{and} \qquad
+    \bar Y_0=\frac{40}{100}=0.4.
+    \]
+    Therefore,
+    \[
+    \widehat{SATE}=0.2-0.4=-0.2.
+    \]
+    This means that, in the sample, showing a warning label reduced the probability of sharing the false post by $0.2$.
+    \end{solutionorbox}
+
+    \item Would your estimator likely suffer from confounding bias? Why or why not?
+
+    \begin{solutionorbox}[7.5cm]
+    \textbf{Solution:} This estimator would not be expected to suffer from important \textbf{confounding bias}, because treatment was assigned \textbf{randomly}. Random assignment makes the treatment and control groups comparable on average, both in observed and unobserved characteristics. Therefore, differences in average outcomes between the two groups can be attributed to the treatment rather than to pre-existing differences between users. For this reason, the difference in means is a credible estimator of the causal effect in this randomized experiment.
+    \end{solutionorbox}
+
+\end{enumerate}
+
+\end{questions}
+
+\end{document}

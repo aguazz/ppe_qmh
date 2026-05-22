@@ -1,0 +1,317 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+%\printanswers % Comment out to hide answers
+
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\makeatother
+\setcounter{footnote}{0}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule
+    \hspace{-\arraycolsep}%
+}
+
+\unframedsolutions
+\renewcommand{\solutiontitle}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Final Exam}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2025/26}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{May 12, 2026}
+\newcommand{\university}{CUNEF Universidad}
+
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \exam{}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        Time Limit: 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+
+            \item Every non-trivial calculation and claim in the exam must be properly justified.
+
+            \item Your work must be well organized and coherent. Pay attention to notation, definitions of events, \\ units of measurement, and interpretation.
+
+            \item You must answer each question inside the designated box; answers outside will not be considered.
+
+            \item The use of calculators is allowed.
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+
+        \end{enumerate}
+    }}
+\end{center}
+%--- Instructions ---%
+\vspace{0.3cm}
+The following questions are about the housing affordability crisis in a fictional city, \textit{Puerto Clara}. The city is considering housing vouchers, rent-stabilization rules, and targeted subsidies to reduce rent burden and displacement. The scenario is inspired by empirical research on housing voucher lotteries and rent-control policies, but all numerical values in this exam are constructed for the exam.\footnote{For background inspiration only: Jacob, Kapustin, and Ludwig (2014), ``Human Capital Effects of Anti-Poverty Programs: Evidence from a Randomized Housing Voucher Lottery''; Diamond, McQuade, and Qian (2019), ``The Effects of Rent Control Expansion on Tenants, Landlords, and Inequality: Evidence from San Francisco''.}
+
+%--- Questions ---%
+\begin{questions}
+
+%========================================================
+\newpage
+\question[2.5]
+The Housing Office audits 600 rental applications. For each applicant, it records whether the household has children and whether the household is \textit{rent-burdened}, defined as spending more than 40\% of monthly income on rent.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & Rent-burdened ($B$) & Not rent-burdened ($B^c$) \\
+\midrule
+Family with children ($C$) & 168 & 112 \\
+No children ($C^c$)       & 132 & 188 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Compute $P(C)$, $P(B)$, $P(C\cap B^c)$, and $P(B\mid C)$.
+
+    \begin{solutionorbox}[7.9cm]
+    \textbf{Solution:} The total number of applications is 600. There are $168+112=280$ families with children and $168+132=300$ rent-burdened households. Therefore,
+    \[
+    P(C)=\frac{280}{600}\approx 0.4667, \qquad
+    P(B)=\frac{300}{600}=0.5,
+    \]
+    \[
+    P(C\cap B^c)=\frac{112}{600}=0.1867, \qquad
+    P(B\mid C)=\frac{P(B\cap C)}{P(C)}=\frac{168}{280}=0.6.
+    \]
+    Among families with children, 60\% are rent-burdened.
+    \end{solutionorbox}
+
+    \item What does it mean that the events $C$ and $B$ are not independent? Explain the intuition behind the definition in words.
+
+    \begin{solutionorbox}[5cm]
+    \textbf{Solution:} It means that knowing that a household has children changes the probability that it is rent-burdened.
+    \end{solutionorbox}
+
+    \item The Housing Office also uses an algorithm that flags a household as being at high risk of housing insecurity (event $H$). Suppose the algorithm flags 80\% of rent-burdened households and 20\% of households that are not rent-burdened. Compute $P(B\mid H)$.
+    Does knowing that a household was flagged change your mind about how likely it is for the household to be rent-burdened? If so, quantify this change of belief.
+    \begin{solutionorbox}[4cm]
+
+    \end{solutionorbox}
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} By Bayes' rule,
+    \[
+    P(B\mid H)=\frac{P(H\mid B)P(B)}{P(H)}.
+    \]
+    The denominator is computed by the Law of Total Probability:
+    \[
+    P(H)=P(H\mid B)P(B)+P(H\mid B^c)P(B^c)
+    =0.8(0.5)+0.2(0.5)=0.5.
+    \]
+    Therefore,
+    \[
+    P(B\mid H)=\frac{0.8(0.5)}{0.5}=\frac{0.4}{0.5}=0.8.
+    \]
+    Interpretation: if the algorithm flags a household, the probability that the household is actually rent-burdened is 80\%. Knowing that the household was flagged changes the probability from $P(B)=0.5$ to $P(B\mid H)=0.8$, so it should make us think the household is more likely to be rent-burdened.
+    \end{solutionorbox}
+
+    \item Let $I_i=1$ if applicant $i$ is rent-burdened and $I_i=0$ otherwise. Suppose future applicants are independently rent-burdened with probability $P(B)=0.5$. For a random sample of $n=100$ future applicants, let
+    \[
+    \widehat p=\frac{1}{100}\sum_{i=1}^{100} I_i
+    \]
+    be the sample proportion of rent-burdened applicants.
+    \begin{itemize}
+        \item[(i)] What does the Law of Large Numbers say about $\widehat p$ as the sample size becomes large?
+        \begin{solutionorbox}[4.5cm]
+        \textbf{Solution:} By the Law of Large Numbers, as the sample size becomes large, $\widehat p$ should get closer to the true population probability $p=0.5$.
+        \end{solutionorbox}
+
+        \item[(ii)] What is the distribution of $100\widehat p = \sum_{i=1}^{100} I_i$?
+        \begin{solutionorbox}[3cm]
+        \textbf{Solution:} Since $100\widehat p=\sum_{i=1}^{100}I_i$ counts the number of rent-burdened households in 100 independent Bernoulli trials,
+        \[
+        100\widehat p\sim \operatorname{Binomial}(100,0.5).
+        \]
+        \end{solutionorbox}
+    \end{itemize}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+In 2024, Puerto Clara introduced a rent assistance program in its East district. The West district did not receive the program. The outcome is the average number of formal eviction cases started by landlords per 1,000 renter households.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+District & 2023 cases & 2024 cases \\
+\midrule
+East district & 18 & 13 \\
+West district & 12 & 10 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Identify the treatment variable, outcome variable, treatment group, control group, before period, and after period.
+
+    \begin{solutionorbox}[7.5cm]
+    \textbf{Solution:} The treatment variable $T$ equals $1$ if the unit received the assistance program, and equals 0 otherwise.
+
+    The outcome variable is the number of formal eviction cases started by landlords per 1,000 renter households.
+
+    The treatment group is the East district and the control group is the West district.
+
+    The before period is 2023 and the after period is 2024.
+    \end{solutionorbox}
+
+    \item Compute the Before-and-After estimator for the East district. Would you rely on this as a causal estimate? Explain.
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} The Before-and-After estimator compares the treated district after and before the program:
+    \[
+    \widehat{SATE}_{BA}=Y^{2024}_{East}-Y^{2023}_{East}=13-18=-5.
+    \]
+    This suggests a decrease, on average, of 5 formal eviction cases per 1,000 renter households after the program. For this to be interpreted causally, we need the no time-varying confounders assumption: absent the rent assistance program, nothing else changing from 2023 to 2024 would have affected eviction cases in the East district.
+    \end{solutionorbox}
+
+    \item Compute the Difference-in-Differences estimator.
+
+    \begin{solutionorbox}[3.5cm]
+
+    \end{solutionorbox}
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} The change in the East district is
+    \[
+    13-18=-5.
+    \]
+    The change in the West district is
+    \[
+    10-12=-2.
+    \]
+    Therefore,
+    \[
+    \widehat{SATE}_{DiD}=(13-18)-(10-12)=-5-(-2)=-3.
+    \]
+    Interpretation: after adjusting for the time trend observed in the West district, the rent assistance program is estimated to reduce formal eviction cases by 3 per 1,000 renter households.
+    \end{solutionorbox}
+
+    \item What is the key assumption behind the Difference-in-Differences estimator? Give one example of a violation in this context.
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} The key assumption is parallel trends: in the absence of the rent assistance program, formal eviction cases in East and West would have changed by the same amount from 2023 to 2024. A violation would occur if, for example, a local labor-market shock affected only the East district in 2024 and independently reduced eviction cases. Another violation would be spillovers: if landlords operating in both districts changed their behavior in West because of the East district program.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[5]
+The city runs a randomized lottery among eligible low-income households, such that all lottery winners receive and use a housing voucher. One year later, the city estimates the following regression:
+\[
+\widehat{housing\_quality}=42.0+5.5\,income+9.0\,voucher-0.5\,(voucher\times income),\qquad R^2=0.23.
+\]
+The observed range of $income$ in the estimation sample is from $0.8$ to $5$ thousand euros. The variables are:
+\begin{itemize}[leftmargin = 0.6cm]
+    \item $housing\_quality$ is a housing quality index, with higher values meaning better housing conditions;
+    \item $income$ is monthly household income, measured in thousands of euros;
+    \item $voucher=1$ if the household received a voucher and $0$ otherwise.
+\end{itemize}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Interpret the coefficient on $income$ for households without a voucher. How does receiving a voucher change the relationship between income and housing quality?
+    \begin{solutionorbox}[9cm]
+    \textbf{Solution:} For households without a voucher, a one-unit increase in $income$, meaning an additional 1,000 euros of monthly income, is associated with an increase of 5.5 points in the housing quality index.
+
+    The interaction coefficient $-0.5$ means that, for households with a voucher, the slope on $income$ is 0.5 points smaller. For voucher recipients, the slope is
+    \[
+    5.5-0.5=5.0.
+    \]
+    \end{solutionorbox}
+
+    \item Can the coefficient on $voucher$ be interpreted as an unbiased average treatment effect? Why or why not?
+    {\footnotesize Hint: compare two households with the same income, one with a voucher and one without.}
+
+    \begin{solutionorbox}[9cm]
+    \textbf{Solution:} No, the coefficient on $voucher$ alone is not the average treatment effect. Because the regression includes the interaction $voucher\times income$, the estimated voucher effect depends on income:
+    \[
+    \widehat{housing\_quality}_{voucher=1}-\widehat{housing\_quality}_{voucher=0}
+    =9.0-0.5\,income.
+    \]
+    The coefficient $9.0$ is the estimated voucher effect when $income=0$, which is outside the observed range of the sample. Since the voucher was randomized, this conditional difference can be interpreted causally under the assumptions stated in the problem, but the average treatment effect would average $9.0-0.5\,income$ over the relevant households.
+    \end{solutionorbox}
+
+    \item Comment on the predictive power of the regression. Would you use it to predict for a household with 10 thousand euros of monthly income? Why or why not?
+    \begin{solutionorbox}[5cm]
+    \textbf{Solution:} The value $R^2=0.23$ means that the model explains 23\% of the variation in housing quality in the sample, so its predictive power is limited.
+
+    I would not use it to predict for a household with $income=10$ because the observed range of income is from $0.8$ to $5$ thousand euros. A prediction at $income=10$ would be an extrapolation.
+    \end{solutionorbox}
+\end{enumerate}
+
+The city now decides to issue the voucher to all households below 500 euros of monthly income. After gathering new data, the fitted regression is
+\[
+\widehat{housing\_quality}=44+5\,income+8\,voucher-0.5\,(voucher\times income).
+\]
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), start = 4, rightmargin = 0.2cm]
+    \item Compute the Regression Discontinuity estimate at the cutoff and interpret it.
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} Just above the cutoff, $voucher=0$ and $income=0.5$, so
+    \[
+    \widehat{housing\_quality}^{+}=44+5(0.5)=46.5.
+    \]
+    Just below the cutoff, $voucher=1$ and $income=0.5$, so
+    \[
+    \widehat{housing\_quality}^{-}=44+5(0.5)+8-0.5(0.5)=54.25.
+    \]
+    Therefore,
+    \[
+    \widehat{RD}=54.25-46.5=7.75.
+    \]
+    The estimate suggests that voucher eligibility increases housing quality by 7.75 points for households at the income cutoff.
+    \end{solutionorbox}
+
+    \item State the key assumption needed for a causal interpretation.
+    \begin{solutionorbox}[5cm]
+    \textbf{Solution:} The key assumption is continuity around the cutoff: households just below and just above 500 euros of monthly income are similar in all relevant ways except for voucher eligibility.
+    \end{solutionorbox}
+\end{enumerate}
+
+\end{questions}
+
+\end{document}

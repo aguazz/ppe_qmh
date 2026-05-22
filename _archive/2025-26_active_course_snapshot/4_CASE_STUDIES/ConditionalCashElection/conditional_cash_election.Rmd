@@ -1,0 +1,229 @@
+---
+title: "Quantitative Methods for Humanities: Election and Conditional Cash Transfer Program in Mexico"
+author: "Quantitative Methods for Humanities"
+date: "CUNEF Universidad"
+output:
+  html_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+fmt <- function(x, d = 2) formatC(x, format = "f", digits = d)
+fmtp <- function(p) ifelse(p < 0.001, "<0.001", formatC(p, format = "f", digits = 3))
+tr <- function(model) {
+  s <- summary(model)$coefficients
+  c(estimate = unname(s["treatment", "Estimate"]),
+    p = unname(s["treatment", "Pr(>|t|)"]))
+}
+adjr2 <- function(model) summary(model)$adj.r.squared
+```
+
+# Introduction
+
+Conditional cash transfer (CCT) programs provide regular cash payments to low-income households, conditional on behaviors such as children's school attendance and preventive health check-ups. They aim to reduce poverty in the short run and improve human capital in the long run.
+
+Mexico's Progresa program was rolled out experimentally before the 2000 presidential election. Eligible villages received Progresa either **21 months before the election** (early Progresa) or **6 months before the election** (late Progresa). Because this timing was randomly assigned, we can estimate the causal effect of early exposure to Progresa on voter turnout and support for the incumbent party, PRI.
+
+# The Data
+
+The data set (`progresa.csv`) contains 417 precincts. The key variables are:
+
+* `treatment`: 1 if the precinct received early Progresa, 0 if it received late Progresa.
+* `t2000`, `pri2000s`: turnout and PRI support in 2000 as shares of the voting-age population.
+* `t2000r`, `pri2000v`: official turnout and official PRI vote share in 2000.
+* `t1994`, `pri1994s`, `pan1994s`, `prd1994s`: 1994 turnout and party support shares.
+* `t1994r`, `pri1994v`, `pan1994v`, `prd1994v`: official 1994 turnout and vote shares.
+* `pri1994`, `pan1994`, `prd1994`, `votos1994`: 1994 vote counts.
+* `avgpoverty`, `pobtot1994`, `villages`: poverty, population, and precinct characteristics.
+
+```{r load-data}
+progresa <- read.csv("progresa.csv")
+progresa$log_pop <- log(progresa$pobtot1994)
+```
+
+# Q1. Estimating the Impact of the CCT Program
+
+**Question.** (a) Compare average electoral outcomes between treated and control precincts. (b) Regress `t2000` and `pri2000s` on `treatment`. (c) Interpret and compare the results.
+
+## Q1(a) Average comparison
+
+```{r q1a}
+agg_q1a <- aggregate(cbind(t2000, pri2000s) ~ treatment, data = progresa,
+                     FUN = function(x) mean(x, na.rm = TRUE))
+agg_q1a$treatment <- ifelse(agg_q1a$treatment == 1, "Early Progresa", "Late Progresa")
+print(agg_q1a)
+```
+
+Early Progresa precincts have higher average turnout and PRI support. The raw differences are `r fmt(diff(agg_q1a$t2000))` points for turnout and `r fmt(diff(agg_q1a$pri2000s))` points for PRI support.
+
+## Q1(b) Simple regressions
+
+```{r q1b}
+turnout_model <- lm(t2000 ~ treatment, data = progresa)
+pri_model <- lm(pri2000s ~ treatment, data = progresa)
+
+summary(turnout_model)
+summary(pri_model)
+```
+
+## Q1(c) Interpretation
+
+The regression coefficients reproduce the difference in means: early Progresa is associated with `r fmt(tr(turnout_model)["estimate"])` more turnout points and `r fmt(tr(pri_model)["estimate"])` more PRI-support points. The turnout effect is not statistically significant at conventional levels (`p = r fmtp(tr(turnout_model)["p"])`). The PRI effect is positive and only marginally significant (`p = r fmtp(tr(pri_model)["p"])`). Thus, the results give weak evidence of higher PRI support, but not strong evidence of voter mobilization.
+
+# Q2. Adding Pretreatment Covariates
+
+**Question.** (a) Fit a regression for each outcome including `avgpoverty`, `pobtot1994`, `votos1994`, `pri1994`, `pan1994`, and `prd1994`. (b) Compare these estimates with Q1.
+
+```{r q2}
+turnout_cov <- lm(
+  t2000 ~ treatment + avgpoverty + pobtot1994 + votos1994 + pri1994 + pan1994 + prd1994,
+  data = progresa
+)
+
+pri_cov <- lm(
+  pri2000s ~ treatment + avgpoverty + pobtot1994 + votos1994 + pri1994 + pan1994 + prd1994,
+  data = progresa
+)
+
+summary(turnout_cov)
+summary(pri_cov)
+```
+
+The adjusted treatment estimates remain positive: `r fmt(tr(turnout_cov)["estimate"])` for turnout and `r fmt(tr(pri_cov)["estimate"])` for PRI support. They are close to the simple estimates, which is what we would expect under successful random assignment. The substantive conclusion is unchanged: the evidence points in the expected direction, but it is not very precise.
+
+# Q3. Alternative Model Specifications
+
+**Question.** (a) Replace count predictors with share-based equivalents (`t1994`, `pri1994s`, `pan1994s`, `prd1994s`). (b) Log-transform `pobtot1994`. (c) Include `avgpoverty` and compare model fit.
+
+```{r q3}
+turnout_alt <- lm(
+  t2000 ~ treatment + log_pop + avgpoverty + t1994 + pri1994s + pan1994s + prd1994s,
+  data = progresa
+)
+
+pri_alt <- lm(
+  pri2000s ~ treatment + log_pop + avgpoverty + t1994 + pri1994s + pan1994s + prd1994s,
+  data = progresa
+)
+
+summary(turnout_alt)
+summary(pri_alt)
+
+fit_comparison <- data.frame(
+  outcome = c("Turnout", "Turnout", "PRI support", "PRI support"),
+  model = c("Q2 count covariates", "Q3 share/log covariates",
+            "Q2 count covariates", "Q3 share/log covariates"),
+  adjusted_R2 = c(adjr2(turnout_cov), adjr2(turnout_alt), adjr2(pri_cov), adjr2(pri_alt))
+)
+print(fit_comparison)
+```
+
+The share/log specification fits better if its adjusted R-squared is higher. For turnout, adjusted R-squared rises from `r fmt(adjr2(turnout_cov), 3)` to `r fmt(adjr2(turnout_alt), 3)`, so the alternative model clearly fits better. The treatment estimate for turnout becomes `r fmt(tr(turnout_alt)["estimate"])` (`p = r fmtp(tr(turnout_alt)["p"])`), so there is no evidence of a turnout effect once richer pretreatment shares are included. For PRI support, the adjusted treatment estimate is `r fmt(tr(pri_alt)["estimate"])` (`p = r fmtp(tr(pri_alt)["p"])`).
+
+# Q4. Examining Balance of Pretreatment Variables
+
+**Question.** (a) Use box plots to compare treatment and control groups for `pobtot1994`, `avgpoverty`, `t1994`, and `pri1994s`. (b) Comment on the patterns.
+
+```{r q4}
+boxplot(pobtot1994 ~ treatment, data = progresa,
+        names = c("Late", "Early"),
+        ylab = "Total Population (1994)",
+        main = "Precinct Population by Treatment")
+
+boxplot(avgpoverty ~ treatment, data = progresa,
+        names = c("Late", "Early"),
+        ylab = "Avg Poverty Index",
+        main = "Average Poverty by Treatment")
+
+boxplot(t1994 ~ treatment, data = progresa,
+        names = c("Late", "Early"),
+        ylab = "Turnout Rate 1994",
+        main = "1994 Turnout by Treatment")
+
+boxplot(pri1994s ~ treatment, data = progresa,
+        names = c("Late", "Early"),
+        ylab = "PRI Support Rate 1994",
+        main = "1994 PRI Support by Treatment")
+```
+
+The central parts of the distributions look broadly similar across treatment groups, especially for poverty and prior electoral behavior. There are some large outliers, particularly in population and previous turnout/PRI support, but the box plots do not show a clear systematic imbalance in the typical treated and control precinct.
+
+# Q5. Using Official Turnout and Vote Shares
+
+**Question.** (a) Use official turnout (`t2000r`) and official PRI vote share (`pri2000v`). (b) Estimate the treatment effect with `avgpoverty`, log population, and previous official election variables. (c) Interpret the results.
+
+```{r q5}
+off_turnout <- lm(
+  t2000r ~ treatment + avgpoverty + log_pop + t1994r + pri1994v + pan1994v + prd1994v,
+  data = progresa
+)
+
+off_pri <- lm(
+  pri2000v ~ treatment + avgpoverty + log_pop + t1994r + pri1994v + pan1994v + prd1994v,
+  data = progresa
+)
+
+summary(off_turnout)
+summary(off_pri)
+```
+
+Using official outcomes, the estimated effect is `r fmt(tr(off_turnout)["estimate"])` for turnout (`p = r fmtp(tr(off_turnout)["p"])`) and `r fmt(tr(off_pri)["estimate"])` for PRI vote share (`p = r fmtp(tr(off_pri)["p"])`). These coefficients are adjusted average treatment effects. The results should be interpreted as evidence of a program effect only if they are both substantively meaningful and statistically precise; in the turnout model, the estimate is negative and not statistically significant.
+
+# Q6. Exploring Heterogeneous Treatment Effects
+
+**Question.** (a) Fit a model with `treatment`, log population, `avgpoverty`, `avgpoverty^2`, and interactions between treatment and the poverty terms. (b) Estimate treatment effects at different poverty levels. (c) Plot and comment on the trend.
+
+```{r q6a}
+het_mod <- lm(
+  t2000 ~ treatment * avgpoverty + treatment * I(avgpoverty^2) + log_pop,
+  data = progresa
+)
+summary(het_mod)
+```
+
+```{r q6b}
+poverty_levels <- quantile(progresa$avgpoverty, probs = c(.25, .50, .75), na.rm = TRUE)
+
+effect_table <- data.frame(avgpoverty = as.numeric(poverty_levels))
+effect_table$effect <- coef(het_mod)["treatment"] +
+  coef(het_mod)["treatment:avgpoverty"] * effect_table$avgpoverty +
+  coef(het_mod)["treatment:I(avgpoverty^2)"] * effect_table$avgpoverty^2
+print(effect_table)
+```
+
+```{r q6c}
+grid <- seq(min(progresa$avgpoverty, na.rm = TRUE),
+            max(progresa$avgpoverty, na.rm = TRUE),
+            length.out = 100)
+
+pred0 <- data.frame(treatment = 0,
+                    avgpoverty = grid,
+                    log_pop = mean(progresa$log_pop, na.rm = TRUE))
+pred1 <- pred0
+pred1$treatment <- 1
+
+effect <- predict(het_mod, newdata = pred1) - predict(het_mod, newdata = pred0)
+
+plot(grid, effect, type = "l",
+     xlab = "Average Poverty Index",
+     ylab = "Estimated Treatment Effect on Turnout",
+     main = "Heterogeneous Treatment Effect by Poverty")
+abline(h = 0, lty = 2)
+```
+
+The estimated effect varies nonlinearly with poverty. In the current fit, the curve is roughly U-shaped: the effect is more positive at low and high poverty levels and closer to zero, or slightly negative, around the middle. However, the interaction terms are not statistically significant, so this should be read as exploratory rather than strong evidence of heterogeneous effects.

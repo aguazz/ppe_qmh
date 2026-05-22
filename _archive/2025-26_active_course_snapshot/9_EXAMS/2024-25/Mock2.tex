@@ -1,0 +1,211 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+\printanswers % Uncomment to show answers
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % math fonts and symbols
+\usepackage{bbm} % Math blackboard font
+\usepackage{enumitem} % For reference enumerations lists
+\usepackage{textcomp} % some symbols (like copyright)
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry} % Margins setup
+\usepackage{xcolor} % Colors
+\usepackage{graphicx}
+\usepackage{booktabs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}} % natural number set
+\newcommand{\R}{\mathbb{R}} % real number set
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}} % Ensure numeric superscripts
+\renewcommand{\thefootnote}{\arabic{footnote}} % Ensure numeric labels
+\makeatother
+\setcounter{footnote}{1}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule % the `\vrule` is as high and deep as a strut
+    \hspace{-\arraycolsep}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Defining information
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Mock Exam 2}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2024/25}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{Apr 30, 2025}
+\newcommand{\university}{CUNEF Universidad}
+% Setting header and footer
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ – \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%--- Instructions ---%
+\begin{center}
+    {\Huge \textbf{\exam}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering 
+        \begin{enumerate}[leftmargin=0.5cm, label=$\bullet$, rightmargin=0.2cm]
+            \item \textbf{Every non-trivial calculation and claim must be properly justified.}
+            \item Digital devices and internet access are forbidden.
+        \end{enumerate}
+    }}
+\end{center}
+%--- Questions ---%
+\begin{questions}
+
+\question[2.5]
+A randomized trial was conducted to test whether different SMS reminders encourage farmers to adopt a soil-conservation practice. A sample of 400 farms was randomly assigned to four groups of equal size (100 farms each):
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Group & Adoptions (Yes) \\
+\midrule
+Environmental Appeal & 20 \\
+Social Norm          & 25 \\
+Simple Reminder      & 22 \\
+No Message           & 18 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{parts}
+  \part Compute the probability that a randomly selected farm:
+    \begin{enumerate}[label=(\roman*)]
+      \item received no message;
+      \item adopted the practice;
+      \item both received no message and adopted.
+    \end{enumerate}
+  \part Are the events “no message” and “adoption” independent? Briefly justify.
+  \part When estimating the effect of the Social Norm reminder, what are the treatment and outcome variables?
+  \part Compute the Difference‐in‐Means estimator for Social Norm versus No Message. Interpret.
+  \part If the average farm size (hectares) and baseline adoption rate (prior to the trial) differ significantly across groups, would you say randomization was carried out successfully? Why? What does this imply about the validity of the DiM estimator?
+  % \part Compute the Difference‐in‐Means for Environmental Appeal versus Social Norm. What does this suggest about those message frames?
+\end{parts}
+
+\begin{solution}
+\begin{parts}
+    \part Recall that there is 400 total farms in the study. Hence, 
+    \begin{enumerate}[label=(\roman*)]
+    \item $P(\text{No Message}) = 100/400 = 0.25.$
+    \item Total adoptions $=20+25+22+18=85$, so $P(\text{Adopt})=85/400=0.2125.$
+    \item $P(\text{No Message} \cap \text{Adopt})=18/400=0.045.$
+\end{enumerate}
+    \part The product $P(\text{No Message})P(\text{Adopt})=0.25\times0.2125=0.053125\neq0.045$, so the events are \emph{not} independent.
+    \part The treatment indicator is $T=1$ if a farm received the Social Norm SMS, $0$ if it received no message; the outcome is $Y=1$ if the farm adopted the practice, $0$ otherwise.
+    \part Adoption rates: Social Norm $=25/100=0.25$, No Message $=18/100=0.18$. Difference‐in‐Means: $0.25-0.18=0.07$. \emph{Interpretation}: receiving the Social Norm reminder increased adoption by 7 percentage points.
+    \part Proper randomization should balance all pre‐treatment characteristics across groups. Here, however, there are meaningful differences in baseline farm size and prior adoption rates, which suggests that random assignment failed. As a result, our Difference‐in‐Means estimate may be confounded by these imbalances and cannot be interpreted as an unbiased average treatment effect.
+\end{parts}
+
+\end{solution}
+
+\question[4]
+To study the impact of a scholarship awarded at a test‐score cutoff, you focus on weekly work‐hours among students near the eligibility threshold (score = 70). You fit linear models separately on each side of the cutoff:
+
+For score $< 70$:
+$
+\widehat{\text{work\_hrs}} = 80 - 0.50\times\text{score}, 
+\quad R^2 = 0.04
+$
+
+For score $\geq 70$:
+$
+\widehat{\text{work\_hrs}} = 60 - 0.30\times\text{score},
+\quad R^2 = 0.30
+$
+
+\begin{parts}
+  \part Which regression explains more of the variation in work‐hours? Briefly compare.
+  \part Estimate the predicted work‐hours at the cutoff (score = 70) using both models.
+  \part Compute the Regression Discontinuity estimate for the scholarship’s effect and interpret.
+  \part State the key assumption needed for this RD estimate to be a valid causal effect.
+  \part Discuss a limitation of this RD design when making inferences far from the cutoff.
+\end{parts}
+
+\begin{solution}
+\begin{parts}
+    \part The model for scores $\ge 70$ has $R^2=0.30$, higher than $0.04$ for scores $<70$, so it explains substantially more variation.    
+    \part For score=70 we get the estimations \\
+    Below: $80-0.50\times70=80-35=45$ hours. \\
+    Above: $60-0.30\times70=60-21=39$ hours.
+    \part $RD_{ATE} = 39 - 45 = -6$ hours. \emph{Interpretation}: eligibility for the scholarship induces a \emph{reduction} of 6 weekly work‐hours at the cutoff.
+    \part The RD estimate applies only very close to the cutoff. Extrapolating to students with much lower or higher scores may be invalid because the linear fits may not hold farther away.
+\end{parts}
+\end{solution}
+
+\question[2.5]
+In 2023, City A pedestrianized its historic center; City B did not. Average monthly retail revenue per capita (in euros) is:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+City  & 2022 & 2023 \\
+\midrule
+A     & 200  & 250  \\
+B     & 210  & 230  \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{parts}
+  \part Identify the treatment and outcome variables if someone want to study the effect of the pedestrianization on the retail revenue per capita.
+  \part Compute the Difference‐in‐Means estimator using only the 2023 data. Would you rely on this as an estimation of the ATE?
+  \part Compute the Before‐and‐After estimator.
+  \part Compute the Difference‐in‐Differences estimator.
+  \part What is the main assumption behind the DiD estimator’s validity?
+\end{parts}
+
+\begin{solution}
+\begin{parts}
+    \part The treatment is a binary variable indicating whether a historic center is pedestrianized or not, while the outcome is the monthly retail revenue per capita in a historic center.
+    \part 2023 Difference‐in‐Means: $250 - 230 = 20$ euros. In the absence of randomization, this may not be an unbiased ATE estimator, as confounders cannot be dismissed (e.g., one city may have a bigger budget allocated to tourism) 
+    \part $BA_{ATE} = 250 - 200 = 50$ euros.
+    \part $DiD_{ATE} = (250-200) - (230-210) = 50 - 20 = 30$ euros.\emph{Interpretation}: pedestrianization increased revenue by 30 euros per capita relative to the counterfactual trend.
+    \part The key assumption is \emph{parallel trends}: absent treatment, both cities would have experienced the same change from 2022 to 2023.
+\end{parts}
+
+\end{solution}
+
+\question[1]
+A regression with interaction models how attending an optional review session affects final exam scores, depending on midterm performance:
+
+\[
+\widehat{\texttt{final\_score}} = 30 + 0.50\,\texttt{midterm\_score} + 5\,\texttt{review}
+  - 0.05\;(\texttt{midterm\_score}\times\texttt{review}),
+\]
+
+where \texttt{review} = 1 if the student attended, 0 otherwise.
+
+\begin{parts}
+  \part What is the estimated average effect of attending the review?
+  \part Interpret the coefficient of the variable \texttt{review}.
+  \part Interpret the coefficient of the interaction term.
+\end{parts}
+
+\begin{solution}
+\begin{parts}
+  \part The estimated average effect of attending equals $5 - 0.05\times\mathrm{midterm\_score}$ points.
+  \part The coefficient on \texttt{review} is the effect of attending the review when \(\texttt{midterm\_score}=0\);\ i.e.\ it raises the estimated average final score by 5 points for a student with a midterm score of zero.
+  \part The interaction coefficient \(-0.05\) means that each additional point in the midterm score reduces the benefit of attending the review by 0.05 points.
+\end{parts}
+\end{solution}
+
+\end{questions}
+
+\end{document}

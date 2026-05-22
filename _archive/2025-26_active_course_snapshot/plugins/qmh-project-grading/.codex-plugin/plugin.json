@@ -1,0 +1,37 @@
+{
+  "name": "qmh-project-grading",
+  "version": "0.1.0",
+  "description": "Local Codex agents for preprocessing and grading PPE QMH group project submissions.",
+  "author": {
+    "name": "PPE QMH course repository"
+  },
+  "license": "MIT",
+  "keywords": [
+    "qmh",
+    "teaching",
+    "grading",
+    "rubric",
+    "student-submissions",
+    "causal-inference",
+    "r-markdown"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "QMH Project Grading",
+    "shortDescription": "Preprocess and grade QMH project submissions.",
+    "longDescription": "Provides local Codex agents for organizing Canvas project submissions into short group folders and grading the processed submissions against the QMH project instructions and rubric.",
+    "developerName": "PPE QMH course repository",
+    "category": "Education",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use the QMH project submission preprocessor for the latest submissions folder.",
+      "Use the QMH project grading agent to grade processed project submissions.",
+      "Prepare concise feedback files for the QMH group project."
+    ],
+    "brandColor": "#7C2D12"
+  }
+}

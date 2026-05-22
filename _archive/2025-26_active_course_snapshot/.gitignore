@@ -1,0 +1,18 @@
+# Private instructor material: keep the folder shell, ignore its contents.
+/11_GRADES_AND_SUBMISSIONS/*
+!/11_GRADES_AND_SUBMISSIONS/README.md
+
+# LaTeX auxiliary files
+aux_files/
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb

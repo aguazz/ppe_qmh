@@ -1,0 +1,404 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{verbatimbox} % For verbatim inside custom environments
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,        % color of links to bibliography
+    urlcolor=magenta           % color of external links
+}
+
+% Define solution if
+\newif\ifsolutions
+\solutionstrue % Uncomment this line to display solutions
+% \solutionsfalse % Uncomment this line to hide solutions
+
+
+\author{\empty}
+\title{Problem Set 3. Causality \\ Quantitative Methods for Humanities}
+\date{\empty}
+
+\begin{document}
+
+\maketitle
+
+\bigskip
+
+\begin{enumerate}
+    \item \textbf{Causal Effects and SUTVA.}
+    
+    Consider an experiment that tries to estimate the causal effect of undergraduate students' participation in politics as they are exposed to political information. The study population consists of all students living in the college residencies of three major colleges. Students are asked whether they would like to sign up for the experiment to start receiving political information.
+    
+    \begin{enumerate}[label=(\alph*)]
+        \item Identify in the study the treatment variable $T$ and the outcome variable $Y$.
+        \item What are the control and treatment groups?
+        \item In practice, do we observe $Y_1 = Y(T = 1)$ and $Y_0 = Y(T = 0)$ for each student? Explain. 
+        \item What can we do to estimate $Y_1 - Y_0$? Under what conditions you belief this estimate may be valid?
+        \item Explore potential sources of bias. Explain.
+        \item Discuss the "No-Interference" (NI) assumption. If you think it may fail, how can you design the study to minimize interaction and account for the ones that you cannot remove, if any?
+        \item Examine the "No-Hidden-Variants" (NHV) assumption. Is the treatment well-defined?
+        \item Imagine that the residencies only have two-people dormitories and the population now is "all students living with roommates." Define the outcome variables:
+        \begin{itemize}
+            \item \( Y_{0,0} \): Outcome if neither the student nor their roommate is treated.
+            \item \( Y_{0,1} \): Outcome if the roommate is treated but the student is not.
+            \item \( Y_{1,0} \): Outcome if the student is treated but their roommate is not.
+            \item \( Y_{1,1} \): Outcome if both the student and their roommate are treated.
+        \end{itemize}
+        Interpret the measures:
+        \begin{enumerate}[label=(\roman*)]
+            \item \(Y_{1,0} - Y_{0,0} \)
+            \item \(Y_{0,1} - Y_{0,0} \)
+            \item \((Y_{1,1} - Y_{1,0}) - (Y_{0,1} - Y_{0,0}) \)
+        \end{enumerate}
+    \end{enumerate}
+    
+\ifsolutions \color{blue} \textbf{Solution:} \\
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Treatment and Outcome Variables:}
+    \begin{itemize}
+        \item \textbf{Treatment Variable} \( T \): Whether a student receives political information (\( T = 1 \)) or does not (\( T = 0 \)).
+        \item \textbf{Outcome Variable} \( Y \): A measure of political participation, which could be:
+        \begin{itemize}
+            \item Whether the student registers to vote.
+            \item Whether the student attends political meetings or events.
+            \item Whether the student donates to a political campaign.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Control and Treatment Groups:}
+    \begin{itemize}
+        \item \textbf{Treatment Group}: Students who sign up and receive political information (\( T = 1 \)).
+        \item \textbf{Control Group}: Students who do not sign up or are randomly assigned to not receive political information (\( T = 0 \)).
+    \end{itemize}
+
+    \item \textbf{Observing Potential Outcomes:}
+    \begin{itemize}
+        \item In practice, we never observe both potential outcomes (\( Y_1 \) and \( Y_0 \)) for the same student. We only observe the outcome corresponding to the treatment assignment:
+        \[
+        Y = T Y_1 + (1 - T) Y_0.
+        \]
+        \item This is known as the \textbf{Fundamental Problem of Causal Inference}: we cannot simultaneously observe what would have happened if a treated student had not been treated and vice versa.
+    \end{itemize}
+
+    \item \textbf{Estimating \( Y_1 - Y_0 \) and Validity Conditions:}
+    \begin{itemize}
+        \item Since individual treatment effects are unobservable, we estimate the \textbf{Average Treatment Effect (ATE)}:
+        \[
+        ATE = E[Y_1 - Y_0].
+        \]
+        \item In a randomized experiment, the \textbf{Sample Average Treatment Effect (SATE)} can be estimated by comparing the sample means:
+        \[
+        \widehat{SATE} = \frac{1}{N_T} \sum_{i \in T} Y_i - \frac{1}{N_C} \sum_{i \in C} Y_i.
+        \]
+        \item \textbf{Conditions for Valid Estimates:}
+        \begin{itemize}
+            \item \textbf{Random Assignment}: Ensures \( T \) is independent of potential outcomes, making \( E[Y_1 \mid T=1] - E[Y_0 \mid T=0] \) an unbiased estimator of \( ATE \).
+            \item \textbf{No-Interference (NI) Assumption}: Each student's outcome depends only on their treatment, not their roommates’ or peers'.
+            \item \textbf{No-Hidden-Variants (NHV) Assumption}: The treatment is consistently applied across students.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Potential Sources of Bias:}
+    \begin{itemize}
+        \item \textbf{Selection Bias}: If participation is voluntary, politically engaged students may be more likely to sign up, biasing results.
+        \item \textbf{Spillover Effects}: In dormitories, untreated students may still be indirectly exposed to political information.
+        \item \textbf{College-Specific Effects}: Political culture differences across colleges could confound the results.
+    \end{itemize}
+
+    \item \textbf{No-Interference (NI) Assumption:}
+    \begin{itemize}
+        \item The assumption states that each student's outcome depends only on their own treatment assignment.
+        \item \textbf{Potential Violation}: If students in shared dorms discuss political information, an untreated student might still be influenced by a treated roommate.
+        \item \textbf{Solutions:}
+        \begin{itemize}
+            \item Randomize treatment at the dorm level rather than the individual level.
+            \item Measure indirect exposure by surveying control students on their political discussions.
+            \item Adjust analyses to account for possible spillovers (e.g., analyze single vs. shared dorms separately).
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{No-Hidden-Variants (NHV) Assumption:}
+    \begin{itemize}
+        \item The assumption requires that the treatment is well-defined.
+        \item If treatment varies (e.g., some students receive more information than others), treatment effects may be inconsistent.
+        \item \textbf{Solutions:}
+        \begin{itemize}
+            \item Standardize information delivery (e.g., all students receive the same number of messages).
+            \item Measure engagement levels (e.g., whether students open emails).
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Expanding to Two-Person Dorms: Outcome Definitions and Effects:}
+    \begin{itemize}
+        \item We now define potential outcomes based on both the student's and their roommate's treatment status:
+        \begin{itemize}
+            \item \( Y_{0,0} \): Outcome if neither student nor roommate is treated.
+            \item \( Y_{0,1} \): Outcome if the roommate is treated but the student is not.
+            \item \( Y_{1,0} \): Outcome if the student is treated but their roommate is not.
+            \item \( Y_{1,1} \): Outcome if both the student and roommate are treated.
+        \end{itemize}
+        \item \textbf{Interpretations of Effects:}
+        \begin{enumerate}[label=(\roman*)]
+            \item \textbf{Direct Effect:}
+            \[
+            Y_{1,0} - Y_{0,0}
+            \]
+            Measures the effect of receiving political information when the roommate is not treated.
+            
+            \item \textbf{Spillover Effect:}
+            \[
+            Y_{0,1} - Y_{0,0}
+            \]
+            Measures the effect of a roommate being treated when the student is not.
+            
+            \item \textbf{Interaction Effect:}
+            \[
+            (Y_{1,1} - Y_{1,0}) - (Y_{0,1} - Y_{0,0}).
+            \]
+            It can be seen as the difference of spillover effects when treated vs not treated. If the treatment of the roommate is independent from that of the student, the quantity must be zero. 
+            
+            Alternatively, the expression can be seen as
+            \[
+            (Y_{1,1} - Y_{0,1}) - (Y_{1,0} - Y_{0,0}),
+            \]
+            that is, the difference in the treatment effect coming from treating vs not treating the roommate.
+        \end{enumerate}
+    \end{itemize}
+\end{enumerate}
+
+\fi \color{black}
+
+\item \textbf{Identifying Confounders.}
+
+For each scenario below, identify a plausible confounder that could bias the estimated causal effect, or argue why assuming no confounders may be reasonable.
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Political Campaign Spending and Election Outcomes.}  
+    Candidates who spend more on campaigns tend to receive more votes. Does spending more cause more votes, or are there confounders?  
+    \item \textbf{Ethics Training and Moral Behavior.} 
+    A study finds that individuals with more education in ethics act more morally. Is this causal, or could another factor explain the relationship?  
+    \item \textbf{Censorship and Political Stability.}  
+    Some governments censor opposition media, arguing it prevents social unrest. Historical data shows more censorship coincides with fewer protests. Identify a confounder.  
+    \item \textbf{Reading Literary Fiction and Empathy.}  
+    A study claims that reading novels increases empathy. Suggest a confounder that could affect both reading habits and empathy.  
+    \item \textbf{Voter Turnout and Economic Inequality.}  
+    Research suggests higher economic inequality leads to lower voter turnout. Under what conditions might this relationship have no confounders?  
+\end{enumerate}
+
+\ifsolutions \color{blue} \textbf{Solution:} \\
+
+\begin{enumerate}[label=(\alph*)]
+    \item \textbf{Confounder: Candidate Popularity} \\
+    More popular candidates both attract more donations (allowing for higher spending) and are more likely to win.  
+    \item \textbf{Confounder: Personal Disposition or Upbringing}  \\ 
+    People inclined toward ethics may already act morally, making the relationship non-causal.  
+    \item \textbf{Confounder: Government Strength}  \\
+    Stronger governments may both engage in censorship and maintain stability, creating a spurious correlation.  
+    \item \textbf{Confounder: Education Level}  \\
+    Higher education levels may increase both reading literary fiction and empathy, explaining the observed effect.  
+    \item \textbf{Assumptions for no confounders between Voter Turnout and Inequality} \\
+    If we compare voter turnout within the same country over a short period, political culture and institutions remain constant, making it plausible that economic inequality is the primary driver of differences in turnout.  
+\end{enumerate}
+
+\fi \color{black}
+
+\item \textbf{Does Offering Free Public Transportation Reduce Traffic Congestion?}
+
+Assume the following dynamics:
+\begin{itemize}[noitemsep]
+    \item The only commuting options available are driving, biking, and public transportation.
+    \item Driving \textbf{causes} traffic congestion.
+    \item Biking \textbf{prevents} traffic congestion.
+    \item Public transportation has no direct effect on congestion.
+\end{itemize}
+
+Think about the following situations:
+\begin{enumerate}[label=(\roman*)]
+    \item If offering free public transportation causes individuals to stop driving and switch to public transport, thereby reducing congestion, is it correct to say that \textbf{offering free public transportation caused a reduction in traffic congestion}?
+    \item If offering free public transportation causes individuals to stop biking and switch to public transport, thereby creating emptier roads, which incentivizes others to drive more, is it correct to say that \textbf{offering free public transportation caused an increase in traffic congestion}?
+\end{enumerate}
+
+Answer the following:
+\begin{enumerate}[label=(\alph*)]
+    \item Define the treatment and potential outcomes in both scenarios.
+
+    \item From the \textbf{potential outcome framework} (POF) perspective and assuming that there are no confounders in the study, both questions are answered \textbf{"Yes"}. Why? Is this a contradiction with the statement "Public transportation has no direct effect on congestion"? Or is this just due to how the POF interprets causality? Comment.
+
+    \item Would you expect a policy offering free public transportation to reduce congestion equally in Los Angeles (where most commuters drive) and in Amsterdam (where most commuters bike)? Why or why not? Comment on the importance of the population.
+\end{enumerate}
+
+\ifsolutions \color{blue} \textbf{Solution:}
+
+\begin{enumerate}[label=(\alph*)]
+
+    \item \textbf{Defining the treatment and potential outcomes:}
+    
+    - Define \( T \) as the treatment: whether free public transportation is offered (\( T = 1 \)) or not (\( T = 0 \)).
+    - Define \( Y(T) \) as the potential outcomes:
+      \begin{itemize}
+          \item \( Y(0) \) = Level of traffic congestion if free public transport is \textbf{not} introduced.
+          \item \( Y(1) \) = Level of traffic congestion if free public transport \textbf{is} introduced.
+      \end{itemize}
+    - In scenario (i), public transport replaces driving, reducing congestion, so \( Y(1) < Y(0) \).
+    - In scenario (ii), public transport replaces biking, which may indirectly encourage driving, increasing congestion, so \( Y(1) > Y(0) \).
+
+    \item \textbf{Why does the POF say "Yes" to both cases?}  
+
+    - According to the POF, a treatment \( T \) is said to "cause" a change in the outcome \( Y \) if:
+      \[
+      Y(1) - Y(0) \neq 0.
+      \]
+    - Even though public transportation itself has no direct effect on congestion, it induces behavioral changes in individuals that ultimately alter congestion levels.  
+    - This is not a contradiction. The POF allows for indirect causation—if a policy changes individuals’ choices and those choices, in turn, affect congestion, then the policy is considered to have caused that change.
+
+    \item \textbf{Effect differences between Los Angeles and Amsterdam.}  
+
+    The effect of free public transportation \textbf{depends on the existing commuting habits}:
+    
+    - In Los Angeles, where most people drive, many commuters would likely switch to public transport, leading to a large reduction in congestion.
+    - In Amsterdam, where biking is common, people switching from bikes to public transport would not reduce congestion and might even increase it if emptier streets encourage driving.
+    
+    \textbf{Conclusion:}  
+    Causal effects depend on the population. A treatment can have different effects depending on who is affected. This highlights the importance of considering the study population when evaluating policies.
+
+\end{enumerate}
+
+\fi \color{black}
+
+\item \textbf{Estimating ATE under randomization}
+
+Recall that, in a causal inference study, $Y(1)$ and $Y(0)$ represents the potential outcomes and, for each individual we have the observations:
+\begin{itemize}[noitemsep]
+    \item \( Y_i(1) \) is the potential outcome if individual \( i \) receives the treatment (\( T_i = 1 \)).
+    \item \( Y_i(0) \) is the potential outcome if individual \( i \) does not receive the treatment (\( T_i = 0 \)).
+\end{itemize}
+We only observe either \( Y_i(1) \) or \( Y_i(0) \) for an individual, but not both (the fundamental problem of causal inference), so we miss the treatment effect $\mathrm{TE} = Y(1) - Y(0)$. 
+The quantity $\mathrm{ATE} = \mathbb{E}[Y(1) - Y(0)]$, therefore, is the measure of interest, for which we use the estimate $\mathrm{SATE} = \overline{TE}$, where $\overline{X}$ is the sample mean of the random variable $X$.
+\begin{enumerate}[label=(\alph*)]
+    \item Show that $\mathrm{SATE} = \overline{Y(1)} - \overline{Y(0)}$, that is, we can measure the sample averate treatment effect as the differences in average of the treated and control groups.
+    
+    \item Write out the expressions $\overline{Y(1)}$ and $\overline{Y(0)}$ in a way that allows you to identify the factual and counterfactual parts of each sample mean.
+    
+    \item Under uniform randomization in the assigning mechanism for the treated and control groups, how would you expect both groups behave? What does that say about the relation between the counterfactual of one group and the factual of the other? 
+    
+    \item Conclude why, under perfect randomization, we can estimate SATE using the difference in means between the treated and control groups.
+\end{enumerate}
+
+\ifsolutions \color{blue} \textbf{Solution:} \\
+
+\begin{enumerate}[label=(\alph*)]
+    \item We start with the definition of $\mathrm{SATE}$:
+    \[
+    \mathrm{SATE} = \frac{1}{n} \sum_{i=1}^{n} (Y_i(1) - Y_i(0)).
+    \]
+    Using the linearity of the sample mean, we rewrite:
+    \[
+    \mathrm{SATE} = \frac{1}{n} \sum_{i=1}^{n} Y_i(1) - \frac{1}{n} \sum_{i=1}^{n} Y_i(0) = \overline{Y(1)} - \overline{Y(0)}.
+    \]
+    Thus, the sample average treatment effect can be estimated as the difference between the sample means of the treated and control groups.
+
+    \item We decompose $\overline{Y(1)}$ and $\overline{Y(0)}$ into their factual and counterfactual parts:
+    \[
+    \overline{Y(1)} = \frac{1}{n} \sum_{i=1}^{n} Y_i(1) = \frac{1}{n} \sum_{i:T_i=1} Y_i(1) + \frac{1}{n} \sum_{i:T_i=0} Y_i(1),
+    \]
+    where:
+    \begin{itemize}
+        \item The first term represents the factual outcomes observed in the treatment group.
+        \item The second term represents the counterfactuals that we do not observe (the potential outcome if the treatment group had not been treated).
+    \end{itemize}
+    Similarly, for $\overline{Y(0)}$:
+    \[
+    \overline{Y(0)} = \frac{1}{n} \sum_{i=1}^{n} Y_i(0) = \frac{1}{n} \sum_{i:T_i=0} Y_i(0) + \frac{1}{n} \sum_{i:T_i=1} Y_i(0),
+    \]
+    where:
+    \begin{itemize}
+        \item The first term is the factual outcome of the control group.
+        \item The second term is the counterfactual outcome that we do not observe (what would have happened if the control group had been treated).
+    \end{itemize}
+
+    \item Under uniform randomization, both the treated and control groups are drawn randomly from the same population. 
+    % This means that:
+    % \[
+    % \mathbb{E}[Y(1) \mid T=0] = \mathbb{E}[Y(1) \mid T=1],
+    % \]
+    % and
+    % \[
+    % \mathbb{E}[Y(0) \mid T=1] = \mathbb{E}[Y(0) \mid T=0].
+    % \]
+    In other words, randomization ensures that the expected value of the potential outcomes is the same across treatment and control groups before treatment is assigned. Therefore, it is reasonable to assume that (is it? see the next exercise), in expectation, the counterfactual of one group is equal to the factual of the other. Therefore, the sample means are expected to be similar for a large-enough sample size, that is
+    $$
+    \frac{1}{n_T} \sum_{i:T_i=1} Y_i(0) \approx \frac{1}{n_C} \sum_{i:T_i=0} Y_i(0),\quad \frac{1}{n_T} \sum_{i:T_i=1} Y_i(1) \approx \frac{1}{n_C} \sum_{i:T_i=0} Y_i(1)
+    $$
+
+    \item Since under perfect randomization we have the expectation property above, we can replace the missing counterfactuals with the observed factual outcomes from the opposite group. This leads to:
+    $$
+    \mathrm{SATE} \approx \frac{1}{n_T} \sum_{i:T_i=1} Y_i(1) - \frac{1}{n_C} \sum_{i:T_i=0} Y_i(0).
+    $$
+\end{enumerate}
+
+\fi \color{black}
+
+\item \textbf{Sometimes randomization is not enough.}
+
+Even under perfect randomization and assuming SUTVA holds, the act of receiving a treatment may induce changes in behavior beyond the intended effect of the treatment itself. This can create fundamental differences between the treated and control groups, even if they were initially identical.
+
+Consider an experiment where companies implement a 4-day workweek\footnote{Kellam, J., and Guðmundur D. Haraldsson. (2021) Going public: Iceland's journey to a shorter working week} for randomly assigned employees to measure its impact on productivity.
+
+\begin{enumerate}[label=(\alph*)]  
+    \item Define the treatment variable \( T \) and the outcome variable \( Y \).
+
+    \item Discuss the SUTVA assumption.
+
+    \item Assume now that SUTVA holds. Suppose that workers in the treatment group, knowing they are part of an experiment, work harder because they believe that their long-term 4-day workweek depends on showing improved performance. Meanwhile, workers in the control group continue as usual. Explain why this could create a fundamental difference between the two groups beyond the direct effect of the 4-day workweek itself.
+    
+    \item Would the measured difference in productivity between the treated and control groups necessarily reflect the true long-term effect of a 4-day workweek? Why or why not?
+    
+    \item Suggest a way to reduce or test for this observer effect in the experiment design.
+\end{enumerate}
+
+\ifsolutions \color{blue} \textbf{Solution:}  
+
+\begin{enumerate}[label=(\alph*)]  
+
+    \item The treatment variable \( T \) is whether a worker is assigned to the 4-day workweek (\( T = 1 \) if treated, \( T = 0 \) if in control).  
+    The outcome variable \( Y \) is the measured productivity (e.g., output per hour, efficiency score, total tasks completed).  
+
+    \item The Stable Unit Treatment Value Assumption (SUTVA) consists of two conditions:  
+    \begin{itemize}  
+        \item \textbf{No interference:} The treatment status of one worker should not affect the outcome of another worker. In this case, if treated workers influence control workers by discussing the benefits of the 4-day workweek, SUTVA would be violated.
+        \item \textbf{No hidden variations in treatment:} The treatment must be well-defined and applied consistently across treated individuals. If some workers receive more flexibility in their 4-day schedule than others, the assumption is violated.  
+    \end{itemize}  
+
+    \item If workers in the treatment group are aware that they are part of an experiment and believe that their effort could influence whether the policy is adopted permanently, they may exert extra effort beyond what they would under normal conditions. This introduces a behavioral response that is not solely due to the 4-day workweek itself. The control group, unaware or unmotivated by such stakes, may behave normally. As a result, the two groups are no longer directly comparable because the treated workers are not just experiencing a different work schedule but are also responding to the experimental setting itself.
+
+    \item No, the measured difference may not reflect the true long-term effect. If the productivity boost is due to workers knowing they are being observed (often called the Hawthorne effect), it may disappear once the policy is permanently implemented and they no longer feel the pressure to perform at an artificially high level. This would mean the estimated treatment effect is biased upward.
+
+    \item To reduce or test for the observer effect, one could:
+    \begin{itemize}
+        \item Conduct the experiment over a long period to see if the initial productivity boost fades over time.
+        \item Implement a placebo treatment for the control group, such as providing them with an unrelated incentive, to balance the motivation levels.
+        \item Use blinding if feasible, meaning workers do not know they are being monitored as part of an experiment.
+        \item Compare post-experiment productivity levels after the policy is permanently adopted to assess whether the initial treatment effect persists.  
+    \end{itemize}  
+
+\end{enumerate}  
+
+\fi \color{black}
+
+\end{enumerate}
+
+\end{document}

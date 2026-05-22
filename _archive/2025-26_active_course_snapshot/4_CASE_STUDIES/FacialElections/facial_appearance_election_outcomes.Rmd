@@ -1,0 +1,293 @@
+---
+title: "Linear Model: Facial Appearance and Election Outcomes"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2024'
+output:
+  html_document: 
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+    
+```{r global_options, include=T, echo = F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE)
+```
+
+# Prelude
+
+Before running this Rmarkdown notebook, ensure that the `rmarkdown` package is installed (`install.packages("rmarkdown")`). Additionally, load the necessary libraries and data sets:
+
+```{r}
+# You may need to install these packages... Uncomment to do so
+# install.packages("devtools")
+# devtools::install_github("kosukeimai/qss-package")
+library(qss)
+data("face", package = "qss")
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Introduction
+
+Psychologists have conducted an experiment suggesting that judgments of candidates' facial appearance, made in under a second, can predict election outcomes at rates better than chance.^[Alexander Todorov, Anesu N. Mandisodza, Amir Goren, and Crystal C. Hall (2005) “Inferences of competence from faces predict election outcomes.” *Science*, vol. 308, no. 10 (June), pp. 1623–1626.] In this study, student participants were briefly shown black-and-white photographs of two congressional candidates (the ultimate winner and the runner-up). The photographs were displayed for under a second, and the participants were then asked to rate the candidates’ competence.
+
+The experimenters used these competence ratings to gauge whether a rapid facial assessment could anticipate real-world election results. **The subjects surveyed were unfamiliar with each candidate's political affiliation, policy positions, or incumbency status.** Their judgments, therefore, relied exclusively on the candidates’ facial impressions.
+
+<div style="margin-top: -60px;"></div>
+
+# The Data
+
+The dataset (accessible in the [Prelude](#Prelude) section) contains `r nrow(face)` observations and `r ncol(face)` variables about election outcomes across different states and congressional sessions.  The variables are:
+
+  * `year`: the year of the election.
+  * `state`: the state where the election occurred.
+  * `winner`: the name of the winning candidate.
+  * `loser`: the name of the runner-up candidate.
+  * `w.party`: the political party of the winning candidate.
+  * `l.party`: the political party of the runner-up candidate.
+  * `d.votes`: the number of votes received by the Democratic candidate.
+  * `r.votes`: the number of votes received by the Republican candidate.
+  * `d.comp`: a competence measure for the Democratic candidate.
+  * `r.comp`: a competence measure for the Republican candidate.
+
+Below is a summary of the basic statistics for each variable.
+
+```{r}
+summary(face)
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Correlation and scatter plots
+
+To explore how facial competence might relate to election outcomes, we can start by plotting competence scores against the vote differences. We define the *win margin* for the Democratic candidate as the difference in two-party vote shares (Democratic minus Republican). Two-party vote share is the fraction of votes going to each major party, ignoring votes for other parties.
+
+```{r}
+## two-party vote share for Democrats and Republicans
+face$d.share <- face$d.votes / (face$d.votes + face$r.votes)
+face$r.share <- face$r.votes / (face$d.votes + face$r.votes)
+face$diff.share <- face$d.share - face$r.share
+```
+
+Next, we create a scatter plot using `plot()`. We color points blue or red based on whether the Democratic or Republican candidate won the election, respectively, by using the argument `pch`. We use the `ifelse()` function when specifying the `col` argument so that red dots are used for the races with Republican winners and blue dots are used for those with Democratic winners. 
+
+The plot shows a mild upward trend in the Democratic margin as the competence score for Democrats increases.
+
+```{r}
+plot(face$d.comp, face$diff.share, pch = 16,
+     col = ifelse(face$w.party == "R", "red", "blue"),
+     xlim = c(0, 1), ylim = c(-1, 1),
+     xlab = "Competence scores for Democrats",
+     ylab = "Democratic margin in vote share",
+     main = "Facial competence and vote share")
+```
+
+Let us know compute the correlation coefficient between the variables `d.comp` and `diff.share` of our dataset.
+
+```{r}
+cor(face$d.comp, face$diff.share)
+```
+
+The resulting correlation of around $0.4$ indicates a moderately positive relationship: in races where the Democratic candidate was considered more competent by the experimental subjects (who had no prior familiarity with the candidates), the Democratic margin of victory tended to be larger.
+
+<div style="margin-top: -60px;"></div>
+
+# Linear Regression
+
+We can fit a linear regression model in R using `lm()`. This function takes a **formula** of the form `Y ~ X` as the main argument, indicating the outcome variable as `Y` and the predictor as `X`, taken from a data frame specified as the `data` argument. By default, the regression includes an intercept term. In our case, `diff.share` is the outcome variable and `d.comp` is the predictor. 
+
+```{r}
+fit <- lm(diff.share ~ d.comp, data = face) # fit the model
+fit
+```
+
+The output shows that the estimated intercept is −0.3122 whereas the estimated slope is 0.6604. That is, when no experimental subject thinks a Democratic candidate is more competent than a Republican counterpart, the predicted Democratic margin of two-party vote share is approximately −31.2 percentage points. If the perceived
+competence score increases by 10 percentage points, then the outcome variable is predicted to increase on average by 6.6 (= 0.6604 × 10) percentage points. 
+
+There is an alternative way of fitting the same model without the data argument. This requires specifying the entire names of objects for the outcome variable and the predictor as follows.
+
+```{r}
+lm(face$diff.share ~ face$d.comp) # fit the model without specifying the data argument
+```
+
+In general, this is not recommended because it unnecessarily complicates the syntax and may cause confusion. However, it may be useful when the variables we wish to use for regression exist as separate objects in the workspace. 
+
+We can also extract the coefficients and fitted values directly by using the functions `coef()` and `fitted()` functions, respectively.
+
+```{r}
+coef(fit) # get estimated coefficients
+head(fitted(fit)) # get fitted or predicted values
+```
+
+We add the regression line to the scatter plot with `abline()`, which takes a linear-model object as input. The plot also shows the estimated intercept $\widetilde{\beta}_0$ as well as the observed outcome $Y$, the predicted or fitted value $\widehat{Y}$ , and the residual $\widetilde{u}$ for one of the observations.
+
+```{r}
+plot(face$d.comp, face$diff.share, xlim = c(0, 1.05), ylim = c(-1,1),
+    xlab = "Competence scores for Democrats",
+    ylab = "Democratic margin in vote share",
+    main = "Facial competence and vote share")
+abline(fit) # add regression line
+abline(v = 0, lty = "dashed")
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Goodness of fit
+
+This regression line is the “line of best fit” because it minimizes the magnitude of prediction error. But, is it good enough? 
+
+We can compute the Standard Error of the Regression (SER), which estimates the standard deviation of the error term as
+
+$$
+\mathrm{SER} = \sqrt{\frac{SSR}{n-k-1}}, \quad SSR = \sum_{i=1}^{n} (Y_i - \widehat{Y}_i)^2 = \sum_{i=1}^{n} \widehat{u}_i^2,
+$$
+
+where \mathrm{SSR} stands for Sum of Squares of the Residuals, and $n$ and $k$ are the number of observations and number of regressors used to estimate the model's parameters.
+
+```{r}
+n <- nrow(face); k <- 1
+epsilon.hat <- resid(fit) # residuals (alternatively, use fit$residuals)
+(SER <- sqrt(sum(epsilon.hat^2)/(n-k-1))) # SER
+```
+
+While this estimate gives an idea average error term, it is not enough to asses the fitness of the regression. The idea is that an average residual of about $0.26$, like the one we obtained, may be large or small when compared with the variability of the explained variable $Y$, that is, the Total Sum of Squares (TSS), defined as
+
+$$
+\mathrm{TTS} = \sum_{i=1}^n (Y_i - \overline{Y})^2, \mathrm{TTS} = \sum_{i=1}^n (\widehat{Y}_i - \overline{Y})^2, 
+$$
+
+We then compute the coefficient of determination
+
+$$
+R^2 = \frac{\mathrm{ESS}}{\mathrm{TSS}} 
+= \frac{\mathrm{TSS} - \mathrm{SSR}}{\mathrm{TSS}} 
+= 1 - \frac{\mathrm{SSR}}{\mathrm{TSS}}, \quad 
+ESS = \sum_{i=1}^n (\widehat{Y}_i - \overline{Y})^2,
+$$
+
+where we also introduce the Explained Sum of Squares (ESS). Let us now compute the coefficient of determination of our regression line
+
+```{r}
+1 -  sum(epsilon.hat^2) / sum((face$diff.share - mean(face$diff.share))^2) # Coefficient of determination
+```
+
+ Recall that $R^2$ scores between $0$ (worse fit) and $1$ (perfect linear fit). An $R^2$ of about $0.1873$, like the one of our linear model, is quite poor as a measure of fit. This means that around $18.73%$ of the total variability of $Y$ is captured, and therefore it can be explained, by using the regressor `face$d.comp`. Therefore, it is said that
+
+  * The model explains $18.73$ ($R^2\times 100$) percentage of the variability of the output variable.
+
+<div style="margin-top: -60px;"></div>
+
+# Diagnosis 
+
+<div style="margin-top: -85px;"></div>
+
+# (not needed if you are only interested in predicting)
+
+Like any model, the Linear Regression Model also rest on some assumptions, namely:
+    
+  * **Linearity:** $\mathbf{E}[Y | X_1, \ldots, X_k] = \beta_0 + \beta_1 X_1 + \cdots \beta_k X_k$
+    
+  * **Homoscedasticity:** The variance of $u_i$, for each value of $x_i$, is constant, $\mathbf{Var}[u_i|x_i] = \sigma^2$ (does not depend on $i$)
+    
+  * **Normality:** $u_i \sim \mathcal{N} (0, \sigma^2)$
+
+  * **Independence:** $u_1, \dots, u_n$ are independent (or not (auto)correlated, $\mathbf{C}\mathrm{ov}{u_i, u_j} = 0,\ \forall i\neq j$, because they are assumed to be normal)
+
+Non-compliance of this assumptions may result invalidates the model in different ways. Blindly using the linear fit results and metrics without checking this assumptions may result in false and misleading conclusions. The critical process of investigating the validity of these assumptions is called **model diagnosis**.
+
+<div style="margin-top: -60px;"></div>
+
+### Diagnosis graphs
+
+The following diagnosis graphs are instrumental in the validation process. To display the graphs, we can input a linear-model object, `fit` in our case, into the function `plot()`. This automatically plot $4$ graphs, from which the first $3$ are the ones we are interested in. To avoid the display of the $4$th one, we just use the `which` argument.
+
+#### Residuals vs. fitted values plot.
+
+This plot serves mainly to check the linearity, although lack of homoscedasticity or independence can also be detected.
+
+```{r}
+plot(fit, which = 1)
+```
+
+The fitted values vs residuals does not show a trend, which support suggests that the linearity assumption is met. Also no clear pattern is observable, so there is no immediate reason to reject independence assumption. in addition, the residuals seems to be equally spread around0, meaning that the heteroscedasticity assumption is likely to be met.
+
+#### Q-Q plot.
+
+This plot is useful to check the normality of the error term.
+
+```{r}
+plot(fit, which = 2)
+```
+
+The fact that the points in the Q-Q plot are reasonable aligned with the $x = y$, specially around $x = 0$, is evidence validating the normality assumption on the error term.
+
+#### Standardized residuals vs. fitted values plot
+
+It is similar to the first diagnostic plot, but now with the residuals standardized and transformed by a square root (of the absolute value). This makes the task of spotting heteroskedasticity about spotting for non-linearities.
+
+```{r}
+plot(fit, which = 3)
+```
+
+The red line in the graph, which is a regression of the fitted values on the standardized residuals, is near the $y = 0$ line, which supports the homoscedasticity assumption.
+
+<div style="margin-top: -60px;"></div>
+
+# The summary of the linear regression
+
+Many of the above-mentioned metrics can be spot as a single output of the linear-fit object `fit`, by using the function `summary()`.
+
+```{r}
+summary(fit)
+```
+
+At the very top, the summary shows the formula used for the linear model, in this case `diff.share ~ d.comp`, followed by basic statistics about the residuals
+
+The coefficient estimation and inference comes right below. The `Estimate` column shows the estimation of the coefficients, while the `Std. Error` displays the sample standard deviation associated to those estimators, and the `Pr(>|t|)` column shows their correspondent $p$-values (see next session). 
+
+Other useful metrics are those about the fitness of the model: `Residual standard error`, `R-squared`, and `Adjusted R-square`. Note that the $R^2$ coefficient coincides with the one calculated earlier. Recall that the Adjusted $R^2$, denoted by $\overline{R}^2$, is a deflated version of the $R^2$ that mitigates its inflation as more non-necessarily-significant regressors are added, making $\overline{R}^2$ a more reliable measure of fitness for multiple linear regression.
+
+<div style="margin-top: -60px;"></div>
+# Significance of the regressors.
+
+Recall that the OLS estimator of the coefficients are random, meaning that, for a different dataset, the estimations change, thus carrying the randomness of the independent and dependent variables.
+
+The question then arises:
+
+  * What if the constant coefficient $\beta_k$ is actually zero but the estimation $\widehat{\beta}_k$ is not, leading to a false sense of linearity between the regressor $X_k$ and the output $Y$?
+  
+This question is relevant since $\beta_k = 0$ means that the $k$th regressor is not relevant to explain the output $Y$. To answer this question, one needs tools of statistical inference. As a rule of thumb:
+
+  * If the **$p$-value** associated to the $k$th coefficient is lower than $\alpha\in (0,1)$, then we can assure that $\beta_k$ is statistically different from zero with a **confidence level** of $(1-\alpha)\times 100\%$, or with a **significance level** of $\alpha$.
+  
+This ''statistically significant'' conclusion should be interpreted as follows:
+
+  * If $m$ datasets were handed to you and you were to perform $m$ different estimators $\widehat{\beta}_k$ and their respective $p$-values, roughly only $m\times\alpha$ times you where going to be wrong about the decision of considering $\beta_k = 0$.
+  
+Hence, one desires small values of $\alpha$ (tipically $0.1$, $0.05$, or $0.001$) to guarantee that considering $\beta_k = 0$, when actually $\beta_k \neq 0$, would be the wrong decision a small number of times, in the hope that our dataset lies in the right side.
+
+In our case, the $p$-value related to the regressor `d.comp` is $8.85\times 10^{-7}$ (or `8.85e-07`), meaning that we can state:
+
+  * The competence measure for the Democratic candidate is statistically significant to explain the variability of the difference in votes received by the Democratic candidate vs Republicans candidates, with a confidence greater than $99\%$.
+
+<div style="margin-top: -60px;"></div>
+
+# Exercises
+
+  * **Exercise 1:** Repeat the whole analysis done in the notebook but using the competence measure for the Republican candidates `r.comp` to explain the difference in votes `face$diff.share`.
+
+# Acknowledgement and Copyright
+
+These notes are adapted from the book [Quantitative Social Science](https://press.princeton.edu/books/quantitative-social-science) by Kosuke Imai.

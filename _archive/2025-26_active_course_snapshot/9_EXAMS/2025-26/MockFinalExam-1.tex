@@ -1,0 +1,388 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+\printanswers % Comment out to hide answers and show answer boxes
+
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\makeatother
+\setcounter{footnote}{0}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule
+    \hspace{-\arraycolsep}%
+}
+
+\unframedsolutions
+\renewcommand{\solutiontitle}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Mock Final Exam - 1}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2025/26}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{May 4, 2026}
+\newcommand{\university}{CUNEF Universidad}
+
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Your work must be well organized and coherent. Pay attention to notation, definitions of events, units, and assumptions.
+
+            \item \textbf{You must answer each question inside the designated box}; answers outside will not be considered.
+
+            \item The use of calculators is allowed.
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+
+        \end{enumerate}
+    }}
+\end{center}
+%--- Instructions ---%
+
+\vspace{0.3cm}
+
+A team of researchers want to study whether holding political office increases politicians' personal wealth.
+%\footnote{Inspired by Andrew C. Eggers and Jens Hainmueller (2009), ``MPs for Sale? Returns to Office in Postwar British Politics.''}
+They gather data on candidates' wealth declarations before and after close elections, with the goal of knowing whether winning office causes an increase in personal wealth.
+
+\vspace{0.2cm}
+
+%--- Questions ---%
+\begin{questions}
+
+%========================================================
+\question[3]
+Before estimating causal effects, the researchers audit wealth declarations and study the probability that a randomly-chosen candidate's declaration is suspicious. Among $1,200$ candidates, $540$ won office, $300$ were flagged by a newspaper as having unusually large wealth growth, and $162$ both won office and were flagged.
+
+Let $W$ be the event ``the candidate won office'' and $F$ the event ``the candidate was flagged by the newspaper.''
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Compute $P(W)$, $P(F)$, $P(W\cap F)$, and $P(W\mid F)$. Interpret the last two probabilities.
+
+    \begin{solutionorbox}[5.2cm]
+    \textbf{Solution:} Since all candidates have the same probability of being chosen, we divide number of candidates in each set by the total number of candidates:
+    \[
+    P(W)=\frac{540}{1200}=0.45, \qquad
+    P(F)=\frac{300}{1200}=0.25,
+    \]
+    \[
+    P(W\cap F)=\frac{162}{1200}=0.135.
+    \]
+    The conditional probability is
+    \[
+    P(W\mid F)=\frac{P(W\cap F)}{P(F)}=\frac{162/1200}{300/1200}=\frac{162}{300}=0.54.
+    \]
+    Among flagged candidates, $0.54$ won office.
+    \end{solutionorbox}
+
+    \item Are the events $W$ and $F$ independent?
+
+    \begin{solutionorbox}[4.4cm]
+    \textbf{Solution:} Events $W$ and $F$ are independent if
+    \[
+    P(W\cap F)=P(W)P(F).
+    \]
+    Here,
+    \[
+    P(W)P(F)=0.45\cdot 0.25=0.1125,
+    \]
+    while $P(W\cap F)=0.135$. Since $0.135\neq 0.1125$, the events are not independent. Equivalently, $P(W\mid F)=0.54\neq 0.45=P(W)$.
+    \end{solutionorbox}
+
+    \item Suppose that an independent anti-corruption audit has the following properties. The prior probability that a declaration hides illicit income is $P(C)=0.06$. If a declaration hides illicit income, the audit flags it with probability $P(A\mid C)=0.85$. If it does not hide illicit income, the audit still flags it with probability $P(A\mid C^c)=0.14$. Compute the probability that a declaration actually hides illicit income given that it was flagged by the audit, $P(C\mid A)$.
+
+    \begin{solutionorbox}[7.2cm]
+    \textbf{Solution:} First compute $P(A)$ using the Law of Total Probability:
+    \[
+    P(A)=P(A\mid C)P(C)+P(A\mid C^c)P(C^c).
+    \]
+    Since $P(C^c)=1-0.06=0.94$,
+    \[
+    P(A)=0.85\cdot 0.06+0.14\cdot 0.94=0.051+0.1316=0.1826.
+    \]
+    By Bayes' theorem,
+    \[
+    P(C\mid A)=\frac{P(A\mid C)P(C)}{P(A)}=\frac{0.85\cdot 0.06}{0.1826}=\frac{0.051}{0.1826}\approx 0.2793.
+    \]
+    Thus, after observing a positive audit flag, the probability of hidden illicit income is about $0.2793$.
+    \end{solutionorbox}
+
+    \item In the population of comparable candidates, suppose individual five-year wealth change $X$ has mean $\mu=8$ and standard deviation $\sigma=24$, measured in thousands of euros. A journalist takes a random sample of $n=64$ candidates. Use the Central Limit Theorem to approximate
+    \[
+    P(\overline X>14).
+    \]
+    {\footnotesize Hint: you may need to use the approximation $\Phi(2)=0.9772$ for the standard normal distribution function evaluated at $2$.}
+
+    \begin{solutionorbox}[6.2cm]
+    \textbf{Solution:} By the Central Limit Theorem,
+    \[
+    \overline X \approx N\left(\mu,\frac{\sigma^2}{n}\right)
+    =N\left(8,\frac{24^2}{64}\right).
+    \]
+    The standard error is
+    \[
+    \frac{\sigma}{\sqrt n}=\frac{24}{\sqrt{64}}=\frac{24}{8}=3.
+    \]
+    Therefore,
+    \[
+    P(\overline X>14)=P\left(Z>\frac{14-8}{3}\right)=P(Z>2).
+    \]
+    Using $\Phi(2)=0.9772$,
+    \[
+    P(Z>2)=1-0.9772=0.0228.
+    \]
+    The probability is approximately $0.0228$.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\question[2]
+The researchers summarize average wealth, measured in thousands of euros, for candidates who narrowly won and narrowly lost an election:
+
+\begin{center}
+\begin{tabular}{lcc}
+\hline
+ & Before the election & Four years after the election \\
+\hline
+Narrow winners & 124.0 & 143.5 \\
+Narrow losers & 123.0 & 130.0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Identify the treatment variable and the outcome variable. What are the treatment and control groups?
+
+    \begin{solutionorbox}[4.2cm]
+    \textbf{Solution:} The treatment variable is whether the candidate wins office:
+    \[
+    T=1 \quad \text{if the candidate narrowly wins}, \qquad T=0 \quad \text{if the candidate narrowly loses}.
+    \]
+    The outcome variable is post-election personal wealth, or alternatively the change in personal wealth. The treatment group is the group of narrow winners, and the control group is the group of narrow losers.
+    \end{solutionorbox}
+
+    \item Using only the post-election data, compute the Difference-in-Means estimator. Would you rely on it as a causal estimate? Why or why not?
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} The post-election Difference-in-Means estimator is
+    \[
+    \widehat{SATE}_{DiM}=143.5-130.0=13.5.
+    \]
+    It says that four years after the election, narrow winners are on average $13.5$ thousand euros wealthier than narrow losers. In the absence of randomization, this comparison may be biased because it ignores pre-existing differences and possible confounders.
+    \end{solutionorbox}
+
+    \item Compute the Before-and-After estimator for the narrow winners. State the key assumption behind this estimator.
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} The Before-and-After estimator for narrow winners is
+    \[
+    \widehat{SATE}_{BA}=143.5-124.0=19.5.
+    \]
+    It suggests that wealth increased by $19.5$ thousand euros for narrow winners after taking office. This is causal only under a no time-varying confounders assumption: in the absence of winning office, the average wealth of these candidates would not have changed for other reasons during the same period.
+    \end{solutionorbox}
+
+    \item Compute the Difference-in-Differences estimator. Interpret it and state its main assumption.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} First compute the before-and-after changes:
+    \[
+    \Delta_T=143.5-124.0=19.5,
+    \]
+    \[
+    \Delta_C=130.0-123.0=7.0.
+    \]
+    Therefore,
+    \[
+    \widehat{SATE}_{DiD}=(143.5-124.0)-(130.0-123.0)=19.5-7.0=12.5.
+    \]
+    The estimate suggests that winning office increased personal wealth by $12.5$ thousand euros relative to the counterfactual trend represented by narrow losers. The key assumption is parallel trends: absent winning office, narrow winners and narrow losers would have experienced the same average change in wealth.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\question[3]
+Now suppose the researchers estimate the following linear regression on candidates whose vote margin is between $-6$ and $6$ percentage points:
+\[
+\widehat{gain}_i
+=6.0+10.0\,winner_i+0.50\,margin_i-0.30(winner_i\times margin_i)
++0.080\,wealth0_i-0.00020\,wealth0_i^2.
+\]
+The outcome $gain_i$ is the four-year wealth gain, measured in thousands of euros. The variable $winner_i$ equals $1$ if candidate $i$ won office and $0$ otherwise. The variable $margin_i$ is the candidate's vote margin in percentage points, centered at zero: positive values indicate victory and negative values indicate defeat. The variable $wealth0_i$ is wealth before the election, also measured in thousands of euros. The model has $R^2=0.46$, adjusted $R^2=0.43$, and $SER=15.0$.
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Interpret the coefficient on $winner_i$. Under what condition can it be interpreted causally?
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} The coefficient on $winner_i$ is $10.0$. Since the model includes an interaction between $winner_i$ and $margin_i$, this coefficient is the estimated difference of average gain between winners and losers at the cutoff, $margin_i=0$, holding pre-election wealth fixed. Thus, at the cutoff, winning office is associated with an additional $10.0$ thousand euros in wealth gain.
+
+    It can be interpreted as a causal effect if winning office is as good as randomly assigned at the cutoff, meaning that candidates just above and just below the winning threshold are comparable in all relevant pretreatment characteristics. this is the idea behinf the regression discontinuity defign.
+    \end{solutionorbox}
+
+    \item Interpret the coefficients on $margin_i$% and on the interaction term $winner_i\times margin_i$
+    .
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} The coefficient on $margin_i$ is $0.50$. Among losers, for whom $winner_i=0$, a one percentage point increase in the vote margin is associated with $0.50$ thousand euros more predicted average wealth gain.
+
+    % The interaction coefficient is $-0.30$. This means that the slope with respect to $margin_i$ is $0.30$ thousand euros smaller for winners than for losers. Therefore, for winners, the slope is
+    % \[
+    % 0.50-0.30=0.20.
+    % \]
+    % Equivalently, according to the algebra of the model, the winner-loser gap at margin $m$ is
+    % \[
+    % 10.0-0.30m.
+    % \]
+    \end{solutionorbox}
+
+    \item What is the marginal effect of one additional thousand euros of initial wealth when $wealth0_i=100$?
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} The marginal effect of $wealth0_i$ is the derivative of the prediction with respect to $wealth0_i$:
+    \[
+    \frac{\partial \widehat{gain}_i}{\partial wealth0_i}=0.080-2(0.00020)wealth0_i=0.080-0.00040wealth0_i.
+    \]
+    At $wealth0_i=100$,
+    \[
+    0.080-0.00040(100)=0.080-0.040=0.040.
+    \]
+    Thus, for a candidate with $100$ thousand euros of initial wealth, one additional thousand euros of initial wealth is associated with $0.040$ thousand euros, or $40$ euros, more predicted wealth gain.
+    \end{solutionorbox}
+
+    \item What is the difference between the predicted wealth gained by a candidate who won by $2$ percentage points and one that lost by $2$ percentage points, if they had the same initial wealth.
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} For the winner, $winner=1$, $margin=2$, and wealth before ellection $wealth0$. Hence,
+    \[
+    \widehat{gain}(winner=1, margin=2)=6.0+10.0+0.50(2)-0.30(1\cdot 2)+0.080(wealth0)-0.00020(wealth0^2).
+    \]
+    For the loser, $winner=0$, $margin=-2$, and same level of wealth before ellection $wealth0$. Hence,
+    \[
+    \widehat{gain}(winner=0, margin=-2)=6.0+0+0.50(-2)+0+0.080(wealth0)-0.00020(wealth0^2).
+    \]
+    The predicted difference is, therefore
+    \[
+    \widehat{gain}(winner=1, margin=2) - \widehat{gain}(winner=0, margin=-2)
+    =
+    10 + 0.5(2) - 0.5(-2) - 0.3(2) = 10 + 2 - 0.6 = 11.4.
+    \]
+    \end{solutionorbox}
+
+    \item Comment on the predictive capability of the model. Would you use it to predict the wealth gain of a winner with $margin=35$?
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} The model has $R^2=0.46$, so it explains $46\%$ of the sample variation in wealth gains.
+
+    I would not use this model to predict for a winner with $margin=35$, because the model was trained only for margins between $-6$ and $6$. Predicting at $margin=35$ would be an out-of-range prediction, or extrapolation. The linear relationship may not hold there, and the regression discontinuity design is local to the cutoff.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\question[2]
+Finally, the researchers estimate separate local linear regressions on the two sides of the electoral cutoff:
+\[
+\text{For } margin<0: \qquad \widehat{gain}=9.0+0.60\,margin, \qquad R^2=0.18,
+\]
+\[
+\text{For } margin\geq 0: \qquad \widehat{gain}=21.5+0.10\,margin, \qquad R^2=0.26.
+\]
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Which regression explains more variation in wealth gains?
+
+    \begin{solutionorbox}[3.8cm]
+    \textbf{Solution:} The regression for $margin\geq 0$ has $R^2=0.26$, while the regression for $margin<0$ has $R^2=0.18$. Therefore, the winners-side regression explains more of the observed variation in wealth gains, although neither model explains all variation.
+    \end{solutionorbox}
+
+    \item Compute the Regression Discontinuity estimate at the cutoff. Interpret it.
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} The cutoff is $margin=0$. The predicted outcome just below the cutoff is
+    \[
+    \lim_{margin\to 0^-}E[gain\mid margin]=9.0+0.60(0)=9.0.
+    \]
+    The predicted outcome just above the cutoff is
+    \[
+    \lim_{margin\to 0^+}E[gain\mid margin]=21.5+0.10(0)=21.5.
+    \]
+    Thus, the RD estimate is
+    \[
+    \widehat{SATE}_{RD}=21.5-9.0=12.5.
+    \]
+    The estimate suggests that winning office increases wealth gain by $12.5$ thousand euros for candidates at the electoral threshold.
+    \end{solutionorbox}
+
+    \item State the key assumptions needed for this RD estimate to have a causal interpretation. Mention one limitation.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} The key assumption is continuity at the cutoff: in the absence of winning office, the expected wealth gain of candidates would change smoothly through the cutoff. In plain words, candidates who barely win and barely lose must be comparable except for the fact that one group wins office.
+
+    A limitation is that the RD estimate is local. It estimates the causal effect for candidates close to the cutoff, not necessarily for candidates who win or lose by large margins.
+    \end{solutionorbox}
+
+    \item Write one single regression equation that reproduces the two separate regression lines above. Use $winner=1$ for $margin\geq 0$ and $winner=0$ for $margin<0$.
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} A single regression with an interaction is
+    \[
+    \widehat{gain}=9.0+0.60\,margin+12.5\,winner-0.50(winner\times margin).
+    \]
+    If $winner=0$, this becomes
+    \[
+    \widehat{gain}=9.0+0.60\,margin,
+    \]
+    which is the losers-side regression. If $winner=1$, this becomes
+    \[
+    \widehat{gain}=9.0+12.5+(0.60-0.50)margin=21.5+0.10\,margin,
+    \]
+    which is the winners-side regression.
+    \end{solutionorbox}
+\end{enumerate}
+
+\end{questions}
+
+\end{document}

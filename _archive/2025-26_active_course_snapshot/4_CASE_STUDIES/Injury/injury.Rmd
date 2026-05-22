@@ -1,0 +1,164 @@
+---
+title: "Causality: Worker Injury Benefits and Time Out of Work"
+author: "Quantitative Methods for Humanities"
+date: "CUNEF Universidad"
+output: 
+  html_document:
+    css: my-theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+
+```{r global_options, include=TRUE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+In July 1980, Kentucky raised the cap on weekly worker injury benefits from \$131 to \$217 — a **66% increase**. Only **high-earning workers** were eligible for the new cap. This policy change creates a natural experiment where we can explore whether more generous compensation discourages injured workers from returning to work quickly.
+
+In this document, we apply both **Before-and-After** and **Difference-in-Differences** designs to estimate the causal effect of this policy using the dataset `injury.RData`.
+
+# Q1. Treatment vs Outcome
+
+- **Treatment:** Being a high earner *after* the policy change. Variable `highearn` equals 1. 
+- **Outcome:** `ldurat`, the log of weeks out of work.
+
+# Q2. Simple Comparison After Policy?
+
+Simply comparing high earners vs. low earners *after* the policy ignores that these groups may have differed even before July 1980. This would confound  pre-existing differences with the policy’s effect. A **Difference-in-Means After** estimator would be **biased**. This is typical in observational studies, where randomization is not guaranteed and, thus, the presence of confounders between the treatment and control group may significantly differ.
+
+# Q3. Before-and-After Design
+
+If we insist on a before-after comparison:
+  
+  - **Treated group:** High earners after the treatment (law) was implemented.
+  - **Control group:** High earners before the treatment (law) was implemented. 
+
+We must compare their average out-of-work time (`ldurat`) before vs. after the policy.
+
+# Q4. Load and Inspect the Data
+
+```{r}
+load("injury.RData")
+summary(injury)
+table(injury$highearn)
+```
+
+We now check the average log duration out of work by group and time period.
+
+# Q5. Before-and-After Estimator (BA)
+
+```{r}
+# Compute means for high earners before and after
+high_earners <- subset(injury, highearn == 1)
+
+mean_before <- mean(high_earners$ldurat[high_earners$afchnge == 0], na.rm = TRUE)
+mean_after <- mean(high_earners$ldurat[high_earners$afchnge == 1], na.rm = TRUE)
+
+ba_estimate <- mean_after - mean_before
+ba_estimate
+
+# Compute the overall variance as a benchmark for the difference
+sd(high_earners$ldurat)
+```
+
+**Interpretation:** This difference might reflect the policy effect, but it may also capture general trends over time. 
+
+Besides, the difference is somehow significant, since it accounts for about 16\% of the standard deviation.
+
+Formally, a hypothesis test determines wheather this difference is significant or not by comparing the p-value with a significant level.
+
+```{r}
+# Hypothesis test: high earners before vs after
+t.test(ldurat ~ afchnge, data = high_earners)
+```
+
+**Note:** Recall that, if you were to report the difference, you may want to transform back to the original scale (exponentiate to remove logarithmic scale) 
+
+# Q6. Limitations of BA — Why DiD?
+
+  - **Problem:** BA can’t separate **policy effects** from **time trends** (e.g., recession, economic changes).
+  - **Solution:** Estimate the time trend by using the group of low earners before and after the policy.
+  - DiD compares the **change** in outcomes *within each group* and then **differences the changes**.
+
+# Q7. Why Do We Need Parallel Trends?
+
+DiD assumes that, **in the absence of the policy**, the treated and control groups would have **followed similar trends** over time. This lets us state that **any difference observed after the policy is due to the policy itself**.
+
+# Q8. Plain Explanation of DiD Terms
+
+\[
+\widehat{\mathrm{SATE}}_{\mathrm{DiD}} = 
+(\overline{Y}_T^{\mathrm{after}} - \overline{Y}_T^{\mathrm{before}}) 
+- (\overline{Y}_C^{\mathrm{after}} - \overline{Y}_C^{\mathrm{before}})
+\]
+
+  - The **first term** measures how outcomes changed for the **treated** group before and after the policy was implemented.
+  - The **second term** captures change in the **control** group (i.e., the trend we'd expect without treatment).
+  - The **difference** isolates the causal effect.
+
+# Q9. Compute the DiD Estimator
+
+```{r}
+# Split into groups
+treated_before <- subset(injury, highearn == 1 & afchnge == 0)
+treated_after  <- subset(injury, highearn == 1 & afchnge == 1)
+control_before <- subset(injury, highearn == 0 & afchnge == 0)
+control_after  <- subset(injury, highearn == 0 & afchnge == 1)
+
+# Compute mean values for each group
+mean_tb <- mean(treated_before$ldurat, na.rm = TRUE)
+mean_ta <- mean(treated_after$ldurat, na.rm = TRUE)
+mean_cb <- mean(control_before$ldurat, na.rm = TRUE)
+mean_ca <- mean(control_after$ldurat, na.rm = TRUE)
+
+# Coimpute differences of treatment and control groups
+treat_diff <- (mean_tb - mean_ta)
+control_diff <- (mean_cb - mean_ca)
+
+# DiD estimator
+did_estimate <- treat_diff - control_diff
+did_estimate
+
+# Plotting
+plot(0:1, c(mean_cb, mean_ca), type = "b", pch = 16, col = "blue", lty = 2,
+     ylim = range(mean_tb, mean_ta, mean_cb, mean_ca), xaxt = "n", xlab = "Time", ylab = "Mean log duration (ldurat)",
+     main = "Parallel Trends Check (Before and After)")
+axis(1, at = 0:1, labels = c("Before", "After"))
+
+lines(0:1, c(mean_tb, mean_ta), type = "b", pch = 16, col = "red", lty = 1)
+
+legend("right", legend = c("Low earners (control)", "High earners (treated)"),
+       col = c("blue", "red"), lty = c(2, 1), pch = 16)
+```
+
+**Interpretation:** A **positive** DiD estimate suggests that the policy **increased time out of work** among high earners, relative to low earners. This supports the hypothesis that more generous benefits reduce return-to-work incentives.
+
+# Q10. Potential Threats to Validity
+
+Even DiD has assumptions. Some threats include:
+
+  - A recession or industry shock that disproportionately hits high earners.
+  - Policy spillovers: e.g., firms reacting by delaying rehiring high earners.
+  - Anticipation effects: if people knew the policy was coming, they might delay filing.
+
+# Summary
+
+This example illustrates how quasi-experimental designs like DiD can help answer causal questions when **randomization is not feasible**. However, we must always be cautious about the assumptions we’re making and validate them with data where possible.
+
+# Exercise
+
+  - Perform the same causal inference analysis but controling for gender (`male` variable)

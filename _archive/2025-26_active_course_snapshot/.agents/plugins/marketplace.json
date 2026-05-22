@@ -1,0 +1,44 @@
+{
+  "name": "ppe-qmh-local",
+  "interface": {
+    "displayName": "PPE QMH Local Agents"
+  },
+  "plugins": [
+    {
+      "name": "overleaf-github-workflow-agent",
+      "source": {
+        "source": "local",
+        "path": "./plugins/overleaf-github-workflow-agent"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "qmh-topic-experts",
+      "source": {
+        "source": "local",
+        "path": "./plugins/qmh-topic-experts"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education"
+    },
+    {
+      "name": "qmh-project-grading",
+      "source": {
+        "source": "local",
+        "path": "./plugins/qmh-project-grading"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Education"
+    }
+  ]
+}
