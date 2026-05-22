@@ -1,0 +1,419 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+\printanswers % Comment out to hide answers
+
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\makeatother
+\setcounter{footnote}{0}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule
+    \hspace{-\arraycolsep}%
+}
+
+\unframedsolutions
+\renewcommand{\solutiontitle}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Mock Final Exam - 2}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2025/26}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{May 8, 2026}
+\newcommand{\university}{CUNEF Universidad}
+
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Your work must be well organized and coherent. Pay attention to notation, definitions of events, etc.
+
+            \item \textbf{You must answer each question inside the designated box}; answers outside will not be considered.
+
+            \item The use of calculators is allowed.
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+
+        \end{enumerate}
+    }}
+\end{center}
+%--- Instructions ---%
+
+\vspace{0.3cm}
+
+The following questions are about \textbf{political corruption, public information, and electoral accountability}. The setting is inspired by real studies of Brazil's federal audit program, in which municipalities were selected for audits and the reports were made public.\footnote{Inspired by Claudio Ferraz and Frederico Finan (2008), ``Exposing Corrupt Politicians: The Effects of Brazil's Publicly Released Audits on Electoral Outcomes,'' \emph{Quarterly Journal of Economics}, 123(2), 703--745, and Claudio Ferraz and Frederico Finan (2011), ``Electoral Accountability and Corruption: Evidence from the Audits of Local Governments,'' \emph{American Economic Review}, 101(4), 1274--1311. The numerical values in this exam are invented for pedagogical purposes.}  A central question is whether voters punish corrupt politicians once reliable information becomes available.
+\vspace{0.2cm}
+
+%--- Questions ---%
+\begin{questions}
+
+%========================================================
+\question[2.5]
+A monitoring NGO reviews 500 public procurement contracts audited by federal inspectors. For each contract, it records whether inspectors found a \textbf{major irregularity} and whether the municipality has at least one \textbf{local radio station}.
+
+\begin{center}
+\begin{tabular}{ccc}
+ & Major irregularity ($C$) & No major irregularity \\
+\hline
+Local radio ($R$) & 72 & 168 \\
+No local radio & 104 & 156 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \vspace{0.3cm}
+    \item Compute $P(R)$, $P(C)$, $P(R \cup C)$, and $P(C \mid R)$. Interpret the last two probabilities.
+
+    \begin{solutionorbox}[7.8cm]
+    \textbf{Solution:} The total number of contracts is $500$. Hence,
+    \[
+    P(R)=\frac{72+168}{500}=\frac{240}{500}=0.48,
+    \]
+    \[
+    P(C)=\frac{72+104}{500}=\frac{176}{500}=0.352,
+    \]
+    \[
+    P(R\cup C)= P(R) + P(C) - P(R\cap C) = \frac{240}{500} + \frac{176}{500} - \frac{72}{500} = \frac{344}{500} = 0.688,
+    \]
+    and
+    \[
+    P(C\mid R)=\frac{P(C\cap R)}{P(R)}=\frac{72/500}{240/500}=\frac{72}{240}=0.30.
+    \]
+    $P(R\cup C)$ is the probability that a contract is either in a municipality with local radio or has a major irregularity. $P(C\mid R)$ is the probability that a contract has a major irregularity given that the municipality has local radio.
+    \end{solutionorbox}
+    \vspace{0.5cm}
+    \item If in the previous part you obtained $P(C \mid R) \neq P(C)$, what does that say about the events $C$ and $R$? Justify.
+
+    \begin{solutionorbox}[4.7cm]
+    \textbf{Solution:}
+    Since $P(C\mid R)=0.30\neq 0.352=P(C)$, the events $C$ and $R$ are not independent. That is, knowing that the municipality has at least one local radio station changes the probability of finding a major irregularity.
+    \end{solutionorbox}
+
+    \item Suppose a newspaper algorithm flags contracts as suspicious. If a contract has a major irregularity, it is flagged with probability $0.75$; if it does not have a major irregularity, it is still flagged with probability $0.12$. If a contract is flagged, what is the probability that it actually has a major irregularity?
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} Let $F$ denote the event that the contract is flagged. We are given
+    \[
+    P(F\mid C)=0.75, \qquad P(F\mid C^c)=0.12,
+    \]
+    and, from part (a), $P(C)=0.352$, so $P(C^c)=0.648$. First compute $P(F)$ by total probability:
+    \[
+    P(F)=P(F\mid C)P(C)+P(F\mid C^c)P(C^c).
+    \]
+    Thus,
+    \[
+    P(F)=0.75(0.352)+0.12(0.648)=0.264+0.07776=0.34176.
+    \]
+    By Bayes' rule,
+    \[
+    P(C\mid F)=\frac{P(F\mid C)P(C)}{P(F)}
+    =\frac{0.75(0.352)}{0.34176}
+    =\frac{0.264}{0.34176}\approx 0.7725.
+    \]
+    Therefore, a flagged contract has about a 0.7725 probability of having a major irregularity.
+    \end{solutionorbox}
+
+    \item After a high-profile audit report is released, suppose each of 900 voters independently reads at least one article about the report with probability $p=0.28$. Let $X$ be the number of voters who read about the report.
+    \begin{itemize}
+        \item[(i)] State the distribution of $X$.
+        \begin{solutionorbox}[2cm]
+    \textbf{Solution:} Each voter either reads the article or does not. Assuming independence and the same probability $p=0.28$ for every voter,
+        \[
+        X\sim \operatorname{Binomial}(n=900,p=0.28).
+        \]
+    \end{solutionorbox}
+        \item[(ii)] Use the Central Limit Theorem to approximate $P(X \geq 270)$. \\
+        {\footnotesize Hint: Express $X$ as a sum of identically distributed random variables and use that $P(Z \leq 1.34) \approx 0.9099$ for $Z\sim N(0, 1)$.}
+        \begin{solutionorbox}[4cm]
+        \end{solutionorbox}
+        \begin{solutionorbox}[7cm]
+    \textbf{Solution:} Notice that
+        \[
+        \mathbb{E}[X]=np=900(0.28)=252,
+        \]
+        and
+        \[
+        \operatorname{Var}(X)=np(1-p)=900(0.28)(0.72)=181.44,
+        \]
+        so $SD(X)=\sqrt{181.44}\approx 13.47$. Using the CLT,
+        \[
+        P(X\geq 270)\approx P\left(Z\geq \frac{270-252}{13.47}\right)
+        =P(Z\geq 1.34).
+        \]
+        Therefore,
+        \[
+        P(X\geq 270)\approx 1-\Phi(1.34)=1-0.9099=0.0901.
+        \]
+    \end{solutionorbox}
+    \end{itemize}
+
+\end{enumerate}
+
+%========================================================
+\question[2.5]
+Consider now a study of municipalities where the audit found serious corruption. Some audit reports were released before the next municipal election, while others were released after the election. The outcome is the incumbent mayor's vote share, measured in percentage points.
+
+\begin{center}
+\begin{tabular}{ccc}
+ & Previous election & Next election \\
+ & 2000 & 2004 \\
+\hline
+Report released before 2004 election & 56 & 41 \\
+Report released after 2004 election & 55 & 50 \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Identify the treatment variable and the outcome variable. Which group is the treatment group, and which one is the control group?
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} The treatment variable is
+    \[
+    T_i =
+    \begin{cases}
+    1 & \text{if the audit report was released before the 2004 election,}\\
+    0 & \text{if the audit report was released after the 2004 election.}
+    \end{cases}
+    \]
+    The outcome variable is the incumbent mayor's vote share in the election, measured in percentage points. The treatment group is the group whose audit report was released before the 2004 election. The control group is the group whose audit report was released after the 2004 election.
+    \end{solutionorbox}
+
+    \item Would you expect a randomized control trial design for this study? Why?
+
+    \begin{solutionorbox}[5.5cm]
+    \textbf{Solution:} Not necessarily. Unless the timing of the report release was randomly assigned by the researchers or the audit program, this is not an RCT. It is better described as an observational or quasi-experimental design, where causal interpretation depends on assumptions about how reports were released.
+    \end{solutionorbox}
+
+    \item Using only the 2004 data, compute the Difference-in-Means estimator. Would you immediately interpret it as a causal effect? Explain.
+
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} Using only 2004 data,
+    \[
+    \widehat{SATE}_{DiM}=\bar Y_T^{2004}-\bar Y_C^{2004}=41-50=-9.
+    \]
+    The estimate says that municipalities where the report was released before the election had, on average, incumbent vote shares 9 percentage points lower than municipalities where the report was released after the election.
+
+    This is an estimate of the average causal effect if treated and control municipalities are similar in every relevant regard but the treatment. This is reasonable to expect under randomization. Otherwise, confounders may bias the estimator (e.g., systematic release of reports in municipalities with more active opposition parties, stronger newspapers, or more severe scandals).
+    \end{solutionorbox}
+
+    \item Compute the Before-and-After estimator for the group whose report was released before the election. Suppose that unemployment rose and housing became less affordable between 2000 and 2004, would you say the BA estimator is unbiased under these circumstances?
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} The Before-and-After estimator for the treatment group is
+    \[
+    \widehat{SATE}_{BA}=\bar Y_T^{2004}-\bar Y_T^{2000}=41-56=-15.
+    \]
+    The estimate suggests that the incumbent vote share fell by 15 percentage points after the report was released.
+
+    The key assumption for unbiasedness of the BA estimator is that there are no time-varying confounders. Unemployment rates and housing affordability are confounders since they may affect levels of satisfaction and, as a result, have an impact on the incumbent party's vote share. So, under the mentioned circumstances the BA estimator would likely be biased.
+    \end{solutionorbox}
+
+    \item Compute the Difference-in-Differences estimator and interpret it.
+
+    \begin{solutionorbox}[7.5cm]
+    \textbf{Solution:} The DiD estimator is
+    \[
+    \widehat{SATE}_{DiD}
+    =\left(\bar Y_T^{2004}-\bar Y_T^{2000}\right)-\left(\bar Y_C^{2004}-\bar Y_C^{2000}\right).
+    \]
+    Substituting the values,
+    \[
+    \widehat{SATE}_{DiD}=(41-56)-(50-55)=-15-(-5)=-10.
+    \]
+    Interpretation: after adjusting for the 5 percentage-point decline in incumbent vote share observed in the control group, the release of the audit report is associated with a 10 percentage-point additional decline in incumbent vote share.
+    \end{solutionorbox}
+
+    \item What is the main assumption needed for the DiD estimator to be valid in this setting? Give one example of a violation.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} The main assumption is parallel trends: in the absence of the pre-election audit release, the treated and control municipalities would have experienced the same change in incumbent vote share from 2000 to 2004.
+
+    A violation would occur if, for reasons unrelated to the audit report, treated municipalities were already moving more strongly against incumbents than control municipalities. For example, if treated municipalities experienced a local economic crisis or a more organized opposition campaign between 2000 and 2004, the DiD estimate would overstate the effect of the report.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\question[2.5]
+A researcher estimates the following linear regression using municipalities from the audit study. The outcome is the incumbent mayor's 2004 vote share, measured in percentage points:
+\[
+\widehat{vote}_i
+=58-4.5\,info_i-0.8\,radio_i-1.2\,corr_i-3.0\,(info_i\times radio_i)+0.08\,corr_i^2.
+\]
+Here $info_i=1$ if the audit report was released before the election and $0$ otherwise; $radio_i=1$ if the municipality has local radio and $0$ otherwise; and $corr_i$ is the number of serious irregularities found in the audit. In the estimation sample, $corr_i$ ranges from 0 to 12. The model has $R^2=0.22$.
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item What is the predicted difference in incumbent vote share between a municipality with a local radio station and a municipality without one, assuming that the audit reports were released before the election and that both municipalities had the same number of serious irregularities?
+
+    \begin{solutionorbox}[4.8cm]
+    \textbf{Solution:} Holding $info=1$ and $corr$ fixed, changing $radio$ from $0$ to $1$ changes the prediction by
+    \[
+    -0.8-3.0(1)=-3.8.
+    \]
+    The predicted difference is -3.8 percentage points: among municipalities whose reports were released before the election and with the same number of serious irregularities, having local radio is associated with a 3.8 percentage-point lower predicted incumbent vote share.
+    \end{solutionorbox}
+
+    \item Interpret the coefficient of $info_i$. Under what condition can it be interpreted causally?
+
+    \begin{solutionorbox}[6.3cm]
+    \textbf{Solution:} The coefficient of $info_i$ is $-4.5$. Because the model includes an interaction between $info_i$ and $radio_i$, this coefficient is the estimated effect of releasing the audit report before the election when $radio_i=0$, holding $corr_i$ fixed. Among municipalities without local radio and the same number of serious irregularities, releasing the information before the election is associated with a $4.5$ percentage-point decrease, on average, in incumbent vote share.
+
+    This coefficient can be interpreted causally if the timing of the information release is randomized after controlling for the variables in the model.
+    \end{solutionorbox}
+
+    \item Interpret the interaction coefficient $-3.0$. What is the estimated effect of $info_i$ when $radio_i=1$?
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} The interaction coefficient $-3.0$ means that the effect of releasing the audit report before the election is estimated to be $3$ additional percentage points more negative, on average, in municipalities with local radio than in municipalities without local radio.
+
+    Specifically, when $radio_i=0$, the estimated effect of $info_i$ is
+    $
+    -4.5$, while
+    for $radio_i=1$, the estimated effect becomes
+    $
+    -4.5-3.0=-7.5
+    $.
+    \end{solutionorbox}
+
+    \item Is the effect of one additional irregularity on the incumbent vote share constant? Compute the marginal effect of one additional irregularity when there are already $10$ irregularities.
+
+    \begin{solutionorbox}[8cm]
+    \textbf{Solution:} The part of the model involving $corr_i$ is
+    \[
+    -1.2\,corr_i+0.08\,corr_i^2.
+    \]
+    The marginal effect of one additional irregularity is approximately the derivative:
+    \[
+    \frac{\partial \widehat{vote}}{\partial corr}=-1.2+2(0.08)corr=-1.2+0.16corr.
+    \]
+    When $corr=10$,
+    \[
+    -1.2+0.16(10)=-1.2+1.6=0.4.
+    \]
+    Thus, at 10 irregularities, the fitted model predicts that one additional irregularity is associated with a 0.4 percentage-point increase in predicted vote share. This illustrates how quadratic terms can produce non-linear and sometimes substantively suspicious patterns.
+    \end{solutionorbox}
+
+    \item Would you trust this model to predict the vote share of a municipality with $corr=18$?
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:} I would be cautious. The model was estimated using observations with $corr$ between 0 and 12, so $corr=18$ is outside the range of the training data. A prediction at $corr=18$ is an extrapolation, and the quadratic pattern may not hold there.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\question[2.5]
+Finally, suppose a researcher studies whether a mayor who barely wins reelection later misuses more public funds. The running variable is the incumbent mayor's margin of victory in the election, measured in percentage points and centered at zero. A positive margin means the incumbent barely won and serves another term; a negative margin means the incumbent barely lost and is replaced. The outcome is the percentage of audited federal funds with serious irregularities in the following term.
+
+The researcher estimates separate linear regressions on each side of the cutoff:
+\[
+\text{For } margin<0: \qquad \widehat{corruption}=18-0.20\,margin, \qquad R^2=0.06,
+\]
+\[
+\text{For } margin\geq 0: \qquad \widehat{corruption}=22.5+0.05\,margin, \qquad R^2=0.08.
+\]
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Which regression has greater predictive power?
+
+    \begin{solutionorbox}[2cm]
+    \textbf{Solution:} The regression for $margin\geq 0$ has $R^2=0.08$, while the regression for $margin<0$ has $R^2=0.06$. Therefore, the regression above the cutoff has slightly greater predictive power. However, the difference is small.
+    \end{solutionorbox}
+
+    \item Compute the Regression Discontinuity estimate. Interpret it.
+
+    \begin{solutionorbox}[5.2cm]
+    \textbf{Solution:} The RD estimate is the discontinuous jump at the cutoff:
+    \[
+    \widehat{RD}=\widehat{corruption}^{+}-\widehat{corruption}^{-}=22.5-18=4.5.
+    \]
+    Interpretation: among municipalities with very close elections, barely reelecting the incumbent is associated with an increase of 4.5 percentage points in the share of audited funds with serious irregularities in the following term.
+    \end{solutionorbox}
+
+    \item Consider the one-regression representation
+    \[
+    corruption_i=\beta_0+\beta_1 margin_i+\beta_2 reelected_i+\beta_3(margin_i\times reelected_i)+u_i,
+    \]
+    where $reelected_i=1$ if $margin_i\geq 0$ and $0$ otherwise. What are $\beta_2$ and $\beta_3$ according to the two regressions above? Interpret them.
+
+    \begin{solutionorbox}[8cm]
+    \textbf{Solution:} Below the cutoff, $reelected_i=0$, so the one-regression model becomes
+    \[
+    corruption_i=\beta_0+\beta_1 margin_i+u_i.
+    \]
+    Comparing with $18-0.20margin$, we get
+    \[
+    \beta_0=18, \qquad \beta_1=-0.20.
+    \]
+    Above the cutoff, $reelected_i=1$, so the model becomes
+    \[
+    corruption_i=(\beta_0+\beta_2)+(\beta_1+\beta_3)margin_i+u_i.
+    \]
+    Comparing with $22.5+0.05margin$, we get
+    \[
+    \beta_0+\beta_2=22.5 \quad \Rightarrow \quad \beta_2=22.5-18=4.5,
+    \]
+    and
+    \[
+    \beta_1+\beta_3=0.05 \quad \Rightarrow \quad \beta_3=0.05-(-0.20)=0.25.
+    \]
+    Thus, $\beta_2=4.5$ is the discontinuous jump at the cutoff, which is the RD estimate. The interaction coefficient $\beta_3=0.25$ means that the slope of the relationship between margin and corruption is 0.25 larger above the cutoff than below it.
+    \end{solutionorbox}
+
+    \item State the key assumption needed for this RD estimate to be interpreted causally. Would you use this RD estimate to predict the effect of reelection for a mayor who wins by 30 percentage points? Why or why not?
+
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} The key RD assumption is continuity around the cutoff: municipalities just below and just above the cutoff are comparable in all relevant respects except for the treatment. In this setting, the idea is that a mayor who wins by a tiny margin and a mayor who loses by a tiny margin are similar, and the small difference in the election result is as-good-as random.
+
+    I would not use this RD estimate to predict the effect for a mayor who wins by 30 percentage points. RD estimates are local: they identify the effect near the cutoff. A mayor who wins by 30 percentage points may be very different from a mayor in a close election, so the near-cutoff causal effect may not generalize to victories far from the cutoff.
+    \end{solutionorbox}
+\end{enumerate}
+
+\end{questions}
+
+\end{document}

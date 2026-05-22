@@ -2,6 +2,9 @@
 /11_GRADES_AND_SUBMISSIONS/*
 !/11_GRADES_AND_SUBMISSIONS/README.md
 
+# Local R session history can contain paths, credentials, or scratch work.
+.Rhistory
+
 # LaTeX auxiliary files
 aux_files/
 *.aux

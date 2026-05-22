@@ -1,0 +1,5 @@
+interface:
+  display_name: "Probability Expert"
+  short_description: "Probability assessment and grading specialist"
+  brand_color: "#7C3AED"
+  default_prompt: "Use $probability-expert to create or review a QMH probability question with an answer key."

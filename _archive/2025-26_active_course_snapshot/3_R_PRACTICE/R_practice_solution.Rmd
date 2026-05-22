@@ -1,0 +1,297 @@
+---
+title: "R Practice — Bias in Self-Reported Turnout (Solution)"
+author: "Instructor solution"
+date: "Quantitative Methods for Humanities. PPE 2nd Year - 2025-2026"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: false
+---
+
+> **Important**  
+> 1) Fill in `student_id` below.  
+> 2) Do **not** rename chunk labels (e.g., `ex1`, `ex2`, ...).  
+> 3) Your file must **Knit** (Compile) to HTML from a **clean session** (no manual steps).
+
+# Setup
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+options(stringsAsFactors = FALSE)
+
+# Include here all libraries you will later need (none needed for this solution)
+
+# Fill this in (used for reproducibility / individualized data)
+student_id <- 12345  # example numeric ID
+
+# If your instructor provides individualized datasets using a seed, this is the standard pattern:
+set.seed(student_id)
+
+# --- DO NOT CHANGE OR REMOVE THIS (IT'LL RESULT IN A GRADE OF ZERO)
+if (!is.numeric(student_id) || length(student_id) != 1) stop("student_id must be a single number.")
+```
+
+---
+
+# Introduction
+
+Surveys are frequently used to measure political behavior such as voter turnout, but some researchers are concerned about the accuracy of self-reports. In particular, they worry about possible social desirability bias where, in postelection surveys, respondents who did not vote in an election lie about not having voted because they may feel that they should have voted. Is such a bias present in the American National Election Studies (ANES)?
+
+# Data
+
+The following table displays the names and descriptions of variables in the `turnout.csv` data file.
+
+| Variable      | Description                                             |
+| ------------- | ------------------------------------------------------- |
+| `year`        | election year                                           |
+| `ANES`        | ANES estimated turnout rate                             |
+| `VEP`         | voting eligible population (in thousands)               |
+| `VAP`         | voting age population (in thousands)                    |
+| `total`       | total ballots cast for highest office (in thousands)    |
+| `felons`      | total ineligible felons (in thousands)                  |
+| `noncit`      | total noncitizens (in thousands)                        |
+| `overseas`    | total eligible overseas voters (in thousands)           |
+| `osvoters`    | total ballots counted by overseas voters (in thousands) |
+
+## Exercise 1 - Data summary
+
+**Tasks/Questions:**
+
+1. Load the data into R and save it into a variable called `turnout`.
+2. Check the dimensions.
+3. Obtain a summary of the dataset.
+4. Report: number of observations and range of years covered.
+
+```{r ex1}
+# 1) Load
+turnout <- read.csv("turnout.csv")
+
+# 2) Dimensions
+dim(turnout)
+
+# 3) Summary
+summary(turnout)
+
+# 4) Key facts
+n_obs <- nrow(turnout)
+year_min <- min(turnout$year)
+year_max <- max(turnout$year)
+
+n_obs
+c(year_min = year_min, year_max = year_max)
+```
+
+```{r data-randomization, include=FALSE}
+# --- Data randomization : DO NOT CHANGE OR REMOVE THIS (IT'LL RESULT IN A GRADE OF ZERO)
+if (!exists("turnout") || !is.data.frame(turnout)) stop("You must load the dataset into a data frame called `turnout` before running the randomization.")
+count_cols <- c("ANES","VEP","VAP","total","felons","noncit","overseas","osvoters")
+row_jitter <- runif(nrow(turnout), 0.995, 1.005)  # ±0.5% per row (same factor for all counts)
+turnout[count_cols] <- lapply(turnout[count_cols], function(x) round(pmax(0, x * row_jitter), 1))
+turnout$fingerprint <- round(sum(turnout$total) + 1000*mean(turnout$ANES), 3)
+turnout$fingerprint
+```
+
+**Takeaways (example):**
+
+- The dataset has **`r n_obs`** rows (one per election year) and covers **`r year_min`–`r year_max`**.
+- The key quantities are turnout rates (`ANES`) and administrative counts (`VAP`, `VEP`, `total`, ...).
+
+**Interpretation (example):**  
+Because the data span many decades, we can check whether any bias in self-reports is stable or changes over time.
+
+---
+
+# Analysis
+
+## Exercise 2 — Turnout rate calculation (VAP and VEP)
+
+**Tasks/Questions:**
+
+1. Compute turnout based on **VAP**, adding eligible overseas voters to the denominator. Store it as `turnout$vap_turnout`.
+2. Compute turnout based on **VEP**. Store it as `turnout$vep_turnout`.
+3. Describe the difference you observe.
+
+```{r ex2}
+# Turnout rates (ratios still work because everything is in thousands)
+turnout$vap_turnout <- turnout$total / (turnout$VAP + turnout$overseas)
+turnout$vep_turnout <- turnout$total / turnout$VEP
+
+# A quick summary
+mean_vap <- mean(turnout$vap_turnout, na.rm = TRUE)
+mean_vep <- mean(turnout$vep_turnout, na.rm = TRUE)
+mean_gap_vap_minus_vep <- mean(turnout$vap_turnout - turnout$vep_turnout, na.rm = TRUE)
+
+c(mean_vap = mean_vap, mean_vep = mean_vep, mean_vap_minus_vep = mean_gap_vap_minus_vep)
+
+# Optional: look at the first few rows
+head(turnout[, c("year","vap_turnout","vep_turnout")])
+```
+
+**Takeaways (example):**
+
+- Average VAP-turnout ≈ **`r round(mean_vap, 3)`**, average VEP-turnout ≈ **`r round(mean_vep, 3)`**.
+- The average difference (VAP − VEP) is **`r round(mean_gap_vap_minus_vep, 3)`**.
+
+**Interpretation (example):**  
+VEP typically differs from VAP because it tries to remove people who are not eligible to vote (e.g., noncitizens, ineligible felons). That can change the denominator and therefore the turnout rate.
+
+---
+
+## Exercise 3 — Compare VAP vs ANES, and VEP vs ANES
+
+**Tasks/Questions:**
+
+1. Compute differences:
+  - `diff_vap_anes = vap_turnout - ANES`
+  - `diff_vep_anes = vep_turnout - ANES`
+2. Report average difference and range.
+
+```{r ex3}
+turnout$diff_vap_anes <- turnout$vap_turnout - turnout$ANES
+turnout$diff_vep_anes <- turnout$vep_turnout - turnout$ANES
+
+# Summary stats
+mean_diff_vap <- mean(turnout$diff_vap_anes, na.rm = TRUE)
+range_diff_vap <- range(turnout$diff_vap_anes, na.rm = TRUE)
+
+mean_diff_vep <- mean(turnout$diff_vep_anes, na.rm = TRUE)
+range_diff_vep <- range(turnout$diff_vep_anes, na.rm = TRUE)
+
+list(
+  vap_minus_anes_mean = mean_diff_vap,
+  vap_minus_anes_range = range_diff_vap,
+  vep_minus_anes_mean = mean_diff_vep,
+  vep_minus_anes_range = range_diff_vep
+)
+```
+
+**Takeaways (example):**
+
+- Mean bias (VEP − ANES) is **`r round(mean_diff_vep, 3)`**, ranging from **`r round(range_diff_vep[1], 3)`** to **`r round(range_diff_vep[2], 3)`**.
+- Mean bias (VAP − ANES) is **`r round(mean_diff_vap, 3)`**, ranging from **`r round(range_diff_vap[1], 3)`** to **`r round(range_diff_vap[2], 3)`**.
+
+**Interpretation (example):**  
+A **negative** value of (VEP − ANES) means ANES turnout is **higher** than administrative turnout; a **positive** value means ANES turnout is **lower**.
+
+---
+
+## Exercise 4 — Compare across election types (presidential vs midterm)
+
+**Tasks/Questions:**
+
+1. Create `turnout$election_type` (`presidential` if year is a multiple of 4; otherwise `midterm`).
+2. Compare VEP turnout vs ANES separately by election type.
+
+```{r ex4}
+turnout$election_type <- ifelse(turnout$year %% 4 == 0, "presidential", "midterm")
+
+# Average bias by election type (using VEP - ANES)
+bias_by_type <- tapply(turnout$diff_vep_anes, turnout$election_type, mean, na.rm = TRUE)
+bias_by_type
+```
+
+**Takeaways (example):**
+
+- Mean bias in presidential years: **`r round(bias_by_type["presidential"], 3)`**
+- Mean bias in midterm years: **`r round(bias_by_type["midterm"], 3)`**
+
+**Interpretation (example):**  
+If one election type has a systematically larger (more negative) bias, it suggests misreporting (or nonresponse) may differ depending on the type of election.
+
+---
+
+## Exercise 5 — Temporal bias trends (two periods)
+
+**Tasks/Questions:**
+
+1. Has the bias of ANES increased over time?
+2. Is the time-evolution pattern the same for presidential vs midterm years?
+3. Use `boxplot()` to visualize the differences.
+
+```{r ex5}
+# We'll define two periods (simple split). Any reasonable split is OK if stated clearly.
+split_year <- 1980
+turnout$period <- ifelse(turnout$year <= split_year, paste0("<= ", split_year), paste0("> ", split_year))
+
+# (1) Bias over time: a simple time plot
+plot(turnout$year, turnout$diff_vep_anes,
+     type = "b",
+     xlab = "Year",
+     ylab = "Bias (VEP - ANES)",
+     main = "Bias over time (VEP - ANES)")
+
+abline(h = 0, lty = 2)
+
+# (2) Average bias by period
+bias_by_period <- tapply(turnout$diff_vep_anes, turnout$period, mean, na.rm = TRUE)
+bias_by_period
+
+# (3) Compare periods using a boxplot
+boxplot(diff_vep_anes ~ period, data = turnout,
+        xlab = "Period",
+        ylab = "Bias (VEP - ANES)",
+        main = "Bias by period")
+
+# (4) Same pattern for presidential vs midterm?
+bias_by_period_and_type <- tapply(turnout$diff_vep_anes, list(turnout$period, turnout$election_type), mean, na.rm = TRUE)
+bias_by_period_and_type
+
+boxplot(diff_vep_anes ~ interaction(period, election_type), data = turnout,
+        las = 2,
+        xlab = "Period × election type",
+        ylab = "Bias (VEP - ANES)",
+        main = "Bias by period and election type")
+```
+
+---
+
+## Exercise 6 — Adjusted VAP turnout rate (2008)
+
+**Tasks/Questions (year 2008 only):**
+
+1. `adj_vap = VAP - felons - noncit`
+2. `adj_total = total - osvoters`
+3. `adj_vap_turnout_2008 = adj_total / (adj_vap + overseas)`
+4. Compare adjusted VAP turnout to unadjusted VAP turnout, VEP turnout, and ANES.
+5. Briefly discuss.
+
+```{r ex6}
+d2008 <- turnout[turnout$year == 2008, ]
+
+# 1) Adjusted denominator (VAP)
+adj_vap <- d2008$VAP - d2008$felons - d2008$noncit
+
+# 2) Adjusted numerator (ballots)
+adj_total <- d2008$total - d2008$osvoters
+
+# 3) Adjusted VAP turnout (include eligible overseas in denominator)
+adj_vap_turnout_2008 <- adj_total / (adj_vap + d2008$overseas)
+
+# 4) Compare measures (all are turnout rates)
+comparison_2008 <- data.frame(
+  measure = c("VAP turnout (unadjusted)", "VAP turnout (adjusted)", "VEP turnout", "ANES turnout"),
+  turnout_rate = c(d2008$vap_turnout, adj_vap_turnout_2008, d2008$vep_turnout, d2008$ANES)
+)
+
+comparison_2008
+```
+
+**Takeaways (example):**
+
+- In 2008, unadjusted VAP turnout ≈ **`r round(d2008$vap_turnout, 3)`** and adjusted VAP turnout ≈ **`r round(adj_vap_turnout_2008, 3)`**.
+- In 2008, VEP turnout ≈ **`r round(d2008$vep_turnout, 3)`**, ANES ≈ **`r round(d2008$ANES, 3)`**.
+
+**Interpretation (example):**  
+The adjustment changes the denominator (removing ineligible groups) and changes the numerator (removing overseas ballots counted in `total`). If ANES is still noticeably higher than adjusted administrative turnout, that is consistent with some overreporting (or differences in survey coverage).
+
+---
+
+# Conclusions
+
+- Administrative turnout rates (VAP/VEP-based) and survey turnout (ANES) can differ.
+- Looking at bias by election type and over time helps us understand whether the pattern is stable or changing.
+
+# Submission checklist
+- ✅ `your_file.Rmd`  
+- ✅ `your_file.html` (compiled output)

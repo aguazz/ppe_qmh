@@ -1,0 +1,216 @@
+%------------------------------
+% DOCUMENT SETTINGS
+%------------------------------
+\documentclass[11pt]{exam}
+\printanswers % Uncomment to show answers
+
+%------------------------------
+% PACKAGES
+%------------------------------
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % math fonts and symbols
+\usepackage{bbm} % math blackboard font
+\usepackage{enumitem} % for customizable lists
+\usepackage{textcomp} % symbols
+\usepackage[top=2cm,bottom=2cm,right=1cm,left=1cm,paper=a4paper,headheight=6cm]{geometry} % margins
+\usepackage{xcolor} % colors
+\usepackage{graphicx} % figures
+\usepackage{booktabs} % tables
+
+%------------------------------
+% MACROS AND COMMANDS
+%------------------------------
+\newcommand{\N}{\mathbb{N}} % natural numbers
+\newcommand{\R}{\mathbb{R}} % real numbers
+
+%------------------------------
+% HEADER AND FOOTER
+%------------------------------
+\pagestyle{headandfoot}
+% degree, subject, exam, author, date, university
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Final Exam}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2024/25}
+\newcommand{\ccauthor}{A.G. Azze}
+\newcommand{\thedate}{May 22, 2025}
+\newcommand{\university}{CUNEF Universidad}
+
+\header{\degree \\ \subject{} -- \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%------------------------------
+% DOCUMENT
+%------------------------------
+\begin{document}
+
+%--- Instructions ---
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering 
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+    
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+            
+        \end{enumerate}
+    }}
+    
+\end{center}
+
+%--- Case Study Scenario ---
+Three social scientists conducted a randomized controlled trial to examine whether social pressure within neighborhoods increases voter participation\footnote{Alan S. Gerber, Donald P. Green, and Christopher W. Larimer (2008) “Social pressure and voter turnout: Evidence from a large-scale field experiment.” \emph{American Political Science Review}, vol. 102, no. 1, pp. 33–48.}. During the 2006 primary election in Michigan, registered voters were randomly assigned to one of four groups, each receiving a different get-out-the-vote postcard or no mailing:
+\begin{itemize}[noitemsep]
+  \item \emph{Civic Duty}: a standard civic-duty reminder emphasizing the importance of voting.
+  \item \emph{Neighbors}: the same civic-duty text plus a notice that the recipients’ voting records would be reported to their neighbors.
+  \item \emph{Hawthorne}: the same civic-duty text plus the opening ``\textbf{YOU ARE BEING STUDIED!}'' to highlight their participation on the study.
+  \item \emph{No-Message}: no postcard sent.
+\end{itemize}
+
+Table \ref{tab:turnout} summarizes each group’s 2006 turnout rate and key pre-treatment variables:
+\begin{table}[ht]
+    \centering
+    \caption{Voter Turnout per Group}
+    \label{tab:turnout}
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{Group:} & Civic Duty & Neighbors & Hawthorne & No-Message \\
+        \midrule
+        \textbf{Turnout rate 2006:} & 0.2966 & 0.3145 & 0.3223 & 0.3779 \\
+        \textbf{Average age:} & 49.8135 & 49.6590 & 49.7048 & 49.8529 \\
+        \textbf{Turnout rate 2004:} & 0.4003 & 0.3994 & 0.4032 & 0.4066 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{questions}
+
+% Question 1
+\question[2] For a randomly selected voter in the 2006 Michigan primary election:
+\begin{enumerate}[label=(\alph*)]
+\item What is the probability that the voter:
+  \begin{enumerate}[label=(\roman*)]
+    \item did not receive any message;
+    \item voted;
+    \item both did not receive any message and voted.
+    \item received no message provided that she voted.
+  \end{enumerate}
+\item Are the events defined in (i) and (ii)independent? Justify briefly.
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+\item These are the required probabilities:
+    \begin{enumerate}[label=(\roman*)]
+        \item With four equally likely groups, $P(\text{No-Message})=1/4=0.25$.  
+        \item Overall turnout is the mean of the group rates:
+        \[
+        P(\text{Voted})=\frac{0.3145+0.2966+0.3223+0.3779}{4} \approx 0.3278.
+        \]
+        \item $
+        P(\text{No-Message}\cap\text{Voted}) 
+        = P(\text{Voted} \mid \text{No-Message}) P(\text{No-Message}) 
+        = 0.25\times0.3779 \approx 0.0945
+        $.
+        \item $
+        P(\text{No-Message} \mid \text{Voted}) 
+        = \frac{P(\text{Voted} \mid \text{No-Message})P(\text{No-Message})}{P(\text{Voted})} 
+        = \frac{0.3779 / 4}{0.3278} \approx 0.2882
+        $
+    \end{enumerate}
+    \item $P(\text{No-Message})P(\text{Voted}) = 0.25\times0.3278 \approx 0.0820 \neq 0.0945$, so they are not independent.
+\end{enumerate}
+\end{solution}
+
+% Question 2
+\question[2] To asses the effect of different social-pressure messages, answer the following questions.
+\begin{enumerate}[label=(\alph*)]
+    \item Specify the treatment variable and the outcome variable when estimating the effect of the Neighbors postcard.
+    \item Using the 2006 turnout rates from Table \ref{tab:turnout}, compute the Difference-in-Means (DiM) estimator for Neighbors versus No-Message.
+    \item Given the information of the average age and 2004 turnout rate in Table \ref{tab:turnout}, does randomization appear successful? What does this imply for the DiM estimator? Why?
+    \item Compute DiM estimators for Civic Duty versus Hawthorne messages. What does this suggest about being observed?
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+    \item 
+    $T = 1 \text{ if individual got a Neighbors postcard}, = 0 \text{ if no message}$ \\
+    $Y = 1 \text{ if the individual voted, } = 0 \text{ if abstained}$.
+    % \item Yes. Each voter’s postcard assignment and response do not affect others’ behavior (postcards sent individually).
+    \item 
+    $DiM_{Neighbors} = 0.3145 - 0.3779 = -0.0634.$ Indicates a 6.34 percentage-point decrease in turnout under Neighbors vs. No-Message.
+    %Since control (No-Message) rate is 0.3779, effect of social-pressure is 0.3145−0.3779=−0.0634 (i.e. a 6.34 pp decrease).
+    \item The four groups have nearly identical age ($\approx 49.7$) and prior turnout ($\approx 0.40$), so randomization appears balanced, supporting unbiased DiM estimates due to equal distribution of potential confounders among the treatment and control groups.
+    \item 
+    $DiM_{Hawthorne-vs-CivicDuty} = 0.3223 - 0.2966 = 0.0257.$ Suggests that awareness of being studied increases turnout by about 2.6 percentage points over the civic-duty message.
+    % \item The Hawthorne effect is $-0.0556$ (meaning −5.56 percentage points), which is smaller in magnitude than Civic Duty (−8.13 pp), suggesting that awareness of being studied partially offsets the civic reminder’s negative impact, but less so than social-duty framing.
+\end{enumerate}
+\end{solution}
+
+% Question 3
+\question[2] We now combine 2004 and 2006 turnout data to assess the Neighbors versus the No-Message effect:
+\begin{enumerate}[label=(\alph*)]
+  \item Identify the treatment and control groups, and the before and after periods
+  \item Compute the Before-and-After (BA) estimator. Interpret.
+  \item Under which assumption the BA estimator would be unbiased for the caussal effect you are trying to asses? Do you think it is reasonable to assume in this case?
+  \item Obtain the Difference-in Differences (DiD) estimator.
+  \item What is the main assumption behind the DiD estimator to guarantee its unbiasness.
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+    \item Treatment group: Neighbors postcard; control group: No-Message. \\
+          Before period: 2004 primary; after period: 2006 primary.
+    
+    \item $BA = \text{turnout}_{2006}^{\text{No-message}} - \text{turnout}_{2004}^{\text{No-message}} = 0.3145 - 0.3994 = -0.0849$. That is, there was a reduction of $8.49$ percentage points in turnout in the Neighbors group when comparing 2004 versus 2006 data.
+    \item The BA estimator is unbiased if there are no confounders changing between 2004 and 2006. This is unlikely, since other factors (e.g., campaign intensity) may differ.
+    \item $DiD = (0.3145 - 0.3994) - (0.3779 - 0.4066) = -0.0849 - (-0.0287) = -0.0562$. After adjusting the BA estimate by subtracting the trend change, the DiD estimate suggests a decrease in 5.62 percentage points in turnout rate.
+    \item DiD validity requires the parallel trends assumption: in absence of treatment, Neighbors and No-Message groups would have experienced the same change in turnout.
+\end{enumerate}
+\end{solution}
+
+% Question 2
+\question[4] Given the estimated model
+\[
+\widehat{\texttt{turnout\_2006}} = 0.3145 - 0.0063\,\texttt{message\_neighbors} + 0.007\,\texttt{message\_hawthorne} - 0.018\,\texttt{message\_no-message},
+\]
+where \texttt{message\_neighbors}, \texttt{message\_hawthorne}, and \texttt{message\_no-message} are binary variables equal to 1 if the voter received that specific message and 0 otherwise. The fitted model has an $R^2$ of $0.0033$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute the predicted 2006 turnout rate for the civic-duty message group.
+  \item Interpret the coefficient associated to \texttt{message\_hawthorne}.
+  \item Can you regard the coefficient associated to \texttt{message\_no-message} as an average causal effect? Why or why not?
+  \item Comment on the predictive power of the model.
+\end{enumerate}
+Suspecting that the Neighbors effect varies by prior turnout, you consider the interaction model
+\[
+\widehat{\texttt{turnout\_2006}} = \widehat{\beta}_0 + \widehat{\beta}_1\,\texttt{turnout\_2004} + \widehat{\beta}_2\,\texttt{message\_neighbors} + \widehat{\beta}_3\,(\texttt{turnout\_2004}\times\texttt{message\_neighbors}),
+\]
+with an $R^2$ of $0.3078$.
+\begin{enumerate}[label=(\alph*)]
+  \item[(e)] Use this model to quantify how much does the Neighbors effect change for someone who voted in 2004 compared to someone who did not.
+  \item[(f)] If your sole goal was to predict the 2006 turnout rate, would you use this model or the previous one? Why?
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+  \item Since all the binary variables included in the regression are zero for the civic-duty group, the estimated turnout rate for this group is the intercept, that is, $\widehat{\texttt{turnout\_2006}} = 0.3145$.
+  \item The coefficient of the Hawthorne group ($0.007$) is the estimated increase in turnout of this group relative to Civic Duty.
+  \item The coefficient of the No-message group can be regarded as the estimated causal effect of recieving a civic-duty message versus not receiving any message, since the study is a RCT
+  \item The model's $R^2$ indicates that only about $0.3\%$ of the variability is being explained, which is a very poor performance for prediction purposes.
+  \item For non-voters in 2004 (\texttt{turnout\_2004} $= 0$), the Neighbors effect is $\widehat{\beta}_2$. For prior voters (\texttt{turnout\_2004} $= 1$), it is $\widehat{\beta}_2+\widehat{\beta}_3$. Hence, the difference is $\widehat{\beta}_2$.
+  \item The new interaction model is about 100 times more capable in terms of prediction, as its $R^2$ indicates that about $30\%$ of the variability is captured.
+\end{enumerate}
+\end{solution}
+
+\end{questions}
+
+\end{document}

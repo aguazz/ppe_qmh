@@ -1,0 +1,36 @@
+{
+  "name": "overleaf-github-workflow-agent",
+  "version": "0.1.0",
+  "description": "A local Codex workflow agent for checking and guiding the Positron/VS Code, AI, Overleaf, Git, GitHub, and LaTeX setup.",
+  "author": {
+    "name": "PPE QMH course repository"
+  },
+  "license": "MIT",
+  "keywords": [
+    "overleaf",
+    "github",
+    "git",
+    "latex",
+    "workflow",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Overleaf GitHub Workflow Agent",
+    "shortDescription": "Audit and guide the local Overleaf-GitHub course workflow.",
+    "longDescription": "Provides a conservative Codex skill and read-only PowerShell audit script for checking Git remotes, LaTeX tooling, ignore rules, editor settings, and manual setup steps.",
+    "developerName": "PPE QMH course repository",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Audit this repo for the Overleaf-GitHub workflow.",
+      "Guide me through connecting Overleaf and GitHub.",
+      "Check whether my LaTeX/Git setup is ready."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

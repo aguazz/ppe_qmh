@@ -1,0 +1,549 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{../../LaTex/simplemetropolis} % Load your custom style
+\input{../../LaTex/preamble}
+% Title, subtitle, author, and date
+\title{Quantitative Methods for Humanities}
+\subtitle{Introduction to R}
+\author{}
+\date{2025/2026}
+
+\begin{document}
+
+% Title page with custom background
+{
+    \usebackgroundtemplate{\includegraphics[width=\paperwidth,height=\paperheight]{../../LaTex/img/title_page.png}}
+    \begin{frame}[plain]
+        % Logo in the upper left corner
+        \vspace{-1cm} % Space between the logo and title
+        {\hspace{-0.45cm} \includegraphics[width=2.5cm]{../../LaTex/img/logoCUNEF.png}} % Adjust the width as needed
+
+        \vspace{1cm} % Space between the logo and title
+        {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}
+        \vspace{-0.05cm} % Reduced space between title and separator
+        \usebeamertemplate{title separator}
+        \vspace{-0.05cm} % Reduced space between separator and subtitle
+        {\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle\par}
+        \vfill
+        {\usebeamerfont{date}\usebeamercolor[fg]{date}\insertdate\par}
+    \end{frame}
+}
+
+% General information section
+\section{\Large General information}
+
+\begin{frame}{General information}
+\begin{itemize}
+    \item Prerequisites:
+    \begin{itemize}
+        \item[$\bullet$] Linear algebra (school level)
+        \item[$\bullet$] Statistics (school level)
+    \end{itemize}
+    \item Laptop (any standard operating system) with internet access
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Literature}
+\begin{description}
+    \item[Essential:] W. John Braun and Duncan J. Murdoch%
+    \newline
+    \emph{A First Course in Statistical Programming with R}\newline
+    Third Edition. Cambridge University Press.\medskip
+    \item[Additional:] Wickham, H. and Grolemund, G.\newline
+    \emph{R for Data Science}, O'Reilly, 2016.
+\end{description}
+\end{frame}
+
+\begin{frame}{About R}
+\begin{itemize}
+    \item Open source programming language
+    \item Available for Windows, Linux, and MacOS
+    \item Used by leading companies like Google, Pfizer, Merck, Bank of America, the
+InterContinental Hotels Group, Shell, ... 
+    \item Internet site: \url{www.r-project.org}
+    \item Comprehensive R Archive Network (CRAN): \url{cran.at.r-project.org}
+\end{itemize}
+\vspace{0.2cm}
+
+    \begin{center}
+        \begin{tcolorbox}[enhanced,sharp corners,
+            width=14.8cm,
+            colback=white,
+            overlay={
+                % Upper left corner (quotation mark)
+                \node[anchor=north west,fill=white,draw=white,circle,inner sep=1pt] 
+                at ([xshift=-0.17cm,yshift=0.2cm]frame.north west) {\faQuoteLeft};
+                % Lower right corner (quotation mark)
+                \node[anchor=south east,fill=white,draw=white,circle,inner sep=1pt] 
+                at ([xshift=0.17cm,yshift=-0.2cm]frame.south east) {\faQuoteRight};
+            }
+            ]
+            The great beauty of R is that you can modify it to do all sorts of things, and you have a lot of prepackaged stuff that’s already available, so you’re standing on the shoulders of giants. \\
+            \vspace{0cm}
+
+            {\small - \href{https://www.nytimes.com/2009/01/07/technology/business-computing/07program.html}{Hal Varian}, chief economist at
+Google.}
+        \end{tcolorbox}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Installation}
+\begin{itemize}
+    \item Open \url{www.r-project.org} in your browser\smallskip
+    \item In the left menu, choose CRAN (or click "download R")\smallskip
+    \item Choose a mirror (e.g., Spain)\smallskip
+    \item Choose your operating system (Windows or macOS)\smallskip
+    \item Download and install:
+    \begin{itemize}
+        \item[$\bullet$] Windows: choose \texttt{base}, download the newest version, run the \texttt{.exe}
+        \item[$\bullet$] macOS: download the newest \texttt{.pkg} installer and open it\smallskip
+    \end{itemize}
+    \item Start R
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Command window}
+Command window (R Console) Prompt: \texttt{>} \\
+You can input commands and execute them (by pressing the \textsc{Return} key).
+\begin{coolblock}{Examples}
+\texttt{> 1+1}\newline
+\texttt{> 1+1 \# This is a comment: 1+1}\newline
+\texttt{> (1+2)*3}\newline
+\texttt{> (5/3)\symbol{94}4.5}\newline
+\texttt{> 5+2; 7+3; 2*5}
+\end{coolblock}
+\end{frame}
+
+\begin{frame}{Command window}
+Concatenation: \texttt{c()} \newline
+Assignment operator: \texttt{<-} or \texttt{=}
+\begin{coolblock}{Examples}
+\texttt{> c(1,4,7)}\newline
+\texttt{> a <- c(1,4,7)}\newline
+\texttt{> print(a)}\newline
+\texttt{> a}\newline
+\texttt{> A}\newline
+\texttt{> b <- c(1,a,3)}\newline
+\texttt{> b}\newline
+\texttt{> mean(b)}
+\end{coolblock}
+\end{frame}
+
+\begin{frame}{Command window}
+Quitting
+\begin{itemize}
+    \item Quit R by the command \texttt{q()}
+    \item In general, do \emph{not} save your workspace
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Editors}
+\begin{itemize}
+    \item Long computations should not be done in the command window\smallskip
+    \item Use an editor to write a program and then execute it in R\smallskip
+    \item There is a built-in editor in R: File -- New script\smallskip
+    \item External editors:
+    \begin{itemize}
+        \item[$\bullet$] \textbf{R-Studio}, \url{https://posit.co/downloads/}, choose RStudio Desktop FREE
+        \item[$\bullet$] Tinn-R, \url{http://sciviews.org/Tinn-R/}
+        \item[$\bullet$] Notepad++: \url{http://www.notepad-plus-plus.org/}\smallskip
+    \end{itemize}
+    \item We will focus on \textbf{R-Studio}, by far the most popular one.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{RStudio}
+\begin{itemize}
+    \item RStudio Cloud
+    \begin{itemize}
+        \item[$\bullet$] Open \url{https://www.rstudio.com/products/cloud/}\smallskip
+        \item[$\bullet$] Click on GET STARTED (for free) and register (sign up)\smallskip
+        \item[$\bullet$] Start a new project
+    \end{itemize}
+\end{itemize}
+\vspace{0.3cm}
+
+\begin{itemize}
+    \item RStudio on your computer
+    \begin{itemize}
+        \item[$\bullet$] Open \url{https://posit.co/download/rstudio-desktop/}\smallskip
+        \item[$\bullet$] Skip the Download-and-install-R step (you already did it)\smallskip
+        \item[$\bullet$] Download \textbf{RStudio Desktop} (free, Open Source edition) for your operating system\smallskip
+        \item[$\bullet$] Run the installer (\texttt{.exe} on Windows, \texttt{.dmg} on macOS) and follow the instructions\smallskip
+        \item[$\bullet$] Start RStudio
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Script in R-Studio}
+\begin{itemize}
+    \item Instead of typing in commands in the console, \textbf{create scripts and save your work}\smallskip
+    \item You will be able to comment, edit, and recompile your code\smallskip
+    \item In R-Studio: top left corner R script\smallskip
+    \item Type a few lines of commands, e.g.\newline
+    \texttt{a <- c(1,4,7)}\newline
+    \texttt{mean(a)}\newline
+    \texttt{mean(a)\symbol{94}2}\smallskip
+    \item \textbf{Execute a single line} by pressing \textsc{Ctrl-Enter}\smallskip
+    \item \textbf{Execute multiple lines/parts} by marking them and then pressing \textsc{Ctrl-Enter}\smallskip
+    \item Save the script, quit R, restart R, open the script and execute it
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Style Guide (by \href{http://adv-r.had.co.nz/Style.html}{Hadley Wickham})}
+\small
+
+\begin{enumerate}
+    \item Use meaningful file names ending in \texttt{.R} (e.g., \texttt{cleaning.R}, \texttt{regression.R})\smallskip
+    \item Use \texttt{lowercase\_with\_underscores} for names (e.g., \texttt{turnout\_rate}, \texttt{load\_data()})\smallskip
+    \item Variable names and commands are case-sensitive (e.g., \texttt{mean} $\neq$ \texttt{Mean}; \texttt{x} $\neq$ \texttt{X})\smallskip
+    \item Names may include letters, numbers (not first), and dots (e.g., \texttt{x2}, \texttt{party.name}; not \texttt{2x})\smallskip
+    \item Don’t reuse names of existing functions/objects\smallskip
+    \item Put spaces around operators (e.g., \texttt{x <- 1}, \texttt{y = x + 2})\smallskip
+    \item Put a space after commas, never before (e.g., \texttt{c(1, 2, 3)})\smallskip
+    \item No spaces inside \texttt{()} or \texttt{[]} (except after commas): \texttt{mean(x)}, \texttt{x[1, 2]}\smallskip
+    \item Keep lines $\le$ 80 characters (split long lines if needed)\smallskip
+    \item Use \texttt{<-} (not \texttt{=}) for assignment: \texttt{x <- 1}\smallskip
+    \item Comment your code: start with \texttt{\#} and keep comments helpful, not excessive
+\end{enumerate}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\Large Basics}
+
+\begin{frame}{Help}
+\begin{itemize}
+    \item To obtain details about a command, type \newline
+    \texttt{?command\_name} \newline
+    or \newline
+    \texttt{help(command\_name)}
+    \item Example: \texttt{?mean} or \texttt{help(mean)}\smallskip
+    % \item Start the "help center": \texttt{help.start()} 
+    \item In R-Studio: bottom right corner \smallskip
+    % \item Task Views on CRAN
+    % \item R Journal on CRAN
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Packages}
+
+One of the strengths of R is the large and growing collection of packages that can be installed from CRAN (The Comprehensive R Archive Network)\smallskip
+
+\begin{itemize}
+    \item \textbf{Installation:} \texttt{install.packages(`package\_name')}\smallskip
+    \item \textbf{Activation:} \texttt{library(package\_name)}\smallskip
+    \item \textbf{Help:} \texttt{library(help=package\_name)}\smallskip
+    \item In R-Studio: bottom right corner\smallskip
+\end{itemize}
+\end{frame}
+
+\begin{frame}{R objects}
+\begin{itemize}
+    \item R is object-oriented \smallskip
+    \item Objects store data, functions, results of operations, ...\smallskip
+    \item Everything in R is an object (e.g., scalar, vector, matrix, string)\smallskip
+    % \item The object type determines how some commands work (e.g., \texttt{plot}, \texttt{summary})
+    \item Every object has a unique (case-sensitive) name\smallskip
+    % \item List of all objects: \texttt{ls()}
+    % \item Delete (\textbf{r}e\textbf{m}ove) objects: \texttt{rm()}
+    \item Examples:
+    \begin{itemize}
+        \item[$\bullet$] Vectors: \\
+            \texttt{x <- c(1, 2, 3)}
+        \item[$\bullet$] Matrices: \\
+            \texttt{m <- matrix(1:6, nrow = 2, ncol = 3)}
+        \item[$\bullet$] Data Frames: \\
+            \texttt{df <- data.frame(Name = c("Alice", "Bob"), Age = c(25, 30))}
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{R classes}
+    \begin{itemize}
+        \item Classes define the type and behavior of an object.\smallskip
+        \item Determines how an object responds to functions.\smallskip
+        \item Common classes:
+        \begin{itemize}
+            \item[$\bullet$] \textbf{Numeric:} Numbers (e.g., $3.14, 42$).
+            \item[$\bullet$] \textbf{Character:} Text strings (e.g., "Hello").
+            \item[$\bullet$] \textbf{Logical:} Boolean values (TRUE, FALSE).
+            \item[$\bullet$] \textbf{Factors:} Categorical data with levels.
+            \item[$\bullet$] \textbf{Lists:} Collections of objects.\smallskip
+        \end{itemize}
+        \item Examples:
+        \begin{itemize}
+        \item[$\bullet$] \textbf{Numeric class:} \\
+            \texttt{num <- 42} \\
+            \texttt{class(num)}
+        \item[$\bullet$] \textbf{Factor class:} \\
+            \texttt{gender <- factor(c("male", "female", "female"))} \\
+            \texttt{class(gender)}
+    \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Functions}
+
+    \begin{itemize}
+        \item Functions in R perform specific tasks or operations.\smallskip
+        \item \textbf{Syntax:} \texttt{func\_name(input)}\smallskip
+        % \begin{itemize}
+        %     \item[$\bullet$] \texttt{func\_name} is the function name
+        %     \item[$\bullet$] \texttt{input} is the argument or input object.
+        % \end{itemize}
+        \item Some basic functions:
+        \begin{itemize}
+            \item[$\bullet$] \texttt{sqrt()} - Square root.
+            \item[$\bullet$] \texttt{print()} - Print output.
+            \item[$\bullet$] \texttt{c()} - Combine elements into a vector.
+            \item[$\bullet$] \texttt{length()} - Number of elements in a vector.
+            \item[$\bullet$] \texttt{min()} - Minimum value.
+            \item[$\bullet$] \texttt{max()} - Maximum value.
+            \item[$\bullet$] \texttt{range()} - Range of values.
+            \item[$\bullet$] \texttt{mean()} - Average of values.
+            \item[$\bullet$] \texttt{sum()} - Total of values.\smallskip
+        \end{itemize}
+        \item Example (mean world population from 1950 to 2010): \\
+        \small \texttt{world.pop <- c(2525779, 3026003, 3691173, 4449049, 5320817, 6127700, 6916183)} \\
+        \texttt{mean(world.pop)}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Functions with multiple arguments}
+
+    \begin{itemize}
+        \item \textbf{Syntax:} \texttt{funcname(arg1 = input1, arg2 = input2)}\smallskip
+        \item \textbf{Example:} \texttt{seq()} function\smallskip
+        \begin{itemize}
+            \item[$\bullet$] Generates a sequence of numbers.\smallskip
+            \item[$\bullet$] Arguments: \\
+            \texttt{from} - start value \\
+            \texttt{to} - end value \\
+            \texttt{by} - interval step value\smallskip
+        \end{itemize}
+        \item \textbf{Implementation:} \texttt{seq(from = 1950, to = 2010, by = 10)}
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Managing working directory}
+
+    \begin{itemize}
+        \item The working directory is where R reads and saves files.\smallskip
+        \item Check the current directory: \\
+        \texttt{getwd()}\smallskip
+        \item Set a new directory via the console: \\
+        \texttt{setwd("path/to/folder")}\smallskip
+        \item Set a new directory via the menu bar: \\
+        Session $\rightarrow$ Set Working Directory $\rightarrow$:
+        \begin{itemize}
+            \item[$\bullet$] To Source File Location (current file path)
+            \item[$\bullet$] Choose Directory... (custom path)
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Loading data}
+
+    \begin{itemize}
+        \item \textbf{CSV files:} tabular data with observations separated by line breaks and variables within the observation separated by a comma, a tab, or other characters.\smallskip
+        \item \textbf{Read CSV files:} \texttt{read.csv(path/to/file)}\smallskip
+        \item Other formats and functions to read them:
+        \begin{itemize}
+            \item[$\bullet$] Excel Files: \texttt{read\_excel("file.xlsx")} (requires \texttt{readxl} package)
+            \item[$\bullet$] RData Files: \texttt{load("file.RData")}
+        \end{itemize}
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Storing and exploring data}
+
+    \begin{itemize}
+        \item \textbf{Storing Data:} typically stored in \texttt{data.frame} objects\smallskip
+        \item \textbf{Summary function:}
+        \begin{itemize}
+            \item[$\bullet$] \texttt{names()} - Names of the variables (columns)
+            \item[$\bullet$] \texttt{nrow()} - Number of rows
+            \item[$\bullet$] \texttt{ncol()} - Number of columns
+            \item[$\bullet$] \texttt{dim()} - Dimensions
+            \item[$\bullet$] \texttt{summary()} - Summary statistics
+        \end{itemize}
+            
+    \end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Accessing variables and observations}
+
+    Imaging that the object \texttt{UN.pop} is a data.frame containing 7 observations (rows) of the variables (columns) \texttt{year} and \texttt{world.pop}. You can access specific variables and observations like this:
+    \begin{itemize}
+        \item \textbf{Using the \$ operator:} \\
+        \texttt{UN.pop\$world.pop} - extract the \texttt{world.pop} variable
+        \item \textbf{Using [ ]:} \\
+        \texttt{UN.pop[, "world.pop"]} - extract the \texttt{world.pop} column \\
+        \texttt{UN.pop[c(1, 2, 3), ]} - extract the first three rows (all columns) \\
+        \texttt{UN.pop[1:3, "year"]} - extract the first three values of the \texttt{year} column
+        \item \textbf{Combining techniques to retrieve specific elements:} \\
+        \texttt{UN.pop\$world.pop[seq(from = 1, to = nrow(UNpop), by = 2)]} -  retrieve odd elements of the \texttt{world.pop} variable
+    \end{itemize}
+\end{frame}
+
+% \begin{frame}
+% \frametitle{R classes}
+% \begin{coolblock}{Examples}
+% \texttt{> x <- c("A","B","C")}\newline
+% \texttt{> class(x)}\newline
+% \texttt{> y <- c(1,2,5)}\newline
+% \texttt{> class(y)}\newline
+% \texttt{> ls()}\newline
+% \texttt{> rm(x)}\newline
+% \texttt{> ls()}
+% \end{coolblock}
+% \pause
+% $\longrightarrow $ Let's do some exercises
+% \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{\Large Exercises}
+
+\begin{frame}{Exercise 1}
+Install the packages \texttt{MASS}, \texttt{devtools}, %\texttt{swirl}, 
+\texttt{lintr}.
+\end{frame}
+
+\begin{frame}{Exercise 2}
+The current working directory (where R reads and writes files) can be found by the command \texttt{getwd()}. Find your current working directory.
+\end{frame}
+
+\begin{frame}{Exercise 3}
+Use the command \texttt{setwd()} to change the working directory to the path \texttt{"C:/Users/Public/Documents"}. Note that the path name is structured by slashes (\texttt{/}), \emph{not} backslashes ($\backslash$). Now change the working directory to \texttt{"C:/Users/Public/Downloads"} via the menu bar.
+\end{frame}
+
+\begin{frame}{Exercise 4}
+Open a new script file. Type the commands to perform the following assignments:
+\begin{eqnarray*}
+a &=&\frac{3\cdot (4+9)}{8-12.5} \\
+b &=&\left( 1,4,1999,2011\right) \\
+d &=&2\pi \\
+e &=&a^2+\sqrt{d}
+\end{eqnarray*}
+Save the script with the name \texttt{Basic\_R} in a path of your choice (you can create a folder called QuantMeth or something similar to start saving there the course material) and quit R.
+\end{frame}
+
+\begin{frame}{Exercise 5}
+Start R and re-open the script. Set the working directory to the path you just created in the previous part (and where the R script is) by using the ``To Source File Location'' option in the menu bar. Mark all lines (\textsc{Ctrl + A}) and execute them (\textsc{Ctrl + Enter}). Mark one line and execute it. Mark a part of a line and execute it. Print $a, b, d, e$. Why is the variable name $c$ not used?
+\end{frame}
+
+\begin{frame}{Exercise 6}
+
+In the same R script file, solve the following problem. Add comments to explain your code and to delimit the code regions of this and the previous exercise.
+\begin{itemize}
+    \item Use the function \texttt{seq()} to create a vector named \texttt{year} with the values from 2010 to 1950 with a interval step of $-10$. 
+    \item Print the vector using the function \texttt{print()}. 
+    \item Use the following functions on the vector \texttt{year}
+    \begin{itemize}
+        \item[$\bullet$] \texttt{length()}
+        \item[$\bullet$] \texttt{min()}
+        \item[$\bullet$] \texttt{max()}
+        \item[$\bullet$] \texttt{range()}
+        \item[$\bullet$] \texttt{mean()}
+        \item[$\bullet$] \texttt{sum()}
+        \end{itemize}
+\end{itemize}
+    
+\end{frame}
+
+\begin{frame}{Exercise 7}
+
+    \begin{itemize}
+        \item Download the \href{https://github.com/kosukeimai/qss/blob/master/INTRO/UNpop.csv}{UNpop.csv} CSV file, which contains the world population in several years according to the United Nations.
+        \item Save the file along wit the R script \texttt{Basic\_R}, in the same path of the script called \texttt{Basic\_R}.
+        \item Import the data contained in the CSV file and store it in an object called \texttt{UNpop}.
+        \item Check the class of \texttt{UNpop}.
+        \item Use the functions \texttt{names()}, \texttt{nrow()}, \texttt{ncol()}, \texttt{dim()}, and \texttt{summary()} on the object \texttt{UNpop}. Comment on the results.
+        \item Extract the column called \texttt{year} from \texttt{UNpop}, both using the \$ operator and the [ ] option.
+        \item Extract the 4th and 5th observations of both columns.
+        \item Extract the even observations of the \texttt{world.pop} variable and save them in a vector called \texttt{even.world.pop}.
+        \item Load the same data in RData format, which you can download from \href{https://github.com/kosukeimai/qss/blob/master/INTRO/UNpop.RData}{here}.
+    \end{itemize}
+        
+\end{frame}
+
+\begin{frame}{Exercise 8}
+
+    The \texttt{lintr} package (already installed in Exercise 1) helps in correcting the coding style and syntax of an R script aligning it to a well-established style guidelines.
+    \begin{itemize}
+        \item Load the \texttt{lintr} package using the command \texttt{library(lintr)}
+        \item Run the command \texttt{lintr("Basic\_R.R")} (provided your working directory contains the script) to see the recommended style changes.
+        \item Implement the changes and save the script.
+    \end{itemize}
+    
+\end{frame}
+
+% \begin{frame}{Swirl}
+    
+%     \begin{itemize}
+%         \item \textbf{What is swirl?} R package designed for learning R interactively and directly in the R console.
+%         \item \textbf{Why swirl?}  Learn by doing, self paced, wide variety of courses available
+%         \item \textbf{Web site:} \href{https://swirlstats.com/}{https://swirlstats.com/}
+%         \item Getting started
+%         \begin{itemize}
+%             \item[$\bullet$] \textbf{Install the package:} \texttt{install.packages("swirl")}
+%             \item[$\bullet$] \textbf{Load the Package:} \texttt{library(swirl)}
+%             \item[$\bullet$] \textbf{Install course:} \texttt{install\_course\_github("kosukeimai", "qss-swirl")}
+%             \item[$\bullet$] \textbf{Select course/lesson:} \texttt{swirl()}
+%         \end{itemize}
+%     \end{itemize}
+    
+% \end{frame}
+
+% \begin{frame}{Swirl lessons during the course}
+    
+%     \begin{itemize}
+%         \item You will complete swirl lessons from the course \texttt{qss-swirl} before certain chapters.
+%         \item These bite-sized lessons are designed to help you understand and practice the essential R skills needed for each chapter.
+%     \end{itemize} 
+    
+% \end{frame}
+
+% \begin{frame}{Exercise 9}
+%     \begin{center}
+%         Take the swirl lessons INTRO1 and INTRO2 from the swirl course qss-swirl
+%     \end{center}
+% \end{frame}
+
+\section{\Large R Markdown}
+
+\begin{frame}{R Markdown}
+\begin{itemize}
+    \item Formatting tool for creating scientific reports
+    \item Includes embedded R code chunks
+    \item File extension: .Rmd
+    \item Internet site: \url{https://rmarkdown.rstudio.com/}
+    \item Cheat Sheet: \url{https://rstudio.github.io/cheatsheets/rmarkdown.pdf}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Exercise 10}
+\begin{itemize}
+    \item Create an HTML format Markdown file (see cheat sheet) called "My first Markdown"
+    \item Use the "Knit" button to compile
+    \item Use the shortcut Ctrl + Shift + K to compile
+    \item Save your Markdown file
+    \item Create your own Markdown report for the solution of Exercises 4, 6, and 7
+    \item Try the option \texttt{\{r echo=FALSE\}}
+    \item Create a more polished report-like HTML document. (try to introduce title, author, separated sections for each exercise, ...)
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Back Page
+%%%%%%%%%%%%%%%%%%%%
+
+
+
+\end{document}

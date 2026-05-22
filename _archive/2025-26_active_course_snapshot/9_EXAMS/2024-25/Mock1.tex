@@ -1,0 +1,195 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+\printanswers % Uncomment to show answers
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm} % math fonts and symbols
+\usepackage{bbm} % Math blackboard font
+\usepackage{enumitem} % For reference enumerations lists
+\usepackage{textcomp} % some symbols (like copyright)
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry} % Margins setup
+\usepackage{xcolor} % Colors
+\usepackage{graphicx}
+\usepackage{booktabs}
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}} % natural number set
+\newcommand{\R}{\mathbb{R}} % real number set
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}} % Ensure numeric superscripts
+\renewcommand{\thefootnote}{\arabic{footnote}} % Ensure numeric labels
+\makeatother
+\setcounter{footnote}{1}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule % the `\vrule` is as high and deep as a strut
+    \hspace{-\arraycolsep}%
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Defining information
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Mock Exam 1}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2024/25}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{Apr 29, 2025}
+\newcommand{\university}{CUNEF Universidad}
+% Setting header and footer
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 120 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering 
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+    
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+            
+        \end{enumerate}
+    }}
+    
+\end{center}
+%--- Questions ---%
+
+\begin{questions}
+
+% Question 1
+\question[2.5]
+A survey of 200 students counts who is enrolled in the optional Political Philosophy seminar and who voted in the recent Student Union election. The counts are:
+\[
+\begin{array}{l|cc}
+ & \text{Enrolled in Seminar} & \text{Not Enrolled} \\ \hline
+\text{Voted}      & 50 & 30 \\
+\text{Did Not Vote}& 70 & 50
+\end{array}
+\]
+\begin{enumerate}[label=(\alph*)]
+    \item Compute:
+    \begin{enumerate}[label=(\roman*)]
+        \item $P(\text{Enrolled})$;
+        \item $P(\text{Voted})$;
+        \item $P(\text{Enrolled}\,\cap\,\text{Voted})$;
+        \item $P(\text{Enrolled}\mid \text{Voted})$.
+    \end{enumerate}
+    \item Are \emph{Enrolment} and \emph{Voting} independent events? Justify.
+    \item What does this imply about the relationship between engaging with political philosophy and electoral participation?
+\end{enumerate}
+
+\begin{solution}[0cm]
+\begin{enumerate}[label=(\alph*)]
+    \item We compute the probabilities by dividing favorable over total cases:
+    \begin{enumerate}[label=(\roman*)]
+        \item $P(\text{Enrolled}) = \frac{50 + 70}{200} = \frac{120}{200} = 0.60$.
+        \item $P(\text{Voted}) = \frac{50 + 30}{200} = \frac{80}{200} = 0.40$.
+        \item $P(\text{Enrolled}\,\cap\,\text{Voted}) = \frac{50}{200} = 0.25$.
+        \item $P(\text{Enrolled}\mid \text{Voted}) = \frac{50/200}{80/200} = \frac{50}{80} = 0.625$.
+    \end{enumerate}
+    \item Independence requires $P(E\cap V)=P(E)\,P(V)\,$:
+    \[
+      P(E)P(V)=0.60\times0.40=0.24\neq 0.25=P(E\cap V).
+    \]
+    $\Rightarrow$ They are not independent.
+    \item Since $P(\text{Enrolled}\mid \text{Voted})=0.625>P(\text{Enrolled})=0.60$, voters are slightly more likely to enroll in the seminar. This suggests a positive association between philosophical engagement and voting.
+\end{enumerate}
+\end{solution}
+
+% Question 2
+\question[4]
+A researcher studies civic engagement among adolescents and young adults. She records average monthly hours spent volunteering for local political NGOs for individuals aged 16–20 (in yearly increments) over several years. At age 18, individuals attain legal adulthood and become eligible to hold leadership positions within these NGOs, which may influence their volunteering. She estimates:
+\[
+\text{vol\_hrs} = \beta_0 + \beta_1\,\text{age} + u
+\]
+separately for ages below and above 18:
+\begin{enumerate}[label=\arabic*.]
+    \item For $\text{age}<18$: $\widehat{\text{vol\_hrs}} = 5.000 + 0.200\,\text{age}$,\quad $R^2=0.020$.
+    \item For $\text{age}>18$: $\widehat{\text{vol\_hrs}} = 20.000 - 0.500\,\text{age}$,\quad $R^2=0.400$.
+\end{enumerate}
+\begin{enumerate}[label=(\alph*)]
+    \item Which model explains more variation in volunteering hours?
+    \item Predict average volunteer hours at age 18 using both regressions.
+    \item Compute the Regression Discontinuity (RD) estimate at the eligibility cutoff. Interpret it.
+    \item Under what assumption is this estimate a valid causal effect of leadership eligibility?
+    \item What are the limitations of this RD design?% when extrapolating to ages far from 18?
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+    \item The $R^2$ below 18 is $0.02$ (2\%), above 18 is $0.40$ (40\%). The latter explains much more variation.
+    \item At age 18:
+    \[
+      \widehat{\text{vol\_hrs}}^-\;=\;5.000 + 0.200\times18 = 8.600,\quad
+      \widehat{\text{vol\_hrs}}^+\;=\;20.000 - 0.500\times18 = 11.000.
+    \]
+    \item RD estimate $=11.000 - 8.600 = 2.400$. Joining the youth wing appears to increase monthly volunteering by about 2.4 hours.
+    \item Valid if, aside from eligibility, all other determinants of volunteer hours change smoothly with age at 18.
+    \item The linear fits may not hold for ages far from 18, as extrapolating out of the range of the sample may be wrong due to potential not compliance of the linear model assumptions.
+\end{enumerate}
+\end{solution}
+
+% Question 3
+\question[3.5]
+To estimate the causal effect of making the course “Ethics and Democracy” mandatory on students’ normative reasoning ability, in 2020 University A required all incoming first-year Political Science (PS) students to take it, while University B continued to offer it only as an elective. At the end of the academic year, you administer the same standardized normative reasoning test (score out of 100) to both cohorts. The average scores are:
+
+\begin{table}[ht]
+    \centering
+    \caption{Normative reasoning test scores for first-year PS students, by university and year}
+    \label{tab:ethics_scores}
+    \begin{tabular}{ccc}
+        \toprule
+        \textbf{University} & \textbf{2019 (pre-mandate)} & \textbf{2020 (post-mandate)} \\
+        \midrule
+        A & 69.5 & 75.2 \\
+        B & 70.1 & 71.0 \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\begin{enumerate}[label=(\alph*)]
+    \item Clearly state the treatment and outcome variables, emphasizing the causal effect of interest.
+    \item Using only the 2020 data, compute the Difference-in-Means estimator.
+    \item Under what assumption would that Difference-in-Means estimator be unbiased for the causal effect? Discuss its plausibility here.
+    \item Compute the Before-and-After estimator. Comment.
+    \item What must be assumed for that Before-and-After estimator to reflect a causal effect? Is it reasonable to assume in this case?
+    \item Compute the Difference-in-Differences estimator and interpret how it adjusts the raw before-and-after comparison.
+    \item State the key parallel-trends assumption needed for the DiD estimator to be valid in this setting.
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[label=(\alph*)]
+    \item Treatment: Student taking the “Ethics and Democracy” course. \\  
+    Outcome: End-of-year normative reasoning test score.
+    \item $\displaystyle \text{DiM}_{ATE} = 75.2 - 71.0 = \boxed{4.2}.$  
+    Interpreted as a 4.2 average-points increase attributed to the mandate.
+    \item Requires that there is no confounders, that is, nothing other than the mandate systematically differs between A and B in 2020 that also affects test scores. Randomized assignation to both treatment and control group would be sufficient. In this case randomization is not held and, most likely, 2020 differences (69.5 vs.\ 70.1) may reflect factors other than the course enrollment (e.g., University A being more elite than B).
+    \item $BA_{ATE} = 75.2 - 69.5 = \boxed{5.7}$ (scores rose 5.7 average points).
+    \item Assumes no other changes at University A affected reasoning scores between 2019 and 2020. Different evolution of sociol-economic factors, as well as different policies implemented in both university, could invalidate the BA estimation as causal. 
+    \item $DiD_{ATE} = (75.2 - 69.5) - (71.0 - 70.1)$. Suggests a 4.8 average-point gain due to the mandate, after including commong trends.
+    \item Parallel-trends: absent the mandate, the change in scores from 2019 to 2020 would have been the same at A and B.
+\end{enumerate}
+\end{solution}
+
+\end{questions}
+
+\end{document}

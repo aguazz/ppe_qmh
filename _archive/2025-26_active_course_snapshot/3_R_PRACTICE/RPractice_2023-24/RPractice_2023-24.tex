@@ -1,0 +1,92 @@
+\documentclass[12pt]{article}
+\usepackage{ae}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{listings}
+\usepackage{graphics,graphicx}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{float}
+\usepackage{subcaption}
+\author{\empty}
+
+\title{R practice \\ Quantitative Methods for Humanities}
+
+\date{\empty}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+    \textbf{Bias in Self-Reported Turnout}    
+\end{center}
+
+Surveys are frequently used to measure political behavior such as voter turnout, but some researchers are concerned about the accuracy of self-reports. In particular, they worry about possible social desirability bias where, in postelection surveys, respondents who did not vote in an election lie about not having voted because they may feel that they should have voted. Is such a bias present in the American National Election Studies (ANES)? ANES is a nationwide survey that has been conducted for every election since 1948. ANES is based on face-to-face interviews with a nationally representative sample of adults. Table \ref{table:US_election} displays the names and descriptions of variables in the \texttt{turnout.csv} data file.
+
+\begin{table}[h!]
+\centering
+\caption{US Election Turnout Data.}
+\label{table:US_election}
+\begin{tabular}{ll}
+\hline
+\textbf{Variable} & \textbf{Description} \\ \hline
+\texttt{year} & election year \\
+\texttt{ANES} & ANES estimated turnout rate \\
+\texttt{VEP} & voting eligible population (in thousands) \\
+\texttt{VAP} & voting age population (in thousands) \\
+\texttt{total} & total ballots cast for highest office (in thousands) \\
+\texttt{felons} & total ineligible felons (in thousands) \\
+\texttt{noncit} & total noncitizens (in thousands) \\
+\texttt{overseas} & total eligible overseas voters (in thousands) \\
+\texttt{osvoters} & total ballots counted by overseas voters (in thousands) \\ \hline
+\end{tabular}
+\end{table}
+
+\subsection*{Exercises}
+
+\begin{enumerate}
+    \item \textbf{Data Summary:}
+    Load the data into R and check the dimensions of the data. Also, obtain a summary of the data. How many observations are there? What is the range of years covered in this data set?
+
+    \item \textbf{Turnout Rate Calculation:} 
+    Calculate the turnout rate based on the voting age population (VAP). Note that for this data set, we must add the total number of eligible overseas voters since the VAP variable does not include these individuals in the count. Next, calculate the turnout rate using the voting eligible population (VEP). What difference do you observe?
+
+    \item \textbf{Comparison of VAP and ANES Estimates:} 
+    Compute the differences between the VAP and ANES estimates of turnout rate. How big is the difference on average? What is the range of the differences? Conduct the same comparison for the VEP and ANES estimates of voter turnout.
+
+    \item \textbf{Comparison Across Election Types:} 
+    Compare the VEP turnout rate with the ANES turnout rate separately for presidential elections and midterm elections. Note that the data set excludes the year 2006. Does the bias of the ANES estimates vary across election types?
+    
+    \item \textbf{Temporal Bias Trends:}
+    Divide the data into two periods based on election years. Subset the data accordingly. Calculate the difference between the VEP turnout rate and the ANES turnout rate separately for each year within each period. Has the bias of ANES increased over time?
+
+    \item \textbf{Adjusted VAP Turnout Rate:}
+    ANES does not interview prisoners and overseas voters. Calculate an adjustment to the 2008 VAP turnout rate. Begin by subtracting the total number of ineligible felons and noncitizens from the VAP to calculate an adjusted VAP. Next, calculate an adjusted VAP turnout rate, taking care to subtract the number of overseas ballots counted from the total ballots in 2008. Compare the adjusted VAP turnout with the unadjusted VAP, VEP, and the ANES turnout rate. Briefly discuss the results.
+\end{enumerate}
+\vspace{0.3cm}
+
+\begin{center}
+    \textbf{Submission Instructions}    
+\end{center}
+
+\begin{itemize}
+    \item You must use the provided R Markdown template (\texttt{.Rmd}). Do not change section titles or chunk labels (e.g., \texttt{ex1}, \texttt{ex2}, \dots).
+    \item Fill in your \texttt{student\_id} in the template (from CANVAS, number only). Your submission must compile (“Knit”) to HTML from a clean R session (i.e., it should run from start to finish without manual steps).
+    \item Submit \textbf{both} (in a zip file):
+    \begin{itemize}
+        \item the completed \texttt{.Rmd} file, and
+        \item the generated \texttt{.html} file.
+    \end{itemize}
+    \item Keep your code readable and your written answers brief but clear. For each exercise, include a few short takeaways and a brief interpretation, supported by numbers from your output (preferably using inline R code).
+\end{itemize}
+
+
+
+
+
+
+
+\end{document}

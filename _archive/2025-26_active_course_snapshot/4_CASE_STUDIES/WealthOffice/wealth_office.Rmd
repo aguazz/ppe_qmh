@@ -1,0 +1,185 @@
+---
+title: "Regression Discontinuity Design: Politicians' Wealth by Holding Office"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2024'
+output:
+  html_document: 
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+    
+```{r global_options, include=T, echo = F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE)
+```
+
+# Prelude
+
+Before running this Rmarkdown notebook, ensure that the `rmarkdown` package is installed (`install.packages("rmarkdown")`). Additionally, load the necessary libraries and data sets:
+
+```{r}
+# You may need to install these packages... Uncomment to do so
+# install.packages("devtools")
+# devtools::install_github("kosukeimai/qss-package")
+library(qss)
+data("MPs", package = "qss")
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Introduction
+
+As an application of the Regression Discontinuity (RD) design, we examine how holding political office affects politicians' personal wealth. Scholars studied this question by analyzing Members of Parliament (MPs) in the United Kingdom^[Andrew C. Eggers and Jens Hainmueller (2009) “MPs for sale? Returns to office in postwar British politics.” American Political Science Review, vol. 103, no. 4, pp. 513–533.]. The original study collected data on personal wealth at the time of death for several hundred competitive candidates who ran for general elections between 1950 and 1970.
+
+<div style="margin-top: -60px;"></div>
+
+### Observational nature of the study and RD design
+
+A simple comparison of MPs and non-MPs in terms of wealth is unlikely to yield valid causal inferences due to observable and unobservable differences between the groups. Instead, the RD design focuses on candidates who narrowly won or lost their elections. The key idea is that a narrow margin of victory serves as a threshold: if serving in office financially benefits politicians, there should be a discontinuous jump in personal wealth at this margin. Assuming no other confounding factors at this threshold, the average causal effect of becoming an MP can be estimated by comparing candidates who barely won with those who barely lost.
+
+<div style="margin-top: -60px;"></div>
+
+### Outline
+
+To analyze this, regression is used to predict the average personal wealth at the point of discontinuity. A scatter plot with regression lines provides a clear visual representation. The outcome variable, log net wealth at the time of death, is plotted against the margin of victory. The natural logarithmic transformation of wealth is used to address its skewness caused by a few highly wealthy politicians.
+
+Separate linear regressions are fitted for candidates with positive margins (winners who became MPs) and those with negative margins (losers). The difference in predicted values at a margin of zero represents the average causal effect of holding office on personal wealth.
+
+<div style="margin-top: -60px;"></div>
+
+# The Data
+
+The data is provided in the file `MPs.csv`, accessible in the [Prelude](#Prelude) section, and containing `r nrow(MPs)` observations and `r ncol(MPs)` variables. The variables are:
+
+  * `surname`: surname of the candidate  
+  * `firstname`: first name of the candidate  
+  * `party`: party of the candidate (`Labour`, `Tory`)  
+  * `ln.gross`: log gross wealth at the time of death  
+  * `ln.net`: log net wealth at the time of death  
+  * `yob`: year of birth of the candidate  
+  * `yod`: year of death of the candidate  
+  * `margin.pre`: margin of the candidate’s party in the previous election  
+  * `region`: electoral region  
+  * `margin`: margin of victory (vote share)  
+
+Below is a summary of the basic statistics for each variable.
+
+```{r}
+summary(MPs)
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Analysis
+
+The analysis begins by subsetting the data for Labour and Tory parties and fitting two regressions for each subset.
+
+```{r}
+## subsetthe data into two parties
+MPs.labour <- subset(MPs, subset = (party == "labour"))
+MPs.tory <- subset(MPs, subset = (party == "tory"))
+## two regressions for Labour: negative and positive margin
+labour.fit1 <- lm(ln.net ~ margin, data = MPs.labour[MPs.labour$margin < 0, ])
+labour.fit2 <- lm(ln.net ~ margin, data = MPs.labour[MPs.labour$margin > 0, ])
+## two regressions for Tory: negative and positive margin
+tory.fit1 <- lm(ln.net ~ margin, data = MPs.tory[MPs.tory$margin < 0, ])
+tory.fit2 <- lm(ln.net ~ margin, data = MPs.tory[MPs.tory$margin > 0, ])
+```
+
+To predict the outcome for a specific predictor value, the `predict()` function is used with a `newdata` data frame provided as an argument. Separate analyses are conducted for Labour and Tory candidates to estimate the causal effect of serving as an MP for each party.
+
+```{r}
+## Labour: range of predictions
+y1l.range <- c(min(MPs.labour$margin), 0) # min to 0
+y2l.range <- c(0, max(MPs.labour$margin)) # 0 to max
+## prediction
+y1.labour <- predict(labour.fit1, newdata = data.frame(margin = y1l.range))
+y2.labour <- predict(labour.fit2, newdata = data.frame(margin = y2l.range))
+## Tory: range of predictions
+y1t.range <- c(min(MPs.tory$margin), 0) # min to 0
+y2t.range <- c(0, max(MPs.tory$margin)) # 0 to max
+## predict outcome
+y1.tory <- predict(tory.fit1, newdata = data.frame(margin = y1t.range))
+y2.tory <- predict(tory.fit2, newdata = data.frame(margin = y2t.range))
+```
+
+We can now plot the predicted values for each party in the scatter plot of log net
+wealth and electoral margin.
+
+```{r}
+## scatter plot with regression lines for Labour
+plot(MPs.labour$margin, MPs.labour$ln.net, main = "Labour", 
+     xlim = c(-0.5, 0.5), ylim = c(6, 18), xlab = "Margin of victory", 
+     ylab = "log net wealth at death")
+abline(v = 0, lty = "dashed")
+## add regression lines
+lines(y1l.range, y1.labour, col = "blue")
+lines(y2l.range, y2.labour, col = "blue")
+## scatter plot with regression lines for Tory
+plot(MPs.tory$margin, MPs.tory$ln.net, main = "Tory", xlim = c(-0.5, 0.5), 
+     ylim = c(6, 18), xlab = "Margin of victory", ylab = "log net wealth at death")
+abline(v = 0, lty = "dashed")
+## add regression lines
+lines(y1t.range, y1.tory, col = "blue")
+lines(y2t.range, y2.tory, col = "blue")
+```
+
+The results indicate that Tory MPs financially benefit from serving in office, while Labour MPs do not. To quantify the effect for Tory candidates, we compute the differences in predictions at the zero margin and convert them back to the original scale (pounds), as net wealth is measured on a log scale. The inverse of the natural logarithm is the exponential function, which can be applied using `exp()` in R.
+
+```{r}
+## average net wealth for Tory MP
+tory.MP <- exp(y2.tory[1])
+tory.MP
+## average net wealth for Tory non-MP
+tory.nonMP <- exp(y1.tory[2])
+## causal effect in pounds
+tory.MP - tory.nonMP
+```
+
+The estimated effect of being an MP on the personal wealth of Tory candidates is slightly above £250,000. Considering that the predicted average net wealth for Tory non-MPs is just over £270,000, this effect is substantial—being an MP nearly doubles one’s net wealth at death.
+
+<div style="margin-top: -60px;"></div>
+
+# Internal validity
+
+To evaluate the internal validity of the regression discontinuity (RD) design, one can perform a **placebo test**. A placebo test identifies a scenario where the effect is theoretically expected to be zero and checks whether the estimated effect is indeed close to zero. The term "placebo" originates from medical studies, where a placebo is expected to have no impact on health outcomes (though psychological mechanisms may sometimes lead to observable effects).
+
+In this application, we conduct a placebo test by estimating the average treatment effect on the margin of victory for the same party in the previous election. Since being an MP in the future cannot influence the outcome of a past election, the effect should theoretically be zero if the RD design is valid. However, if the estimated effect is significantly different from zero, it could indicate a potential violation of the RD assumption—for instance, if the incumbent party engages in election fraud to secure narrow victories.
+
+```{r}
+## two regressions for Tory: negative and positive margin
+tory.fit3 <- lm(margin.pre ~ margin, data = MPs.tory[MPs.tory$margin < 0, ])
+tory.fit4 <- lm(margin.pre ~ margin, data = MPs.tory[MPs.tory$margin > 0, ])
+## the difference between two intercepts is the estimated effect
+coef(tory.fit4)[1] - coef(tory.fit3)[1]
+```
+
+The estimated effect on the previous margin of victory is less than 2 percentage points, providing empirical support for the validity of the RD design in this study.
+
+While the RD design effectively addresses the primary challenge of observational studies (potential confounding bias), this strength in internal validity comes at the expense of external validity. Specifically, the causal effects estimated using RD design are applicable only to observations near the point of discontinuity. In this study, these observations are candidates who narrowly won or lost elections. The financial benefits of serving as an MP may differ significantly for those who won by a larger margin. Thus, while RD relies on weaker assumptions compared to other methods, the estimated effects may not be generalizable to the broader population.
+
+<div style="margin-top: -60px;"></div>
+
+# Exercises
+
+  * **Exercise 1 (Interaction term to evaluate internal validity):**
+  
+  1. Create a binary variable called `winner` that indicates whether the candidate won a sit on the Parliament (`margin < 0`) or not (`margin < 0`)
+  2. Use this new dummy variable to perform the RD design by adding the regressor `winner` and the interaction term `winner:margin` to the regression
+  3. Comment on the advantages of this method.
+  
+# Acknowledgement and Copyright
+
+These notes are adapted from the book [Quantitative Social Science](https://press.princeton.edu/books/quantitative-social-science) by Kosuke Imai.

@@ -1,0 +1,60 @@
+---
+title: "My First Markdown"
+author: "Your Name"
+output: html_document
+---
+
+# This is a Header (Chapter)
+
+## This is a smaller header (Section)
+
+### This is an even smaller header (Subsection)
+
+#### You get the point
+
+You are creating your first Rmarkdown document. Congrats!
+
+# Exercise 4
+Perform assignments:
+```{r}
+a <- 3 * (4 + 9)
+b <- c(1, 4, 1999, 2011)
+d <- 2 * pi
+e <- a^2 + sqrt(d)
+```
+
+# Exercise 6
+Create and analyze a vector:
+```{r}
+year <- seq(2010, 1950, by = -10)
+print(year)
+length(year)
+min(year)
+max(year)
+range(year)
+mean(year)
+sum(year)
+```
+
+# Exercise 7
+Import and analyze data:
+```{r}
+UNpop <- read.csv("UNpop.csv")
+class(UNpop)
+names(UNpop)
+nrow(UNpop)
+ncol(UNpop)
+dim(UNpop)
+summary(UNpop)
+year_column <- UNpop$year
+year_column
+UNpop[4:5, ]
+even.world.pop <- UNpop$world.pop[seq(2, nrow(UNpop), by = 2)]
+even.world.pop
+```
+
+# Note
+Use `{r echo=FALSE}` to suppress code output where necessary.
+
+# Compile
+Compile using the Knit button or the shortcut Ctrl + Shift + K to compile.

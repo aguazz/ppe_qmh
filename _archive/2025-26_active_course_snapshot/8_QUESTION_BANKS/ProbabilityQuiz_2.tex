@@ -1,0 +1,129 @@
+\documentclass[12pt]{article}
+\usepackage[lmargin=1cm, rmargin=2cm,tmargin=2cm,bmargin=2cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage{enumitem} % for structured lists
+\usepackage{graphicx}
+
+\begin{document}
+
+\section*{Probability Quiz with Answers}
+
+\textbf{Question:}  
+A political pollster is analyzing two voter characteristics in a population:  
+\begin{itemize}
+    \item \( A \): The voter supports Candidate X.  
+    \item \( B \): The voter is under 30 years old.  
+\end{itemize}
+The pollster finds that \( P(A) = 0.4 \) and \( P(B) = 0.5 \).  
+
+Are the events "supporting Candidate X" and "being under 30" independent?
+\begin{enumerate}
+    \item[(A)] Yes 
+    \item[(B)] No
+    \item[(C)] More information is needed
+\end{enumerate}
+
+\textbf{Question:}  
+Match each probability expression with the most appropriate interpretation:  
+\begin{enumerate}
+    \item[(A)] \( P(A \cup B) \)  
+    \item[(B)] \( P(A \cap B) \)  
+    \item[(C)] \( P(A \mid B) \)  
+    \item[(D)] \( 1 - P(A) \)  
+\end{enumerate}
+
+Possible interpretations:  
+
+\begin{enumerate}
+    \item[(1)] The probability that at least one of the events \( A \) or \( B \) occurs.  
+    \item[(2)] The probability that both events \( A \) and \( B \) occur together.  
+    \item[(3)] The probability that event \( A \) happens, given that \( B \) has already occurred.  
+    \item[(4)] The probability that event \( A \) does not occur.  
+\end{enumerate}
+
+\textbf{Question:}  
+You want to investigate whether two political beliefs, \( A \) and \( B \), are independent. Which of the following must be true for independence?  
+\begin{enumerate}
+    \item[(A)] \( P(A \cap B) = P(A) \cdot P(B) \)  
+    \item[(B)] \( P(A \mid B) = P(A) \)  
+    \item[(C)] Knowing that one belief is held does not affect the probability of holding the other.  
+    \item[(D)] \( P(A \cup B) = P(A) + P(B)\).  
+\end{enumerate}
+
+\textbf{Question:}  
+Which of the following describes the principle behind Bayes’ Rule?  
+\begin{enumerate}
+    \item[(A)] It calculates the probability of two independent events occurring together.  
+    \item[(B)] It provides a way to revise the probability of an event based on prior knowledge and new evidence.  
+    \item[(C)] It states that as more data is collected, the sample mean approaches the population mean.  
+    \item[(D)] It determines the likelihood of an event occurring in the future based solely on past frequencies.  
+\end{enumerate}
+
+\textbf{Question:}  
+In stylometric analysis, the \textit{term frequency-inverse document frequency} (TF-IDF) metric is used to measure the importance of a word within a document relative to a collection of documents. It is computed as:
+\[
+\text{TF-IDF}(w) = \text{TF}(w) \times (\ln(N) - \text{IDF}(w)),
+\]
+where \( \text{TF}(w) \) is the frequency of word \( w \) in a given document, $N$ is the total number of documents being analyzed in the corpora, and \( \text{IDF}(w) \) is the frequency of word $w$ in the other documents.  
+
+What does a high TF-IDF score suggest in a corpora of novels?  
+\begin{enumerate}
+    \item[(A)] The word is frequently used in the novel but rarely appears in other novels, making it distinctive.  
+    \item[(B)] The word is common across all novels and does not contribute much to distinguishing the author.  
+    \item[(C)] The word appears infrequently in the novel but is common across other novels, indicating that it is not meaningful.  
+    \item[(D)] The word is equally frequent in all speeches and is therefore the best indicator of authorship.  
+\end{enumerate}
+
+\textbf{Question:}  
+Different probability distributions are used to model various social science phenomena. Match each situation below with the most appropriate probability distribution:  
+\begin{enumerate}
+    \item[(A)] The number of political protests occurring in a country per month.  
+    \item[(B)] The distribution of public opinion scores (on a 0-100 scale) for a controversial political figure.  
+    \item[(C)] The number of respondents in a survey who approve of a new government policy.  
+    \item[(D)] The average age of voters in randomly selected electoral districts.  
+\end{enumerate}
+
+Possible distributions:  
+\begin{enumerate}
+    \item[(1)] Binomial  
+    \item[(2)] Poisson  
+    \item[(3)] Normal  
+    \item[(4)] Uniform  
+\end{enumerate}
+
+\textbf{Question:}  
+A bag contains two types of dice: one fair six-sided die and one biased six-sided die that always rolls a six. You randomly pick a die and roll it, getting a six. What is the probability that you picked the fair die? (Give your answer as a decimal between 0 and 1.) 
+
+\textbf{Question:}  
+The Law of Large Numbers (LLN) states that as \( n \) grows large, the sample mean:  
+\begin{enumerate}
+    \item[(A)] Always moves away from the true mean.  
+    \item[(B)] Converges to the distribution’s mode.  
+    \item[(C)] Converges to the population mean.  
+    \item[(D)] Becomes more variable over time.  
+\end{enumerate}
+
+\textbf{Question:}  
+Select the correct statements about the Central Limit Theorem.
+
+\begin{enumerate}
+    \item[(A)] As the sample size increases, the distribution of the sample mean becomes approximately normal, regardless of the shape of the population distribution.  
+    \item[(B)] The CLT applies only to populations with normal-like distributions and cannot be used when the population distribution is asymmetric or bimodal.  
+    \item[(C)] The variability of the sample mean decreases as the sample size increases.  
+    \item[(D)] The sample mean converges to the population mean.  
+    \item[(E)] The distribution of any variable becomes normal as the sample size increases.  
+\end{enumerate}
+
+\textbf{Question:}  
+Suppose I give you a random variable \( X \), such that its mean is 10 and the expectation of \( X^2 \) is 150. What is the variance of \( X \)?
+
+\textbf{Question:}  
+The Central Limit Theorem (CLT) is a fundamental result in probability and statistics. Which of the following best describes its implications?  
+\begin{enumerate}
+    \item[(A)] The distribution of any variable becomes normal as the sample size increases.  
+    \item[(B)] The distribution of the sample mean approaches a normal distribution, regardless of the shape of the population, as the sample size increases.  
+    \item[(C)] The CLT applies only to normally distributed populations, ensuring that their sample means remain normally distributed.  
+    \item[(D)] The sample mean always equals the population mean.  
+\end{enumerate}
+
+\end{document}

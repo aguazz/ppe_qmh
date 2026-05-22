@@ -1,0 +1,5 @@
+interface:
+  display_name: "Project Grading Agent"
+  short_description: "Grade QMH projects with concise evidence-based feedback"
+  brand_color: "#7C2D12"
+  default_prompt: "Use $project-grading-agent to grade the latest processed QMH project submissions."

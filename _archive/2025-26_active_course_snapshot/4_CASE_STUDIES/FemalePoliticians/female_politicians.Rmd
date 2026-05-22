@@ -1,0 +1,145 @@
+---
+title: "Linear Model: Female vs Male policy making"
+author: "Quantitative Methods for Humanities"
+date: 'CUNEF Universidad, 2024'
+output:
+  html_document: 
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: no
+    toc: no
+    toc_depth: 1
+  pdf_document:
+    css: theme.css
+    theme: cerulean
+    highlight: tango
+    number_sections: yes
+    toc: yes
+    toc_depth: 1
+editor_options:
+  chunk_output_type: console
+---
+    
+```{r global_options, include=T, echo = F}
+knitr::opts_chunk$set(echo = T, warning=FALSE, message=FALSE)
+```
+
+# Prelude
+
+Before running this Rmarkdown notebook, ensure that the `rmarkdown` package is installed (`install.packages("rmarkdown")`). Additionally, load the necessary libraries and data sets:
+
+```{r}
+# You may need to install these packages... Uncomment to do so
+# install.packages("devtools")
+# devtools::install_github("kosukeimai/qss-package")
+library(qss)
+data("women", package = "qss")
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Introduction
+
+We aim to shed light on the following question:
+
+  * **Reseach question:** Do female politicians in government affect policy decisions differently than male politicians?
+  
+To this end, simply contrasting policy measures between districts that elect women versus those that elect only men is insufficient, since these regions might differ in a number of ways besides the gender of their elected officials. For instance:
+
+  * **Potential confounding bias** More liberal districts could be more inclined to elect female representatives, making it difficult to distinguish whether observed policy differences arise from ideology or politician gender.
+
+To overcome this potential confounding problem, the authors of the study^[Raghabendra Chattopadhyay and Esther Duflo (2004) “Women as policy makers: Evidence from a randomized policy experiment in India.” Econometrica, vol. 72, no. 5, pp. 1409–1443.] took advantage of a randomized policy experiment in India where, since the mid-1990s, one-third of village council heads have been randomly reserved for female politicians. The policy was implemented at the level of government called Gram Panchayat or GP. Each GP contains many villages. For this study, two villages were selected at random within each GP for detailed data collection.
+
+<div style="margin-top: -60px;"></div>
+
+# The Data
+
+The data set (accessible in the [Prelude](#Prelude) section) contains `r nrow(women)` observations and `r ncol(women)` variables. Each observation in the data set represents a village and there are two villages associated with each GP. The variables are:
+
+  * `GP`: identifier for the Gram Panchayat (GP)
+  * `village`: identifier for each village
+  * `reserved`: binary variable indicating whether the GP was reserved for women leaders or not
+  * `female`: binary variable indicating whether the GP had a female leader or not
+  * `irrigation`: variable measuring the number of new or repaired irrigation facilities in the village since the reserve policy started
+  * `water`: variable measuring the number of new or repaired drinking water facilities in the village since the reservation policy started
+
+Below is a summary of the basic statistics for each variable.
+
+```{r}
+summary(women)
+```
+
+<div style="margin-top: -60px;"></div>
+
+# Descriptive analysis
+
+We begin by verifying whether the reservation policy was effectively implemented. To do this, we calculate the proportion of female politicians elected to both reserved and unreserved seats. Since each GP (Gram Panchayat) comprises the same number of villages, we can directly compute the average across villages without needing to aggregate data at the GP level. For reserved seats, this proportion should equal 1.
+
+```{r}
+# proportion of female politicians in reserved GP vs. unreserved GP
+mean(women$female[women$reserved == 1])
+mean(women$female[women$reserved == 0])
+```
+
+The evidence suggests that the reservation policy was implemented as intended:
+
+  1. All GPs required to reserve a council position for women successfully elected a female politician. 
+  2. Conversely, 93% of GPs not subject to the reservation policy lacked female representation. 
+  
+  Building on concepts from Chapter 2, we compare the average policy outcomes between villages in reserved GPs and those in unreserved GPs. The hypothesis:
+  
+* **Hypothesis:** Female politicians are more likely to prioritize policies aligned with female voters' preferences (drinking water quality), while men are more likely to focus on male voter's prederences (irrigation issues). 
+
+<div style="margin-top: -60px;"></div>
+
+# Causal inference using the difference-in-means estimator
+
+To assess the policy's impact, we estimate the average causal effects of the reservation policy on the number of new or repaired irrigation systems and drinking water facilities established since its implementation, employing the difference-in-means estimator.
+
+```{r}
+## drinking water facilities
+mean(women$water[women$reserved == 1]) - mean(women$water[women$reserved == 0])
+## irrigation facilities
+mean(women$irrigation[women$reserved == 1]) - mean(women$irrigation[women$reserved == 0])
+```
+
+
+The results show that the reservation policy led to an average increase of about 9 new or repaired drinking water facilities per GP, while having little to no impact on irrigation systems. This aligns with the hypothesis that female politicians are more likely to advocate for policies that address female voters' concerns.
+
+<div style="margin-top: -60px;"></div>
+
+# Linear regression for causal inference under randomization
+
+How can regression be used to analyze data from randomized experiments like this? 
+
+  * Regressing an outcome variable on a treatment variable produces a slope coefficient equal to the difference in average outcomes between the treatment and control groups. Additionally, the intercept in this regression represents the average outcome for the control group. 
+  
+More broadly, when the predictor variable $X$ is binary, the linear model $Y = \beta_0 + \beta_1 X$ provides the estimated coefficients directly.
+  
+```{r}
+# regression over water
+(fit_water <- lm(water ~ reserved, data = women))
+# regression over irrigation
+(fit_irrigation <- lm(irrigation ~ reserved, data = women))
+```
+
+Note that the slope coefficients equal the difference-in-means estimators. Finally, 
+
+  * The randomization of treatment assignment permits this causal interpretation of association identified under a linear regression model.
+
+<div style="margin-top: -60px;"></div>
+
+# Exercises
+
+  * **Exercise 1:** Perform the following analysis over the linear models `fit_water` and `fit_irrigation`:
+
+  1. Compute the correlation between the response and the predictor.
+  2. Plot a scatter plot between the response and the predictor, and add the regression line.
+  3. Obtain the $R^2$ coefficients. How good the fits are?
+  4. Investigate whether the model's assumptions are met.
+  5. Asses the significance of the slope coefficients in each regression. Interpret.
+  
+# Acknowledgement and Copyright
+
+These notes are adapted from the book [Quantitative Social Science](https://press.princeton.edu/books/quantitative-social-science) by Kosuke Imai.

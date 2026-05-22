@@ -1,0 +1,111 @@
+% % Input encoding.
+\usepackage[utf8]{inputenc} % For accents in spanish: transforms "á" into "\'a"
+\usepackage[T1]{fontenc} % Output encoding. Use to avoid silly problems on the output.
+                         % See: http://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+\usepackage{lmodern} % Latin Modern fonts have broader support
+% AMS packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{bbm}
+% Other maths packages
+\usepackage{mathtools}
+\usepackage{leftindex}
+% Tables
+\usepackage{booktabs}  % For professional tables
+\usepackage{multirow}  % For multirow formatting
+% Include animated gifs
+\usepackage{animate}
+% Hyperlink
+\usepackage{hyperref}
+\hypersetup{
+	final,
+    bookmarksnumbered=true,
+    bookmarksopen=true,
+    bookmarksopenlevel=0,
+    unicode=false,          % non-Latin characters in Acrobat?s bookmarks
+    pdftoolbar=true,        % show Acrobat?s toolbar?
+    pdfmenubar=true,        % show Acrobat?s menu?
+    pdffitwindow=false,     % window fit to page when opened
+    pdftitle={Quantitative Methods For Humanities},    % title
+    pdfdisplaydoctitle=true, %display document title instead of file name in title bar
+    pdftoolbar=true,
+    pdfmenubar=true,
+    pdflang={English},
+    pdfauthor={Abel Guada Azze},     % author
+    pdfsubject={Quantitative Methods For Humanities},   % subject of the document
+    pdfcreator={Abel Guada Azze},   % creator of the document
+    pdfproducer={Abel Guada Azze}, % producer of the document
+    pdfkeywords={Quantitative Methods} {R}, % list of keywords
+    pdfnewwindow=true,      % links in new window
+    breaklinks=true,
+    hidelinks,
+    colorlinks,
+    linkcolor=CUNEFOrange,          % color of internal links (change box color with linkbordercolor)
+    citecolor=black,        % color of links to bibliography
+    filecolor=cyan,      % color of file links
+    urlcolor=magenta           % color of external links
+}
+% Import icons
+\usepackage{fontawesome}
+\usepackage{tikz}
+% \pgfplotsset{compat=1.18}
+% \usepackage{tkz-euclide}
+\usetikzlibrary{shapes,arrows,matrix,positioning,calc}
+\newcommand{\tikzmark}[1]{\tikz[baseline,remember picture] \coordinate (#1) {};}
+% Define colors
+\definecolor{amber}{rgb}{1.0, 0.49, 0.0} % Normalized RGB
+\definecolor{firebrick3}{RGB}{207, 33, 32} % 8-bit RGB
+\definecolor{deepskyblue3}{RGB}{0, 155, 206} % 8-bit RGB
+\definecolor{darkorange3}{RGB}{206, 102, 0} % 8-bit RGB
+\definecolor{darkolivegreen3}{RGB}{163, 207, 91} % 8-bit RGB
+\definecolor{purpleR}{RGB}{160, 32, 240}
+% Customizable new commands
+\usepackage{xparse}
+% Plain macros
+\newcommand{\R}{\mathbb{R}} % real number set
+\newcommand{\N}{\mathbb{N}} % natural number set
+\newcommand{\lp}{\left(} % left parenthesis
+\newcommand{\rp}{\right)} % right parenthesis
+\newcommand{\lb}{\left[} % left brackets
+\newcommand{\rb}{\right]} % right brackets
+\newcommand{\lc}{\left\{} % left curly brackets
+\newcommand{\rc}{\right\}} % right curly brackets
+\newcommand{\la}{\langle} % left angled brackets
+\newcommand{\ra}{\rangle} % right angled brackets
+\newcommand*{\defeq}{\mathrel{\vcenter{
+                     \baselineskip0.5ex\lineskiplimit0pt
+                     \hbox{\scriptsize.}\hbox{\scriptsize.}
+                     }}%
+                     =}
+                     \newcommand{\Rcoef}{\textsf{R}^2} % Coefficient of determination
+\newcommand{\adjRcoef}{\oline{\textsf{R}}^2} % Coefficient of determination
+\newcommand{\SER}{\textsf{SER}} % Standard error of the regression
+\newcommand{\SSR}{\textsf{SSR}} % Sum of squared residuals
+\newcommand{\ESS}{\textsf{ESS}} % explained sum of squares
+\newcommand{\TSS}{\textsf{TSS}} % total sum of squareds
+% Macros with arguments
+\newcommand{\lrav}[1]{\left|#1\right|} % absolute value
+\newcommand{\wtilde}[1]{\widetilde{#1}}
+\newcommand{\what}[1]{\widehat{#1}}
+\newcommand{\oline}[1]{\overline{#1}}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\lrp}[1]{\lp#1\rp} % left-right parenthesis
+\newcommand{\lrb}[1]{\lb#1\rb} % left-right brackets
+\newcommand{\lrc}[1]{\lc#1\rc} % left-right curly brackets
+\newcommand{\lra}[1]{\la#1\ra} % left-right angled brackets
+\RenewDocumentCommand{\Pr}{oe{_^}}{% Probability P
+  \operatorname{\mathbb{P}}%
+  \IfValueT{#2}{_{#2}}%
+  ^{\IfValueTF{#3}{#3}{}}%
+  \IfValueT{#1}{\lp #1 \rp}%
+}
+\NewDocumentCommand{\Esp}{oe{_^}}{%
+  \operatorname{\mathbb{E}}%
+  \IfValueT{#2}{_{#2}}%
+  ^{\IfValueTF{#3}{#3}{}}%
+  \IfValueT{#1}{\lb #1 \rb}%
+}
+\newcommand{\Var}[1]{\mathbb{V}ar\lb #1\rb} % variance
+\newcommand{\Cov}[2]{\mathbb{C}ov\lb #1, #2\rb} % covariance

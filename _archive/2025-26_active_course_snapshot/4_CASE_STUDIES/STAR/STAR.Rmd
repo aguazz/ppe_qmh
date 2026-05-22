@@ -1,0 +1,288 @@
+---
+title: "Efficacy of Small Class Size in Early Education"
+author: "Quantitative Methods for Humanities"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cerulean
+    highlight: tango
+    toc: yes
+    number_sections: yes
+  pdf_document:
+    theme: cerulean
+    highlight: tango
+    toc: yes
+    number_sections: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+The STAR (Student–Teacher Achievement Ratio) Project was a four-year longitudinal study (1985–1989) designed to examine the impact of class size on early education outcomes. In this document, we analyze the STAR dataset to explore key concepts and answer several key questions:
+
+- **Recode Variables:** How can we transform raw data into meaningful categories?
+- **Test Score Comparison:** Do students in small classes perform better in reading and math compared to those in regular classes?
+- **Quantile Treatment Effects:** What do different points in the test score distributions (e.g., 33rd and 66th percentiles) reveal?
+- **Effect of Exposure Duration:** Does the number of years in small classes affect academic outcomes?
+- **Racial Achievement Gaps:** Are racial disparities in test scores reduced in small classes?
+- **Long-Term Outcomes:** What are the effects on high-school graduation rates?
+
+# Data exploration and processing
+
+## Loading the Data
+
+The dataset `STAR.csv` contains observations from the STAR study. Specifically, it contains 6,325 observations from the variables
+
+  - **`race`**: Student’s race *(1 = white, 2 = black, 3 = Asian, 4 = Hispanic, 5 = Native American, 6 = others)*
+
+  - **`classtype`**: Type of kindergarten class *(1 = small, 2 = regular, 3 = regular with aid)*
+
+  - **`g4math`**: Total scaled score for the **math** portion of the fourth-grade standardized test
+
+  - **`g4reading`**: Total scaled score for the **reading** portion of the fourth-grade standardized test
+
+  - **`yearssmall`**: Number of years spent in small classes
+
+  - **`hsgrad`**: High-school graduation status *(1 = graduated, 0 = did not graduate)*
+
+
+We begin by loading the data.
+
+```{r load-data}
+star <- read.csv("STAR.csv")
+head(star)
+```
+
+We also display a summary of the data to get a quick assessment of the variables' content, type, and distribution
+
+```{r}
+summary(star)
+```
+
+## Recode Variables
+
+We need to recode the class type and race variables for better interpretability.
+
+- **Class Type (`classtype`):** Recode into a new factor variable `kinder` with labels:
+  - `1` becomes `"small"`
+  - `2` becomes `"regular"`
+  - `3` becomes `"regular_aid"`
+
+- **Race:** Recode into four categories:
+  - `1` becomes `"white"`
+  - `2` becomes `"black"`
+  - `4` becomes `"hispanic"`
+  - Combine `3`, `5`, and `6` into `"others"`
+
+```{r recode-variables}
+# Recode classtype into kinder with meaningful labels
+unique(star$classtype)
+star$kinder <- NA
+star$kinder[star$classtype == 1] <- "small"
+star$kinder[star$classtype == 2] <- "regular"
+star$kinder[star$classtype == 3] <- "regular_aid"
+star$kinder <- as.factor(star$kinder)
+unique(star$kinder)
+
+# Recode race variable
+unique(star$race)
+star$race[star$race == 1] <- "white"
+star$race[star$race == 2] <- "black"
+star$race[star$race == 4] <- "hispanic"
+star$race[star$race %in% c(3, 5, 6)] <- "others"
+```
+
+# Comparison of Test Scores
+
+We now compare the fourth-grade reading and math scores for students in small classes versus those in regular classes. The comparison is based on the means (with missing values removed) and then assessed relative to the standard deviation.
+
+```{r compare-scores}
+# Subset data for small and regular classes (ignoring regular_aid)
+small <- subset(star, kinder == "small")
+regular <- subset(star, kinder == "regular")
+
+# Calculate mean reading scores
+mean_reading_small <- mean(small$g4reading, na.rm = TRUE)
+mean_reading_regular <- mean(regular$g4reading, na.rm = TRUE)
+
+# Calculate mean math scores
+mean_math_small <- mean(small$g4math, na.rm = TRUE)
+mean_math_regular <- mean(regular$g4math, na.rm = TRUE)
+
+# Overall standard deviations
+sd_reading <- sd(star$g4reading, na.rm = TRUE)
+sd_math <- sd(star$g4math, na.rm = TRUE)
+
+# Display the results
+c(mean_reading_small, mean_reading_regular)
+c(mean_math_small, mean_math_regular)
+# c(sd_reading, sd_math)
+```
+
+**Interpretation:**  
+If the differences in means between small and regular classes are a significant fraction of the overall standard deviation, it suggests that class size has a substantial effect on academic performance.
+
+However, we can formally test the differences between two means with a `t.test`.
+
+```{r}
+# Formal tests of difference in means
+
+## 1) Reading scores
+# Welch's t-test (unequal variances, default in R)
+t.test_reading <- t.test(small$g4reading, 
+                         regular$g4reading, 
+                         alternative = "two.sided", 
+                         var.equal = FALSE) 
+t.test_reading
+
+# If you want to assume equal variances, use:
+# t.test(small$g4reading, regular$g4reading, var.equal = TRUE)
+
+## 2) Math scores
+# Welch's t-test (unequal variances, default in R)
+t.test_math <- t.test(small$g4math, 
+                      regular$g4math, 
+                      alternative = "two.sided", 
+                      var.equal = FALSE) 
+t.test_math
+```
+
+The result shows that the hypothesis "true difference in means is not equal to 0" cannot be rejected for a confidence level of 95\%.
+
+# Quantile Treatment Effects
+
+Rather than focusing solely on average performance, we now compare the 33rd and 66th percentiles of reading and math scores for students in small and regular classes. This provides insight into the effects at different parts of the performance distribution.
+
+```{r quantile-analysis}
+# Quantiles for reading scores
+quantiles_reading_small <- quantile(small$g4reading, probs = c(0.33, 0.66), na.rm = TRUE)
+quantiles_reading_regular <- quantile(regular$g4reading, probs = c(0.33, 0.66), na.rm = TRUE)
+
+# Quantiles for math scores
+quantiles_math_small <- quantile(small$g4math, probs = c(0.33, 0.66), na.rm = TRUE)
+quantiles_math_regular <- quantile(regular$g4math, probs = c(0.33, 0.66), na.rm = TRUE)
+
+quantiles_reading_small
+quantiles_reading_regular
+quantiles_math_small
+quantiles_math_regular
+```
+
+**Discussion:**  
+The quantile analysis may reveal, for example, that lower-performing students (at the 33rd percentile) benefit more from small classes than higher-performing students (at the 66th percentile), offering additional nuance to our understanding beyond mean comparisons.
+
+In this case, percentiles remain very similar, suggesting that the bottom, middle, and top 33\% of the students are not significantly different in small vs regular classes.
+
+# Effect of Years in Small Classes
+
+Some students experienced small classes for varying durations. We first create a contingency table to see how many students fall into each category based on the number of years spent in small classes.
+
+```{r contingency-table}
+table(star$kinder, star$yearssmall)
+```
+
+Next, we examine whether the duration of exposure to small classes affects reading and math scores by comparing means and medians across different years.
+
+```{r years-effect}
+# Mean and median reading scores by years in small classes
+mean_reading_by_year <- tapply(star$g4reading, star$yearssmall, mean, na.rm = TRUE)
+median_reading_by_year <- tapply(star$g4reading, star$yearssmall, median, na.rm = TRUE)
+
+# Mean and median math scores by years in small classes
+mean_math_by_year <- tapply(star$g4math, star$yearssmall, mean, na.rm = TRUE)
+median_math_by_year <- tapply(star$g4math, star$yearssmall, median, na.rm = TRUE)
+
+mean_reading_by_year
+median_reading_by_year
+mean_math_by_year
+median_math_by_year
+```
+
+**Interpretation:**  
+By comparing these statistics, we assess whether longer exposure to small classes correlates with higher academic performance. Consistent increases in the mean or median scores with additional years would support the efficacy of sustained exposure.
+
+The differences in means and medians appears small across different years of exposure to small classes, and there is no a clear patter in the sequences.
+
+# Reducing Racial Achievement Gaps
+
+An important question is whether small class sizes help reduce racial achievement gaps. Here we compare the mean reading and math scores between white students and minority students (defined as black and hispanic) within both regular and small classes.
+
+First, we create a binary variable for minority status.
+
+```{r minority-variable}
+star$minority <- ifelse(star$race %in% c("black", "hispanic"), "minority", "white")
+```
+
+Next, we calculate the mean scores for each group in regular classes:
+
+```{r racial-gaps-regular}
+regular_subset <- subset(star, kinder == "regular")
+mean_reading_regular_white <- mean(regular_subset$g4reading[regular_subset$minority == "white"], na.rm = TRUE)
+mean_reading_regular_minority <- mean(regular_subset$g4reading[regular_subset$minority == "minority"], na.rm = TRUE)
+mean_math_regular_white <- mean(regular_subset$g4math[regular_subset$minority == "white"], na.rm = TRUE)
+mean_math_regular_minority <- mean(regular_subset$g4math[regular_subset$minority == "minority"], na.rm = TRUE)
+
+c(mean_reading_regular_white, mean_reading_regular_minority)
+c(mean_math_regular_white, mean_math_regular_minority)
+```
+
+And then for small classes:
+
+```{r racial-gaps-small}
+small_subset <- subset(star, kinder == "small")
+mean_reading_small_white <- mean(small_subset$g4reading[small_subset$minority == "white"], na.rm = TRUE)
+mean_reading_small_minority <- mean(small_subset$g4reading[small_subset$minority == "minority"], na.rm = TRUE)
+mean_math_small_white <- mean(small_subset$g4math[small_subset$minority == "white"], na.rm = TRUE)
+mean_math_small_minority <- mean(small_subset$g4math[small_subset$minority == "minority"], na.rm = TRUE)
+
+c(mean_reading_small_white, mean_reading_small_minority)
+c(mean_math_small_white, mean_math_small_minority)
+```
+
+**Interpretation:**  
+If the gap (difference in scores) between white and minority students is smaller in small classes compared to regular classes, this suggests that smaller class sizes may help reduce racial achievement disparities. 
+
+Despite clearly showing a racial gap in math and reading abilities in both regular- and small-size classes, there is no evidence of a reduction in this racial when the class size is reduced.
+
+# Long-Term Effects on Graduation
+
+Finally, we assess whether the STAR program has long-term benefits by examining high-school graduation rates.
+
+## Graduation Rates by Class Type
+
+```{r grad-by-class}
+grad_rates_by_class <- tapply(star$hsgrad, star$kinder, mean, na.rm = TRUE)
+grad_rates_by_class
+```
+
+## Effect of Years in Small Classes on Graduation Rates
+
+```{r grad-by-years}
+grad_rates_by_year <- tapply(star$hsgrad, star$yearssmall, mean, na.rm = TRUE)
+grad_rates_by_year
+```
+
+## Racial Disparities in Graduation Rates
+
+```{r grad-by-race}
+grad_rates_by_race <- tapply(star$hsgrad, star$race, mean, na.rm = TRUE)
+grad_rates_by_race
+```
+
+**Interpretation:**  
+By examining graduation rates across class types, duration in small classes, and racial groups, we determine if the benefits observed in early education persist into later academic outcomes.
+
+# Conclusion
+
+This analysis of the STAR dataset has provided several insights:
+
+- **Test Scores:** On average, students in small classes tend to perform better in reading and math compared to those in regular classes. The effect size becomes clearer when comparing the differences to the overall variability in scores.
+- **Distributional Effects:** Quantile analysis indicates that the benefits of small classes might vary across the performance spectrum, potentially offering more help to lower-performing students.
+- **Duration Matters:** Longer exposure to small classes is associated with improved test scores.
+- **Racial Achievement Gaps:** Small class sizes may contribute to reducing the gap between white and minority students.
+- **Long-Term Benefits:** The STAR program appears to have positive long-term effects, as evidenced by higher graduation rates, and may even help reduce racial disparities in graduation outcomes.
+
+These results underscore the potential value of smaller class sizes in early education and inform discussions on educational policy and resource allocation.
