@@ -1,10 +1,20 @@
-# Quantitative Methods for Humanities
+# Quantitative Methods for Humanities (2026-27)
 
 Course repository for **Quantitative Methods for Humanities**, PPE 2nd year.
 
-This is the working folder for the course: syllabus, slides, problem sets, R practice, case studies, datasets, bibliography, exams, rubrics, and instructor-only grading material. The repository is meant to be used locally in **Positron** or **VS Code**, with AI assistance, while remaining connected to **Overleaf** for LaTeX editing/compilation and to **Git/GitHub** for version control and backup.
+The active course version is **2026-27**. The 2025-26 course has been preserved under `_archive/2025-26_active_course_snapshot/`, and the former 2025-26 data-analysis project has been preserved under `_archive/2025-26_data_analysis_project/`.
+
+This is the working folder for the course: syllabus, slides, problem sets, optional R enrichment, case studies, datasets, bibliography, exams, rubrics, and instructor-only grading material. The repository is meant to be used locally in **Positron** or **VS Code**, with AI assistance, while remaining connected to **Overleaf** for LaTeX editing/compilation and to **Git/GitHub** for version control and backup.
 
 For a detailed tree of the current folder layout, see [MAP.md](MAP.md). For the repo-local Codex agents and skills, see [AGENTS.md](AGENTS.md).
+
+## 2026-27 Course Direction
+
+- R is retained as optional/enrichment material and as a tool for case-study demonstrations. It is not part of the required continuous-evaluation workload unless explicitly reintroduced.
+- The required assessment structure is centered on written course-content exams, problem sets/practice, and a paper-exposition group project.
+- The group project is now a causal-inference paper exposition, not a new data-analysis or coding project.
+- The new inference material should remain technically minimal but clear: comparison of means, central limit theorem intuition, and basic hypothesis-testing logic for PPE students.
+- Older 2025-26 materials should stay available in `_archive/` without looking like active 2026-27 requirements.
 
 ## Working Model
 
@@ -13,9 +23,12 @@ This repository is designed around four connected tools:
 - **Local editor:** use Positron or VS Code as the main workspace for editing `.tex`, `.R`, `.Rmd`, `.csv`, `.md`, and support files.
 - **AI assistance:** use Codex, Copilot, or another AI assistant locally to reorganize files, draft material, review code, update documentation, and maintain consistency.
 - **Overleaf:** use the Overleaf Git integration for LaTeX-oriented work and PDF compilation when convenient.
-- **Git/GitHub:** use Git to track course-material changes and, if configured, push a clean version to GitHub. The `11_GRADES_AND_SUBMISSIONS/` folder shell is tracked, but private grading material inside it is excluded from pushes through a `.gitignore` file.
+- **Git/GitHub:** use Git to track course-material changes and push clean course versions to GitHub and Overleaf.
 
-At the time this README was written, the Git remote named `origin` points to the Overleaf Git remote. If a GitHub remote is also configured, use a separate remote name such as `github` to avoid confusion.
+The current local branch is `master`. The configured remotes are:
+
+- `overleaf`: Overleaf Git remote, pushed as `master`.
+- `github`: GitHub repository, pushed from local `master` to GitHub `main`.
 
 ## Repository Principles
 
@@ -25,31 +38,28 @@ At the time this README was written, the Git remote named `origin` points to the
 - Keep generated PDFs next to their source `.tex` files when the goal is to overwrite PDFs efficiently after compiling.
 - Keep sensitive grading material in `11_GRADES_AND_SUBMISSIONS/`, but never push the private contents to Git.
 - Keep legacy material in `_archive/` so it remains available without cluttering the active course structure.
+- Keep optional R material visibly optional in folder names and documentation.
 
 ## Folder Structure
 
-- `0_SYLLABUS/`: syllabus files and course planning spreadsheets.
-- `1_SLIDES/`: lecture slide folders by topic. Each topic keeps its `.tex` source beside the generated `.pdf`.
-- `2_PROBLEM_SETS/`: problem sets by topic, including sources, PDFs, local datasets, and selected solution files.
-- `3_R_PRACTICE/`: R practice templates, instructor solutions, data, rendered outputs, and rubric material.
+- `0_SYLLABUS/`: active 2026-27 syllabus source. The DOCX is the current source of truth; regenerate/export the PDF when needed.
+- `1_SLIDES/`: lecture slide folders by topic. The Intro R deck is retained as optional/enrichment material pending the slide rewrite.
+- `2_PROBLEM_SETS/`: problem sets by topic. Existing Intro R and R-based exercises should be treated as optional/enrichment until rewritten or relabeled.
+- `3_OPTIONAL_R_PRACTICE/`: optional R practice templates, instructor solution, data, rendered output, and older R-practice material. This is not a required continuous-evaluation folder for 2026-27.
 - `4_CASE_STUDIES/`: self-contained RMarkdown case studies, usually with `.Rmd`, `.html`, local data, and local assets.
-- `5_GROUP_PROJECT/`: group project instructions, LaTeX sources, generated PDF, and project datasets.
+- `5_GROUP_PROJECT/`: active 2026-27 paper-exposition project instructions, LaTeX source, and generated PDF.
 - `6_DATA_SETS/`: shared datasets and QSS chapter code/data.
 - `7_BIBLIOGRAPHY/`: bibliography and course readings.
 - `8_QUESTION_BANKS/`: quiz/question-bank LaTeX sources and archived question-bank exports.
-- `9_EXAMS/`: exam sources and PDFs, organized by academic year.
-- `10_RUBRICS/`: grading rubrics in PDF and editable formats.
+- `9_EXAMS/`: exam sources and PDFs, organized by academic year. `9_EXAMS/2026-27/` is the active skeleton for the new Midterm 1, Midterm 2, and final-exam materials.
+- `10_RUBRICS/`: grading rubrics in PDF and editable formats. The active project rubric is now the paper-exposition rubric DOCX; export its PDF manually if needed.
 - `11_GRADES_AND_SUBMISSIONS/`: visible placeholder for private instructor material, grades, and student submissions. Only `11_GRADES_AND_SUBMISSIONS/README.md` is tracked; private contents are ignored by Git.
 - `LaTex/`: shared LaTeX infrastructure only: preamble, style files, shared images, and animation frames.
-- `_archive/`: legacy material retained for reference.
+- `_archive/`: legacy material retained for reference, including the full 2025-26 snapshot and the old 2025-26 data-analysis project.
 
 ## Opening The Project Locally
 
-Open the repository root folder in Positron or VS Code:
-
-```text
-c:\Users\aguaz\OneDrive - CUNEF\Teaching\2025-26\ppe_qmh
-```
+Open the repository root folder in Positron or VS Code. The root is the folder containing `README.md`, `MAP.md`, `AGENTS.md`, and the numbered course folders.
 
 Recommended local workflow:
 
@@ -74,9 +84,11 @@ Examples:
 
 ```powershell
 latexmk -pdf -cd "1_SLIDES\Topic 0 - Intro Course\0.Intro.tex"
-latexmk -pdf -cd "2_PROBLEM_SETS\Topic 1 - Intro R\Problem_set_1_introR.tex"
-latexmk -pdf -cd "9_EXAMS\2025-26\1stMidterm.tex"
+latexmk -pdf -cd "5_GROUP_PROJECT\Project_Instructions.tex"
+latexmk -pdf -cd "9_EXAMS\2026-27\Midterm1.tex"
 ```
+
+The exam example is the intended 2026-27 convention once `Midterm1.tex` is created.
 
 Slide decks load shared assets from `LaTex/` through paths such as:
 
@@ -102,6 +114,8 @@ Note: `2_PROBLEM_SETS/solution.tex` is a legacy combined solution source that ha
 
 ## Working With R And RMarkdown
 
+R remains useful in this course, especially for demonstrations, case studies, optional practice, and students who want to go deeper. For 2026-27, it should not be treated as a required coding workload unless a later syllabus decision explicitly changes that.
+
 For R and RMarkdown activities, the working directory should usually be the folder containing the `.Rmd` file and its data. Many files use local paths such as:
 
 ```r
@@ -109,46 +123,26 @@ read.csv("turnout.csv")
 load("anchoring.RData")
 ```
 
-This means the activity folder is part of the reproducibility setup. Avoid moving data away from a case study or practice folder unless the code paths are updated too.
+This means the activity folder is part of the reproducibility setup. Avoid moving data away from a case study or optional R folder unless the code paths are updated too.
 
 Shared datasets are kept in `6_DATA_SETS/`. Local copies are allowed when they make a student-facing activity easier to run.
 
-## Overleaf Workflow
+## Overleaf And GitHub Workflow
 
-Overleaf is useful for LaTeX editing, online compilation, and sharing rendered course documents. This repository is connected to Overleaf through Git.
+Overleaf is useful for LaTeX editing, online compilation, and sharing rendered course documents. GitHub is used as the clean repository backup.
 
 Typical workflow:
 
 ```powershell
 git status --short
-git pull origin main
 # edit locally
-git add .
+git add <changed-files>
 git commit -m "Update course materials"
-git push origin main
+git push overleaf master
+git push github master:main
 ```
-
-Use the actual branch name if it is not `main`.
 
 Important Overleaf note: compiling in Overleaf shows the generated PDF in Overleaf, but it does not always behave like a local build artifact committed inside the repository. If the repository needs an updated PDF file, compile locally or explicitly export/update the PDF in the repo.
-
-## GitHub Workflow
-
-GitHub can be used as a clean backup or public/private course repository, while Overleaf remains the LaTeX editing/compilation environment.
-
-If GitHub is configured as a second remote, a clear setup is:
-
-```powershell
-git remote -v
-git remote add github <github-repository-url>
-```
-
-Then push intentionally:
-
-```powershell
-git push origin main    # Overleaf
-git push github main    # GitHub
-```
 
 Before pushing to GitHub, check:
 
@@ -179,9 +173,8 @@ Examples:
 
 ```text
 0.Intro.tex                -> 0.Intro.pdf
-1.IntroR.tex               -> 1.IntroR.pdf
-Problem_set_1_introR.tex   -> Problem_set_1_introR.pdf
-1stMidterm.tex             -> 1stMidterm.pdf
+Project_Instructions.tex   -> Project_Instructions.pdf
+Midterm1.tex               -> Midterm1.pdf
 ```
 
 When adding new materials, prefer:
@@ -191,6 +184,7 @@ When adding new materials, prefer:
 - Put reusable LaTeX assets in `LaTex/`.
 - Put activity-specific data beside the activity.
 - Put broadly shared datasets in `6_DATA_SETS/`.
+- Put historical versions under `_archive/`, not in active teaching folders.
 
 ## AI-Assisted Maintenance
 
@@ -200,7 +194,7 @@ This repo is intended to be maintained with AI assistance, but the course struct
 - updating `.tex` image/input paths after moves;
 - checking for missing datasets or broken references;
 - drafting problem sets, rubrics, and README updates;
-- reviewing R/Rmd code for reproducibility;
+- reviewing optional R/Rmd code for reproducibility;
 - generating summaries of changes before committing.
 
 Before accepting AI-made changes, check:
@@ -224,8 +218,8 @@ plugins/
 The current agent families are:
 
 - **Overleaf GitHub Workflow Agent:** audits and guides the local Positron or VS Code, AI assistant, Overleaf, Git, GitHub, and LaTeX workflow.
-- **QMH Topic Experts:** reusable course experts for Intro R, Probability, Causal Inference, and Linear Regression.
-- **QMH Project Grading:** private-workflow agents for preprocessing Canvas group-project submissions and grading processed submissions against the project rubric.
+- **QMH Topic Experts:** reusable course experts for optional Intro R enrichment, Probability, Causal Inference, and Linear Regression.
+- **QMH Project Grading:** private-workflow agents for preprocessing Canvas group-project submissions and grading processed submissions. Before using them for 2026-27, check that the grading prompt and rubric match the paper-exposition project.
 
 Use an agent by naming its trigger in a Codex prompt:
 
@@ -235,33 +229,11 @@ Use $project-submission-preprocessor to organize the latest QMH project submissi
 Use $project-grading-agent to grade the latest processed QMH project submissions.
 ```
 
-The workflow agent contributes the `overleaf-github-workflow` skill and a read-only audit script. Use it when you want Codex to inspect the local setup, explain what is missing, and propose safe next commands for connecting:
-
-Good Codex prompt:
-
-```text
-Use the overleaf-github-workflow skill to audit this repo. Do not edit files, commit, pull, or push without approval.
-```
-
-You can also run the audit script directly from the repo root:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\overleaf-github-workflow-agent\scripts\Test-OverleafGithubWorkflow.ps1
-```
-
-The script is read-only by default. It checks Git, remotes, branch name, `.gitignore`, LaTeX tooling, LaTeX Workshop workspace settings, and whether private contents inside folders such as `11_GRADES_AND_SUBMISSIONS/` are ignored while the public placeholder remains tracked.
-
-Optional remote checks may contact Overleaf or GitHub and can prompt for credentials:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\plugins\overleaf-github-workflow-agent\scripts\Test-OverleafGithubWorkflow.ps1 -CheckRemoteAccess
-```
-
 Never paste Overleaf Git tokens or private credentials into an AI chat. Paste tokens only into Git credential prompts or an approved credential manager.
 
 ## Legacy Material
 
-`_archive/` contains older course material and leftover script wrappers. These files are kept for reference, not as the active 2025-26 course structure.
+`_archive/` contains older course material and leftover script wrappers. These files are kept for reference, not as the active 2026-27 course structure.
 
 Do not delete archived material casually. If something is promoted back into the active course, copy or move it into the relevant active folder and update documentation.
 

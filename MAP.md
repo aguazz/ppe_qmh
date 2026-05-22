@@ -1,6 +1,8 @@
 # Repository Map
 
-This repository is organized by course use. In general, a teaching item should keep its source files, generated PDF, local data, and supporting scripts together.
+This repository is organized by course use. The active version is **2026-27**. Historical materials live under `_archive/`.
+
+In general, a teaching item should keep its source files, generated PDF, local data, and supporting scripts together.
 
 ## Top Level
 
@@ -9,7 +11,7 @@ This repository is organized by course use. In general, a teaching item should k
 |-- 0_SYLLABUS/
 |-- 1_SLIDES/
 |-- 2_PROBLEM_SETS/
-|-- 3_R_PRACTICE/
+|-- 3_OPTIONAL_R_PRACTICE/
 |-- 4_CASE_STUDIES/
 |-- 5_GROUP_PROJECT/
 |-- 6_DATA_SETS/
@@ -21,18 +23,21 @@ This repository is organized by course use. In general, a teaching item should k
 |-- LaTex/
 |-- _archive/
 |-- .gitignore
-|-- README.md
-`-- MAP.md
+|-- 2026-27_REPO_UPDATE_PLAN.md
+|-- AGENTS.md
+|-- LOCAL_AI_OVERLEAF_GITHUB_WORKFLOW.md
+|-- MAP.md
+`-- README.md
 ```
 
 ## Active Course Folders
 
 ```text
 0_SYLLABUS/
-|-- Syllabus_G351_QuantitativeMethodsForHumanities_2025-26.docx
-|-- Syllabus_G351_QuantitativeMethodsForHumanities_2025-26.pdf
-`-- weekly_schedule_quant-meths-hum_2024_2025.xlsx
+`-- Syllabus_G351_QuantitativeMethodsForHumanities_2026-27.docx
 ```
+
+The 2026-27 DOCX is the active syllabus source. Export a matching PDF manually when needed.
 
 ```text
 1_SLIDES/
@@ -59,6 +64,8 @@ This repository is organized by course use. In general, a teaching item should k
     `-- 5.LinearRegression.pdf
 ```
 
+`Topic 1 - Intro R/` is retained for now but should be treated as optional/enrichment for 2026-27 until the slide-deck phase rewrites or relabels it.
+
 ```text
 2_PROBLEM_SETS/
 |-- Topic 1 - Intro R/
@@ -78,17 +85,20 @@ This repository is organized by course use. In general, a teaching item should k
 |   |-- Problem_set_4_studies.pdf
 |   `-- local data files
 |-- Topic 5 - Linear Regression/
+|   |-- problem_set_5_linear_regression_noR.tex
+|   |-- problem_set_5_linear_regression_noR.pdf
 |   |-- Problem_set_5_linear_regression_R.tex
 |   |-- Problem_set_5_linear_regression_R.pdf
-|   |-- problem_set_5_linear_regression_noR.tex
 |   `-- Problem_set_prediction.tex
 `-- solution.tex
 ```
 
+`Topic 1 - Intro R/`, `Problem_set_5_linear_regression_R.tex`, and `Problem_set_prediction.tex` are active-looking legacy materials. Treat them as optional/enrichment until the problem-set phase decides what to archive, rename, or rewrite.
+
 `solution.tex` is a legacy combined solution source. It has not yet been split into topic folders.
 
 ```text
-3_R_PRACTICE/
+3_OPTIONAL_R_PRACTICE/
 |-- R_practice_template.Rmd
 |-- R_practice_solution.Rmd
 |-- R_practice_solution.html
@@ -99,6 +109,8 @@ This repository is organized by course use. In general, a teaching item should k
     |-- RPractice_2023-24.tex
     `-- turnout.csv
 ```
+
+This folder is optional/enrichment material for 2026-27, not a required continuous-evaluation folder.
 
 ```text
 4_CASE_STUDIES/
@@ -118,16 +130,15 @@ This repository is organized by course use. In general, a teaching item should k
 `-- WealthOffice/
 ```
 
-Each case-study folder is intended to be self-contained, typically with its `.Rmd`, rendered `.html`, local data, and local style/assets.
+Each case-study folder is intended to be self-contained, typically with its `.Rmd`, rendered `.html`, local data, and local style/assets. Case studies may still use R for demonstration even though R practice is optional.
 
 ```text
 5_GROUP_PROJECT/
-|-- Project.tex
 |-- Project_Instructions.tex
-|-- Project_Instructions.pdf
-|-- gay.csv
-`-- leaders.csv
+`-- Project_Instructions.pdf
 ```
+
+The active project is the 2026-27 causal-inference paper exposition. The old data-analysis project and its datasets are in `_archive/2025-26_data_analysis_project/`.
 
 ```text
 6_DATA_SETS/
@@ -135,7 +146,9 @@ Each case-study folder is intended to be self-contained, typically with its `.Rm
 |-- 2_PROBABILITY/
 |-- 3_CAUSALITY/
 |-- 4_LINEAR_MODEL/
-`-- 5_DISCOVERY/
+|-- 5_DISCOVERY/
+|-- UNpop.csv
+`-- UNpop.RData
 ```
 
 Shared datasets and QSS chapter code live here. If an activity has a small local copy of a dataset for student use, that copy stays with the activity.
@@ -160,17 +173,30 @@ Shared datasets and QSS chapter code live here. If an activity has a small local
 |-- 2024-25/
 |   |-- exam .tex sources
 |   `-- exam PDFs and solution PDFs
-`-- 2025-26/
-    |-- 1stMidterm.tex
-    |-- 1stMidterm.pdf
-    |-- 1stMidterm_solution.pdf
-    `-- logo.png
+|-- 2025-26/
+|   |-- 1stMidterm.tex
+|   |-- 1stMidterm.pdf
+|   |-- FinalExam.tex
+|   |-- FinalExam.pdf
+|   `-- mock final exam sources/PDFs
+`-- 2026-27/
+    `-- README.md
 ```
+
+`9_EXAMS/2026-27/` is the active skeleton for the new Midterm 1, Midterm 2, and final-exam materials. Keep the older year folders untouched unless explicitly archiving or cross-referencing them.
 
 ```text
 10_RUBRICS/
-`-- rubric PDFs and editable DOCX files
+|-- G351-QMH-Rubric-Final_exam.docx
+|-- G351-QMH-Rubric-Final_exam.pdf
+|-- G351-QMH-Rubric-Midterm.docx
+|-- G351-QMH-Rubric-Midterm.pdf
+|-- G351-QMH-Rubric-Project.docx
+|-- G351-QMH-Rubric-R_practice.docx
+`-- G351-QMH-Rubric-R_practice.pdf
 ```
+
+The active project rubric is now the paper-exposition DOCX. Its PDF still needs manual export from Word if a committed PDF is required. The R-practice rubric remains present but should be considered legacy/optional until the rubric cleanup phase.
 
 ```text
 11_GRADES_AND_SUBMISSIONS/
@@ -199,10 +225,12 @@ Some empty legacy subfolders may still appear inside `LaTex/` because OneDrive r
 ```text
 _archive/
 |-- 2024-25_legacy_QuantMethdsHum/
+|-- 2025-26_active_course_snapshot/
+|-- 2025-26_data_analysis_project/
 `-- Scripts_remainder/
 ```
 
-Legacy course bundles and leftover script wrappers are kept here for reference.
+`2025-26_active_course_snapshot/` preserves the full active course state before the 2026-27 migration. `2025-26_data_analysis_project/` preserves the former project instructions, project datasets, and project rubric that were removed from active folders during the 2026-27 migration.
 
 ## Compile Convention
 
@@ -210,9 +238,11 @@ Active `.tex` files live next to the PDF they should overwrite. Compile with `la
 
 ```powershell
 latexmk -pdf -cd "1_SLIDES\Topic 0 - Intro Course\0.Intro.tex"
-latexmk -pdf -cd "2_PROBLEM_SETS\Topic 1 - Intro R\Problem_set_1_introR.tex"
-latexmk -pdf -cd "9_EXAMS\2025-26\1stMidterm.tex"
+latexmk -pdf -cd "5_GROUP_PROJECT\Project_Instructions.tex"
+latexmk -pdf -cd "9_EXAMS\2026-27\Midterm1.tex"
 ```
+
+The `Midterm1.tex` example describes the intended 2026-27 exam naming convention once the file exists.
 
 Slide decks use shared assets through paths such as:
 

@@ -1,6 +1,6 @@
 ---
 name: project-grading-agent
-description: Use when Codex needs to grade processed PPE Quantitative Methods for Humanities group project submissions. The agent must find the latest 11_GRADES_AND_SUBMISSIONS/Project/processed_20xx-xx folder, ask the user to confirm the year/folder, read the project instructions and rubric, inspect each g### group folder, use QMH topic expert skills when substantive course-topic uncertainty arises, assign rubric scores, overwrite concise evidence-based feedback txt files in plain instructor English, and recreate grades_summary.csv.
+description: Use when Codex needs to grade processed PPE Quantitative Methods for Humanities group project submissions. For 2026-27, the active project is a causal-inference paper exposition, not a data-analysis coding project. The agent must find the latest 11_GRADES_AND_SUBMISSIONS/Project/processed_20xx-xx folder, ask the user to confirm the year/folder, read the active project instructions and rubric, inspect each g### group folder, use QMH topic expert skills when substantive course-topic uncertainty arises, assign rubric scores, overwrite concise evidence-based feedback txt files in plain instructor English, and recreate grades_summary.csv.
 ---
 
 # Project Grading Agent
@@ -13,9 +13,10 @@ Read these before grading:
 
 - `5_GROUP_PROJECT/Project_Instructions.tex`
 - `10_RUBRICS/G351-QMH-Rubric-Project.docx` or `10_RUBRICS/G351-QMH-Rubric-Project.pdf`
-- relevant datasets in `5_GROUP_PROJECT/`, especially `gay.csv` and `leaders.csv` when needed to verify calculations or variable coding.
 
 Treat the project instructions and rubric as the grading contract.
+
+For 2026-27, do not look for project datasets in `5_GROUP_PROJECT/`; the active project is a paper exposition. The old 2025-26 data-analysis project and datasets are archived under `_archive/2025-26_data_analysis_project/` and should be used only if the instructor explicitly asks to grade that historical project.
 
 ## Folder Selection
 
@@ -24,16 +25,18 @@ Treat the project instructions and rubric as the grading contract.
 - Before starting grading, tell the user which processed folder/year was detected and ask for confirmation.
 - Grade group folders named `g001`, `g002`, etc.
 - Each group folder should contain the representative submission files chosen by the preprocessing agent.
-- Grade the `.Rmd` file in each group folder. If there is no `.Rmd`, grade only if a compiled report exists and note the missing `.Rmd` as a Code Quality issue.
+- For 2026-27, grade the submitted paper-exposition materials. These may be PDF reports, slide decks, DOCX files, or other instructor-approved files. Do not require `.Rmd`, `.R`, or executable code.
 
 ## Rubric
 
-Assign a final score out of 10 using:
+Assign a final score out of 10 using the active project rubric:
 
-- Causal Inference: 2.5 points
-- Interpretation: 3.0 points
-- Code Quality: 2.0 points
-- Report Clarity & Organization: 2.5 points
+- Problem, research question, and motivation: 1.5 points
+- Causal framework: 2.0 points
+- Data and descriptive evidence: 1.5 points
+- Causal method, assumptions, and threats: 2.0 points
+- Results, uncertainty, and interpretation: 1.5 points
+- Presentation, oral questions, and source use: 1.5 points
 
 Use the rubric bands:
 
@@ -42,22 +45,18 @@ Use the rubric bands:
 - 50-75%: partially correct and complete, fair understanding.
 - 75-100%: mostly correct and complete, strong understanding and sound conclusions, minor to no errors.
 
-Reward correct causal reasoning even if minor arithmetic or formatting issues appear. Penalize unsupported causal claims, unclear treatment/control framing, incorrect variable construction, non-reproducible code, and conclusions not tied to estimates.
+Reward clear, accurate exposition of the assigned paper. Penalize unsupported causal claims, unclear treatment/control framing, confusion about the estimand, weak explanation of identification assumptions, missing threats to validity, results stated without magnitude or uncertainty, or presentation choices that make the paper difficult to understand.
 
-For Code Quality, treat an absolute local path to the dataset as a minor beginner reproducibility issue. If the absolute path is the only meaningful code problem and the rest of the code is readable and complete, remove at most 0.2 points from the Code Quality category for that issue. Larger Code Quality deductions require additional problems such as missing submitted code, code that cannot reproduce the report, incorrect variable construction, broken syntax, missing packages with no setup, or incomplete analysis.
-
-For Report Clarity & Organization, do not penalize readable printed R output merely because it is not formatted as a polished table. Penalize output formatting only when it is confusing, excessive, unreadable, or not explained in the surrounding text.
-
-Do not penalize absence of compiled HTML/PDF if the `.Rmd` is present.
+Do not penalize students for not writing code or not submitting data-analysis files in the 2026-27 paper-exposition project.
 
 ## Topic Expert Use
 
 Use relevant QMH topic expert skills when substantive uncertainty arises:
 
 - `$causal-inference-expert` for treatment/control, outcomes, randomization checks, ATEs, natural experiments, causal assumptions, validity, and interpretation of causal designs.
-- `$intro-r-expert` for R Markdown, beginner R code structure, loading data, object use, and reproducibility.
 - `$linear-regression-expert` for regression models, coefficient interpretation, fitted models, binary regressors, interactions, or regression used as a causal estimator.
-- `$probability-expert` only if the submission uses probability concepts that affect grading.
+- `$probability-expert` for uncertainty, standard errors, confidence intervals, p-values, comparison of means, or central-limit-theorem reasoning that affects grading.
+- `$intro-r-expert` only if the instructor explicitly asks to grade optional R/code material.
 
 Do not call experts for routine file handling or obvious rubric decisions.
 
@@ -65,32 +64,22 @@ Do not call experts for routine file handling or obvious rubric decisions.
 
 For each `g###` folder:
 
-1. Identify the submission file(s), especially the `.Rmd`.
-2. Determine which project problem is attempted: gay marriage experiment, leader assassination natural experiment, or approved alternative.
-3. Inspect whether the required assignment elements are addressed.
+1. Identify the submission file(s) to grade.
+2. Identify the assigned paper or paper chosen by the group.
+3. Inspect whether the required exposition elements are addressed.
 4. Note concrete evidence for each meaningful deduction before writing feedback.
-5. Check code readability and reproducibility. Run code only when practical and safe; if not run, grade from inspection and state the precise reason code was not executed.
-6. Verify key variable definitions and comparisons against the instructions/datasets when needed.
+5. Check the explanation of the research question, causal framework, data, method, assumptions, threats, results, uncertainty, and interpretation.
+6. Assess presentation clarity and source use, including whether claims are tied to the paper's pages, tables, figures, or sections.
 7. Assign category scores and total.
 8. Write one concise feedback file, explaining why points were removed in each category with a concrete example when possible.
 
 ## Evidence Standard
 
-- For `.Rmd` and `.R` files, cite evidence with filename and line number when possible, for example `project.Rmd:18 uses Downloads/gay.csv`.
-- For compiled PDF/DOCX reports, cite the section/table/phrase instead, for example `PDF section 4.1 labels leader ages as democracy-before values`.
+- For PDF/DOCX reports and slides, cite the section, slide, table, figure, or short phrase, for example `slide 5 labels the control group unclearly`.
+- For source files with line numbers, cite filename and line number when useful.
 - Use at most one concrete example per category line. Pick the clearest example, not every problem.
 - If a category loses points because something is missing, name the missing assignment part instead of inventing a citation.
 - Keep examples short. Quote only a few words when useful.
-
-## R Execution Checks
-
-When deciding whether `.Rmd` or `.R` files can be executed:
-
-- First check for `Rscript` on `PATH`.
-- On Windows, if `Rscript` is not on `PATH`, also check common install locations such as `C:\Program Files\R\R-*\bin\Rscript.exe` and use the newest version found.
-- Do not say "R/Rscript is not available in the local environment" unless both checks fail.
-- If Rscript exists but code is not executed or knitting fails, state the specific reason, such as missing `rmarkdown`, missing packages, unsafe local paths, file chooser prompts, or the source being incomplete.
-- If execution is skipped because inspection is sufficient, say "Code was graded by inspection; Rscript was not run" in Notes. Do not make this sound like a student penalty unless execution failure is itself evidence of non-reproducibility.
 
 ## Feedback Output
 
@@ -104,23 +93,25 @@ Use this exact structure:
 
 ```text
 Group: g001
-Submission graded: [filename]
+Submission graded: [filename or file bundle]
 Final grade: [x]/10
 
 Category scores:
-- Causal Inference: [x]/2.5. Why not full: [plain-English reason with one example/citation, or "None."]
-- Interpretation: [x]/3.0. Why not full: [plain-English reason with one example/citation, or "None."]
-- Code Quality: [x]/2.0. Why not full: [plain-English reason with one example/citation, or "None."]
-- Report Clarity & Organization: [x]/2.5. Why not full: [plain-English reason with one example/citation, or "None."]
+- Problem, research question, and motivation: [x]/1.5. Why not full: [plain-English reason with one example/citation, or "None."]
+- Causal framework: [x]/2.0. Why not full: [plain-English reason with one example/citation, or "None."]
+- Data and descriptive evidence: [x]/1.5. Why not full: [plain-English reason with one example/citation, or "None."]
+- Causal method, assumptions, and threats: [x]/2.0. Why not full: [plain-English reason with one example/citation, or "None."]
+- Results, uncertainty, and interpretation: [x]/1.5. Why not full: [plain-English reason with one example/citation, or "None."]
+- Presentation, oral questions, and source use: [x]/1.5. Why not full: [plain-English reason with one example/citation, or "None."]
 
 Feedback:
 [2-3 short sentences in natural instructor voice. Say what worked and what most needs fixing. Do not repeat every category line.]
 
 Notes:
-[Missing .Rmd, code execution status with precise reason if relevant, duplicate/representative issue from report.txt, unclear authorship, or "None."]
+[Duplicate/representative issue from report.txt, missing expected file, unclear authorship, oral-question note if provided by the instructor, or "None."]
 ```
 
-Feedback must be clear, specific, concise, and human-sounding. Avoid polished boilerplate, long essays, vague praise, and generic advice. Use plain English such as "The main thing missing is..." or "This part works well, but..." instead of formal audit language. The category lines must explain the score with evidence: mention concrete issues such as missing randomization check, unclear treatment/control, unsupported conclusion, wrong success variable, missing magnitude interpretation, incomplete `.Rmd`, or code that cannot reproduce the report. If full credit is awarded in a category, write `None.`
+Feedback must be clear, specific, concise, and human-sounding. Avoid polished boilerplate, long essays, vague praise, and generic advice. Use plain English such as "The main thing missing is..." or "This part works well, but..." instead of formal audit language. The category lines must explain the score with evidence: mention concrete issues such as unclear treatment/control, weak link between the design and the causal claim, missing assumptions, missing threat to validity, unsupported conclusion, no discussion of uncertainty, or confusing slide/report organization. If full credit is awarded in a category, write `None.`
 
 Length target: each category reason should be one short sentence, and the `Feedback` paragraph should normally be 45-75 words total.
 
@@ -130,7 +121,7 @@ Also write:
 
 with columns:
 
-`group,submission_graded,causal_inference,interpretation,code_quality,report_clarity,total,notes`
+`group,submission_graded,problem_motivation,causal_framework,data_descriptive_evidence,method_assumptions_threats,results_uncertainty_interpretation,presentation_source_use,total,notes`
 
 If `grades_summary.csv` already exists from an earlier grading run, recreate it from scratch. Do not append to the old file.
 
