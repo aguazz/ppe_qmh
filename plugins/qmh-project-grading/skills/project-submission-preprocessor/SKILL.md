@@ -1,6 +1,6 @@
 ---
 name: project-submission-preprocessor
-description: Use when Codex needs to preprocess PPE Quantitative Methods for Humanities group project submissions downloaded from Canvas. This includes finding the latest 11_GRADES_AND_SUBMISSIONS/Project/submissions_20xx-xx folder, asking the user to confirm the year/folder, creating a short processed_20xx-xx folder, parsing Canvas filenames, normalizing student-name filenames, grouping duplicate group submissions, keeping one representative submission bundle, removing duplicates from the processed copy only, and writing report.txt.
+description: Use when Codex needs to preprocess PPE Quantitative Methods for Humanities group project submissions downloaded from Canvas. For 2026-27, the active project is a paper-exposition project, so submissions may be reports, slides, PDFs, DOCX files, or other instructor-approved files rather than R/Rmd code. This includes finding the latest 11_GRADES_AND_SUBMISSIONS/Project/submissions_20xx-xx folder, asking the user to confirm the year/folder, creating a short processed_20xx-xx folder, parsing Canvas filenames, normalizing student-name filenames, grouping duplicate group submissions, keeping one representative submission bundle, removing duplicates from the processed copy only, and writing report.txt.
 ---
 
 # Project Submission Preprocessor
@@ -31,31 +31,31 @@ Parse:
 
 Normalize processed filenames with the student slug only, plus extension:
 
-`alvarezvazquezmanuela.Rmd`
+`alvarezvazquezmanuela.pdf`
 
 Use ASCII-safe lowercase names by default: remove accents/diacritics, convert spaces/punctuation to nothing or short hyphens only when needed, and avoid long filenames. Preserve original filenames in `report.txt`.
 
 If a single representative has multiple files with the same extension, append a short suffix: `alvarezvazquezmanuela_2.pdf`.
 
-If a Canvas filename has a malformed extension with spaces or extra text, infer a safe extension when obvious from the original name or file content. For example, a text file whose name contains `.R` but ends as `.R INES` should become `.r`, with the original filename preserved in `report.txt`.
+If a Canvas filename has a malformed extension with spaces or extra text, infer a safe extension when obvious from the original name or file content. For example, a file whose original name contains `.pptx` but has extra Canvas text after the extension should become `.pptx`, with the original filename preserved in `report.txt`.
 
 ## Processed Folder Shape
 
 Use short group folders:
 
 ```text
-11_GRADES_AND_SUBMISSIONS/Project/processed_2025-26/
+11_GRADES_AND_SUBMISSIONS/Project/processed_2026-27/
   report.txt
   g001/
-    alvarezvazquezmanuela.Rmd
     alvarezvazquezmanuela.pdf
+    alvarezvazquezmanuela.pptx
   g002/
-    perezlopezmaria.Rmd
+    perezlopezmaria.docx
 ```
 
 Do not include student names in group folder names.
 
-Do not create `grade_this.txt` when each group folder contains one representative bundle. The grading agent should grade the `.Rmd` in each group folder.
+Do not create `grade_this.txt` when each group folder contains one representative bundle. The grading agent should grade the representative paper-exposition submission files in each group folder.
 
 ## Group And Duplicate Logic
 
@@ -63,14 +63,14 @@ Group submissions conservatively.
 
 Automatic same-group evidence:
 
-- exact duplicate `.Rmd`, `.html`, `.pdf`, or other submission content by file hash;
-- same `.Rmd` content after ignoring harmless whitespace differences;
-- same clearly stated author/group list inside the `.Rmd` or compiled text.
+- exact duplicate `.pdf`, `.docx`, `.pptx`, `.tex`, `.md`, `.Rmd`, `.html`, or other submission content by file hash;
+- same report/slide content after text extraction or obvious visual inspection;
+- same clearly stated author/group list inside the submitted report, slides, or source file.
 
 Potential same-group evidence to flag, not silently merge:
 
-- very similar `.Rmd` content without exact match;
-- same project title and near-identical analysis;
+- very similar report or slide content without exact match;
+- same project title and near-identical exposition;
 - same student-given filename across different submitters.
 
 For each detected group with multiple student submitters, keep only one representative bundle in the processed copy. Leave all originals in `submissions_20xx-xx`.
@@ -78,8 +78,8 @@ For each detected group with multiple student submitters, keep only one represen
 Representative selection:
 
 1. Prefer the submitter with the largest number of associated files.
-2. If tied, prefer the submitter whose normalized student slug is alphabetically first.
-3. If still tied, prefer the bundle containing `.Rmd`.
+2. If tied, prefer the bundle containing a compiled report or slide deck (`.pdf`, `.docx`, `.pptx`).
+3. If tied, prefer the submitter whose normalized student slug is alphabetically first.
 4. Record every omitted duplicate submitter and original filename in `report.txt`.
 
 If a duplicate decision is ambiguous, keep separate `g###` folders and flag the issue in `report.txt` instead of merging.

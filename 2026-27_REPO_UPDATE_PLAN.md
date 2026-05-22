@@ -15,9 +15,15 @@ The 2026-27 course should make these structural changes consistently across the 
 
 Use the language "students with uneven quantitative and coding preparation" in future materials. Avoid framing the change as lowering standards; frame it as focusing student effort on probability, causal inference, statistical reasoning, and linear-model interpretation.
 
-## Current Audit Findings
+## Progress Log
 
-Important findings from the current repo state:
+- 2026-05-22: Phase 0 completed. The 2025-26 active course was preserved in `_archive/2025-26_active_course_snapshot/` and tagged as `course-2025-26-final-active`.
+- 2026-05-22: Phase 1 source-of-truth work completed for the syllabus and group project. The active project is now the 2026-27 paper-exposition project, with the old data-analysis project preserved in `_archive/2025-26_data_analysis_project/`.
+- 2026-05-22: Phase 2 course-structure documentation completed. The optional R practice folder is now `3_OPTIONAL_R_PRACTICE/`; `README.md`, `MAP.md`, `AGENTS.md`, and affected local agent skills were updated; and `9_EXAMS/2026-27/README.md` was created as the exam skeleton.
+
+## Initial Audit Findings
+
+Important findings from the repo state before the migration work began:
 
 - `0_SYLLABUS/Syllabus_G351_QuantitativeMethodsForHumanities_2025-26.docx` contains many of the new ideas, but still needs cleanup: "Module 0" is followed by "Module 2", the PDF beside it is stale and still says 2025-26, and the DOCX contains stray Spanish/template fragments after the final exam description.
 - `1_SLIDES/Topic 0 - Intro Course/0.Intro.tex` still presents the old evaluation: 5% quizzes, 5% practice about statistical software, 15% midterm, 15% R-based group project, plus a date typo `20254/2026`.
