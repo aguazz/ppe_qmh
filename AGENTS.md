@@ -27,17 +27,17 @@ Use $probability-expert to draft a short quiz question on conditional probabilit
 | --- | --- | --- | --- |
 | Overleaf GitHub Workflow Agent | `$overleaf-github-workflow` | `plugins/overleaf-github-workflow-agent/skills/overleaf-github-workflow/` | Auditing and guiding the local Positron or VS Code, AI assistant, Overleaf, Git, GitHub, and LaTeX workflow. |
 | Intro R Expert | `$intro-r-expert` | `plugins/qmh-topic-experts/skills/intro-r-expert/` | Creating or reviewing optional beginner R and R Markdown enrichment material. Do not treat R practice as required 2026-27 assessment unless explicitly asked. |
-| Probability Expert | `$probability-expert` | `plugins/qmh-topic-experts/skills/probability-expert/` | Creating, reviewing, or grading probability questions, quizzes, problem sets, exams, answer keys, and feedback for Topic 2. |
+| Probability Expert | `$probability-expert` | `plugins/qmh-topic-experts/skills/probability-expert/` | Creating, reviewing, or grading probability and introductory hypothesis-testing questions, quizzes, problem sets, exams, answer keys, and feedback for Topic 2. |
 | Causal Inference Expert | `$causal-inference-expert` | `plugins/qmh-topic-experts/skills/causal-inference-expert/` | Creating, reviewing, or grading causal inference and study-design material for Topics 3 and 4. |
 | Linear Regression Expert | `$linear-regression-expert` | `plugins/qmh-topic-experts/skills/linear-regression-expert/` | Creating, reviewing, or grading linear regression exercises, exams, answer keys, and student feedback for Topic 5. |
 | Project Submission Preprocessor | `$project-submission-preprocessor` | `plugins/qmh-project-grading/skills/project-submission-preprocessor/` | Turning raw Canvas group-project submissions into short `processed_20xx-xx/g###` folders for grading while leaving raw submissions untouched. For 2026-27, expect paper-exposition reports/slides rather than R code. |
-| Project Grading Agent | `$project-grading-agent` | `plugins/qmh-project-grading/skills/project-grading-agent/` | Grading processed group-project submissions against the active project instructions and rubric, then writing feedback files and `grades_summary.csv`. Before 2026-27 grading, confirm the prompt/rubric matches the paper-exposition project rather than the old data-analysis project. |
+| Project Grading Agent | `$project-grading-agent` | `plugins/qmh-project-grading/skills/project-grading-agent/` | Grading processed 2026-27 paper-exposition reports/slides against the active project instructions and rubric, then writing feedback files and `grades_summary.csv`. Do not expect R/Rmd data-analysis submissions unless explicitly grading an archived project. |
 
 ## Plugin Families
 
 - `overleaf-github-workflow-agent`: one workflow agent plus a read-only PowerShell audit script.
 - `qmh-topic-experts`: four reusable course-topic experts for optional Intro R enrichment, probability, causal inference, and linear regression.
-- `qmh-project-grading`: two private-workflow agents for preprocessing and grading group project submissions. For 2026-27, use them only after checking that grading expectations match the paper-exposition project.
+- `qmh-project-grading`: two private-workflow agents for preprocessing and grading 2026-27 paper-exposition group project submissions.
 
 ## Common Prompts
 
@@ -67,6 +67,6 @@ Use $project-grading-agent to grade the latest processed QMH project submissions
 - The workflow agent should inspect first and ask before commits, pulls, pushes, remote changes, or credential-sensitive operations.
 - The submission preprocessor should never modify raw `submissions_20xx-xx` folders.
 - The grading agent should write grades and feedback only inside the selected processed project folder unless explicitly told otherwise.
-- For 2026-27 project grading, verify that the grading agent is using the paper-exposition instructions and rubric.
+- For 2026-27 project grading, use the active paper-exposition instructions and rubric. Do not expect `.Rmd`, `.R`, datasets, or code-quality evidence unless explicitly grading an archived data-analysis project.
 - Intro R material is optional/enrichment in 2026-27; do not create required coding assessment unless the instructor explicitly requests it.
 - Topic experts should use local course materials as the source of truth for notation, examples, and expected difficulty.

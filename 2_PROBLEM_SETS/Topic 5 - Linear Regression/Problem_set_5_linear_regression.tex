@@ -302,4 +302,168 @@
 
 \end{enumerate}
 
+\clearpage
+\section*{Optional R-Based Regression Exercises}
+
+\noindent The exercises in this section are optional enrichment for students who want to practice linear regression with R. They are not part of the required problem set unless explicitly assigned by the instructor.
+
+\begin{center}
+    \textbf{\large A. Election and Conditional Cash Transfer Program in Mexico}
+\end{center}
+
+In this exercise, we analyze data from studies that estimate the electoral impact of Progresa, Mexico's conditional cash transfer program (CCT program).\footnote{Based on Ana de la O (2013), ``Do conditional cash transfers affect voting behavior? Evidence from a randomized experiment in Mexico,'' and Kosuke Imai, Gary King, and Carlos Velasco (2015), ``Do nonpartisan programmatic policies have partisan electoral effects? Evidence from two large scale randomized experiments.''} The original study relied on a randomized evaluation of the CCT program in which eligible villages were randomly assigned to receive the program either 21 months (early Progresa) or 6 months (late Progresa) before the 2000 Mexican presidential election. The author hypothesized that the CCT program would mobilize voters, leading to an increase in turnout and support for the incumbent party (PRI, or Partido Revolucionario Institucional).
+
+The data are available as \texttt{progresa.csv}. Each observation is a precinct. Table~\ref{table:cash_transfer_optional} describes the main variables.
+
+\begin{table}[H]
+\centering
+\caption{Conditional Cash Transfer Program (Progresa) Data}
+\label{table:cash_transfer_optional}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{treatment} & whether a precinct contains an early-Progresa village \\
+\texttt{pri2000s} & PRI votes in 2000 as a share of population above 18 \\
+\texttt{pri2000v} & official PRI vote share in the 2000 election \\
+\texttt{t2000} & turnout in 2000 as a share of population above 18 \\
+\texttt{t2000r} & official turnout in the 2000 election \\
+\texttt{pri1994}, \texttt{pan1994}, \texttt{prd1994} & party vote counts in 1994 \\
+\texttt{pri1994s}, \texttt{pan1994s}, \texttt{prd1994s} & party vote shares relative to adult population in 1994 \\
+\texttt{pri1994v}, \texttt{pan1994v}, \texttt{prd1994v} & official party vote shares in 1994 \\
+\texttt{t1994}, \texttt{t1994r} & 1994 turnout measures \\
+\texttt{votos1994} & total votes cast in the 1994 presidential election \\
+\texttt{avgpoverty} & precinct average of village poverty index \\
+\texttt{pobtot1994} & total population in the precinct \\
+\texttt{villages} & number of villages in the precinct \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{enumerate}
+    \item \textbf{Estimating the impact of the CCT program.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Import \texttt{progresa.csv}.
+        \item Compare average turnout and PRI support between treated (early Progresa) and control (late Progresa) precincts.
+        \item Regress turnout and PRI support rates (\texttt{t2000} and \texttt{pri2000s}) on \texttt{treatment}.
+        \item Interpret and compare the difference-in-means and regression results. Do the results support the hypothesis that the program mobilized voters and increased PRI support?
+    \end{enumerate}
+
+    \item \textbf{Adding pretreatment covariates.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Fit a linear regression model for each outcome (\texttt{t2000} and \texttt{pri2000s}) including \texttt{avgpoverty}, \texttt{pobtot1994}, \texttt{votos1994}, \texttt{pri1994}, \texttt{pan1994}, and \texttt{prd1994}.
+        \item Compare these results to the previous question. Do the estimated program effects change?
+        \item Explain why these variables are called pretreatment covariates and why that matters for causal interpretation.
+    \end{enumerate}
+
+    \item \textbf{Alternative model specifications.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Replace count predictors with their share-based equivalents: \texttt{t1994}, \texttt{pri1994s}, \texttt{pan1994s}, and \texttt{prd1994s}.
+        \item Apply a natural-log transformation to \texttt{pobtot1994}.
+        \item Include \texttt{avgpoverty} as an additional predictor and compare the results. Which model fits the data better?
+    \end{enumerate}
+
+    \item \textbf{Examining balance of pretreatment variables.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Use box plots to compare treatment and control groups for \texttt{pobtot1994}, \texttt{avgpoverty}, \texttt{t1994}, and \texttt{pri1994s}.
+        \item Comment on the patterns observed in the box plots.
+        \item Explain why balance in pretreatment variables matters in a randomized evaluation.
+    \end{enumerate}
+
+    \item \textbf{Using official turnout and vote shares.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Replace the outcome variables with official turnout (\texttt{t2000r}) and official PRI vote share (\texttt{pri2000v}).
+        \item Estimate the average treatment effect using a regression with \texttt{avgpoverty}, log-transformed \texttt{pobtot1994}, and previous election variables (\texttt{t1994r}, \texttt{pri1994v}, \texttt{pan1994v}, \texttt{prd1994v}).
+        \item Briefly interpret the results.
+    \end{enumerate}
+
+    \item \textbf{Exploring heterogeneous treatment effects.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Fit a model with \texttt{treatment}, log-transformed \texttt{pobtot1994}, \texttt{avgpoverty}, \texttt{avgpoverty}$^2$, and interactions between \texttt{treatment} and the poverty terms.
+        \item Estimate the treatment effect at different levels of \texttt{avgpoverty}.
+        \item Plot the estimated effects and comment on the pattern.
+    \end{enumerate}
+\end{enumerate}
+
+\begin{center}
+    \textbf{\large B. Government Transfer and Poverty Reduction in Brazil}
+\end{center}
+
+A central question in public policy is whether giving more resources to local governments improves citizens' lives. One view is that additional public money may be wasted or captured by local elites, especially where institutions are weak. Another view is that additional resources may improve public services when citizens strongly need them and politicians face pressure to respond.
+
+This exercise uses a regression discontinuity design to study increased government transfers in Brazil.\footnote{Based on Stephan Litschig and Kevin M. Morrison (2013), ``The impact of intergovernmental transfers on education outcomes and poverty reduction.''} Until 1991, the formula for government transfers to individual Brazilian municipalities depended partly on municipality population. Municipalities just above certain population thresholds received a larger transfer coefficient than municipalities just below them. The data are available as \texttt{transfer.csv}. Table~\ref{table:transfer_data_optional} describes the main variables.
+
+\begin{table}[H]
+\centering
+\caption{Brazilian Government Transfer Data}
+\label{table:transfer_data_optional}
+\begin{tabular}{ll}
+\toprule
+\textbf{Variable} & \textbf{Description} \\
+\midrule
+\texttt{pop82} & population of the municipality in 1982 \\
+\texttt{poverty80}, \texttt{poverty91} & poverty rate in 1980 and 1991 \\
+\texttt{educ80}, \texttt{educ91} & average years of education in 1980 and 1991 \\
+\texttt{literate91} & literacy rate in 1991 \\
+\texttt{state} & state where the municipality is located \\
+\texttt{region} & region where the municipality is located \\
+\texttt{id} & municipal ID \\
+\texttt{year} & year of measurement \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In this exercise, focus on the first three relevant cutoffs: 10,188, 13,584, and 16,980 inhabitants. The RDD compares municipalities located very close to these thresholds.
+
+\begin{enumerate}
+    \item \textbf{Regression discontinuity design assumptions.}
+    \begin{enumerate}[label=(\alph*)]
+        \item State the required identifying assumption for the regression discontinuity design.
+        \item Interpret the assumption in this specific application.
+        \item Describe a scenario where the assumption would be violated.
+        \item Discuss the advantages and disadvantages of using this design here.
+    \end{enumerate}
+
+    \item \textbf{Creating a variable for proximity to the cutoff.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Calculate the difference between each municipality's population and the closest cutoff.
+        \item Standardize this measure by dividing the difference by the corresponding cutoff and multiplying by 100.
+        \item Interpret the resulting normalized proximity variable.
+    \end{enumerate}
+
+    \item \textbf{Estimating causal effects near the cutoff.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Subset the data to include only municipalities within 3 percentage points of the funding cutoff on either side.
+        \item Use regressions to estimate the effect of government transfers on educational attainment, literacy, and poverty.
+        \item Provide a brief substantive interpretation of the results.
+    \end{enumerate}
+
+    \item \textbf{Visualizing the analysis.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Create a plot of the data points, fitted regression lines, and the population threshold.
+        \item Briefly comment on the patterns observed in the plot.
+    \end{enumerate}
+
+    \item \textbf{Difference-in-means analysis.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Compute the difference in means for educational attainment, literacy, and poverty between municipalities above and below the threshold.
+        \item Compare these estimates to the regression estimates from question 3.
+        \item Discuss whether this analysis requires the same assumption as the RDD regression.
+        \item Evaluate which estimates are more appropriate and why.
+    \end{enumerate}
+
+    \item \textbf{Varying the analysis window.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Repeat the regression analysis from question 3, varying the analysis window from 1 to 5 percentage points above and below the threshold.
+        \item Obtain the estimate for each window width.
+        \item Briefly comment on how the results change as the window changes.
+    \end{enumerate}
+
+    \item \textbf{Validity check using pretreatment data.}
+    \begin{enumerate}[label=(\alph*)]
+        \item Conduct the same analysis as in question 3, but use poverty and education measures from 1980, before the population-based government transfers began.
+        \item Interpret the results and evaluate what they imply for the validity of the RDD analysis.
+    \end{enumerate}
+\end{enumerate}
+
 \end{document}

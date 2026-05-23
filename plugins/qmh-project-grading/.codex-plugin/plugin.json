@@ -1,7 +1,7 @@
 {
   "name": "qmh-project-grading",
   "version": "0.1.0",
-  "description": "Local Codex agents for preprocessing and grading PPE QMH group project submissions.",
+  "description": "Local Codex agents for preprocessing and grading PPE QMH paper-exposition group project submissions.",
   "author": {
     "name": "PPE QMH course repository"
   },
@@ -13,13 +13,15 @@
     "rubric",
     "student-submissions",
     "causal-inference",
-    "r-markdown"
+    "paper-exposition",
+    "slides",
+    "reports"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "QMH Project Grading",
-    "shortDescription": "Preprocess and grade QMH project submissions.",
-    "longDescription": "Provides local Codex agents for organizing Canvas project submissions into short group folders and grading the processed submissions against the QMH project instructions and rubric.",
+    "shortDescription": "Preprocess and grade QMH paper-exposition projects.",
+    "longDescription": "Provides local Codex agents for organizing Canvas paper-exposition project submissions into short group folders and grading reports, slides, and related materials against the active QMH project instructions and rubric. The 2026-27 project is not an R/Rmd data-analysis project.",
     "developerName": "PPE QMH course repository",
     "category": "Education",
     "capabilities": [
@@ -28,9 +30,9 @@
       "Write"
     ],
     "defaultPrompt": [
-      "Use the QMH project submission preprocessor for the latest submissions folder.",
-      "Use the QMH project grading agent to grade processed project submissions.",
-      "Prepare concise feedback files for the QMH group project."
+      "Use the QMH project submission preprocessor for the latest paper-exposition submissions folder.",
+      "Use the QMH project grading agent to grade processed paper reports and slides.",
+      "Prepare concise feedback files for the QMH paper-exposition group project."
     ],
     "brandColor": "#7C2D12"
   }

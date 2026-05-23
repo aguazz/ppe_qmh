@@ -43,9 +43,9 @@ The current local branch is `master`. The configured remotes are:
 ## Folder Structure
 
 - `0_SYLLABUS/`: active 2026-27 syllabus source. The DOCX is the current source of truth; regenerate/export the PDF when needed.
-- `1_SLIDES/`: lecture slide folders by topic. The Intro R deck is retained as optional/enrichment material pending the slide rewrite.
-- `2_PROBLEM_SETS/`: problem sets by topic. Existing Intro R and R-based exercises should be treated as optional/enrichment until rewritten or relabeled.
-- `3_OPTIONAL_R_PRACTICE/`: optional R practice templates, instructor solution, data, rendered output, and older R-practice material. This is not a required continuous-evaluation folder for 2026-27.
+- `1_SLIDES/`: lecture slide folders by topic. `Topic 0.5 (optional) - Intro R/` contains optional R/RStudio enrichment.
+- `2_PROBLEM_SETS/`: problem sets by topic. `Topic 0.5 (optional) - Intro R/` and current R-based regression exercises are optional/enrichment unless explicitly assigned.
+- `3_OPTIONAL_R_PRACTICE/`: optional R practice source/PDF, template, instructor solution source, and data. This is not a required continuous-evaluation folder for 2026-27.
 - `4_CASE_STUDIES/`: self-contained RMarkdown case studies, usually with `.Rmd`, `.html`, local data, and local assets.
 - `5_GROUP_PROJECT/`: active 2026-27 paper-exposition project instructions, LaTeX source, and generated PDF.
 - `6_DATA_SETS/`: shared datasets and QSS chapter code/data.
@@ -55,7 +55,7 @@ The current local branch is `master`. The configured remotes are:
 - `10_RUBRICS/`: grading rubrics in PDF and editable formats. The active project rubric is now the paper-exposition rubric DOCX; export its PDF manually if needed.
 - `11_GRADES_AND_SUBMISSIONS/`: visible placeholder for private instructor material, grades, and student submissions. Only `11_GRADES_AND_SUBMISSIONS/README.md` is tracked; private contents are ignored by Git.
 - `LaTex/`: shared LaTeX infrastructure only: preamble, style files, shared images, and animation frames.
-- `_archive/`: legacy material retained for reference, including the full 2025-26 snapshot and the old 2025-26 data-analysis project.
+- `_archive/`: legacy material retained for reference, including the full 2025-26 snapshot, the old 2025-26 data-analysis project, and archived R-practice assessment rubrics/rendered outputs.
 
 ## Opening The Project Locally
 

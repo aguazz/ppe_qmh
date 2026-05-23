@@ -14,7 +14,7 @@
 \usepackage{booktabs}
 \author{\empty}
 
-\title{Problem Set 1. Introduction to R \\ Quantitative Methods for Humanities}
+\title{Optional Practice Solution. Introduction to R \\ Quantitative Methods for Humanities}
 
 \date{\empty}
 
@@ -22,10 +22,16 @@
 \maketitle
 
 \begin{center}
-    \textbf{\large 1. Understanding World Population Dynamics}    
+    \textbf{Optional enrichment for 2026--2027.}\\
+    This solution corresponds to the optional Intro R practice. It is not part of the required continuous evaluation unless explicitly assigned by the instructor.
+\end{center}
+\vspace{0.3cm}
+
+\begin{center}
+    \textbf{\large Understanding World Population Dynamics}    
 \end{center}
 
-Understanding population dynamics is crucial for many areas of social science. This exercise involves calculating basic demographic measures of births and deaths for the world population over two time periods: 1950–1955 and 2005–2010. The analysis will use data files \texttt{Kenya.csv}, \texttt{Sweden.csv}, and \texttt{World.csv}, which contain population data for Kenya, Sweden, and the world, respectively.
+Understanding population dynamics is crucial for many areas of social science. This exercise involves calculating basic demographic measures of births and deaths for the world population over two time periods: 1950--1955 and 2005--2010. The analysis will use data files \texttt{Kenya.csv}, \texttt{Sweden.csv}, and \texttt{World.csv}, which contain population data for Kenya, Sweden, and the world, respectively.
 
 \subsection*{Data Description}
 
@@ -89,7 +95,7 @@ The data are collected for a five-year period, with person-years representing th
     \]
     Briefly describe the patterns observed in the ASDRs.
 
-    \item \textbf{Counterfactual CDR:} To understand differences in the CDR between Kenya and Sweden, compute the counterfactual CDR for Kenya using Sweden’s age distribution:
+    \item \textbf{Counterfactual CDR:} To understand differences in the CDR between Kenya and Sweden, compute the counterfactual CDR for Kenya using Sweden's age distribution:
     \[
     \text{CDR} = \sum_{\text{Age Groups}} \text{ASDR}[x, x+\delta) \times P[x, x+\delta),
     \]

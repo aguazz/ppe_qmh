@@ -1,5 +1,5 @@
 interface:
   display_name: "Project Submission Preprocessor"
-  short_description: "Clean Canvas project submissions for grading"
+  short_description: "Clean Canvas paper-project submissions"
   brand_color: "#7C2D12"
-  default_prompt: "Use $project-submission-preprocessor to organize the latest QMH project submissions folder."
+  default_prompt: "Use $project-submission-preprocessor to organize the latest QMH paper-exposition project submissions folder."

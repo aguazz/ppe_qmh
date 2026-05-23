@@ -1,7 +1,7 @@
 {
   "name": "qmh-topic-experts",
   "version": "0.1.0",
-  "description": "Local Codex topic experts for the PPE Quantitative Methods for Humanities course.",
+  "description": "Local Codex topic experts for the PPE Quantitative Methods for Humanities course, including optional R, probability with introductory inference, causal inference, and linear regression.",
   "author": {
     "name": "PPE QMH course repository"
   },
@@ -12,14 +12,15 @@
     "statistics",
     "r",
     "probability",
+    "hypothesis-testing",
     "causal-inference",
     "linear-regression"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "QMH Topic Experts",
-    "shortDescription": "Course experts for R, probability, causality, and regression.",
-    "longDescription": "Provides four local Codex skills that act as reusable topic experts for creating, reviewing, and grading PPE Quantitative Methods for Humanities course materials.",
+    "shortDescription": "Course experts for optional R, probability/inference, causality, and regression.",
+    "longDescription": "Provides four local Codex skills that act as reusable topic experts for creating, reviewing, and grading PPE Quantitative Methods for Humanities course materials. The 2026-27 probability expert includes introductory hypothesis testing, p-values, confidence intervals, and comparison of means.",
     "developerName": "PPE QMH course repository",
     "category": "Education",
     "capabilities": [
@@ -29,6 +30,7 @@
     ],
     "defaultPrompt": [
       "Use the relevant QMH topic expert to draft an exam question.",
+      "Use the probability expert to draft a probability or introductory hypothesis-testing question.",
       "Consult the QMH topic experts while reviewing this problem set.",
       "Use the QMH topic experts to align grading guidance with the course."
     ],

@@ -2,10 +2,13 @@
 
 This folder is the active exam workspace for the 2026-27 version of **Quantitative Methods for Humanities**.
 
-Planned files:
+Created files:
 
 - `Midterm1.tex` and `Midterm1.pdf`: written exam about early course content, expected to cover probability, central limit theorem intuition, basic hypothesis-testing logic, comparison of means, and early causal-inference concepts.
-- `Midterm2.tex` and `Midterm2.pdf`: written exam about course content, expected to cover causal designs/studies and linear-regression interpretation. Do not require students to write R code unless explicitly approved.
+- `Midterm2.tex` and `Midterm2.pdf`: written exam about causal designs/studies and linear-regression interpretation. It does not require students to write R code.
+
+Planned files:
+
 - `FinalExam.tex` and `FinalExam.pdf`: final exam source/PDF if the 2026-27 course uses a final-exam component.
 - `MockFinalExam-*.tex` and PDFs: optional practice exams if needed.
 

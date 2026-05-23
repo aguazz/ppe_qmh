@@ -5,7 +5,7 @@
 \title{Quantitative Methods for Humanities}
 \subtitle{Probability}
 \author{}
-\date{2025/2026}
+\date{2026/2027}
 
 \begin{document}
 
@@ -198,10 +198,9 @@
         \[
         P(\text{nobody shares a birthday}) = \frac{_{365}P_k}{365^k} = \frac{365!}{365^k (365-k)!}
         \]
-        \item \textbf{How to compute?} $365!$ and $365^k$ are large numbers. Try to compute them in your calculator
+        \item \textbf{How to compute?} $365!$ and $365^k$ are large numbers. Try to compute them in your calculator.
         \item \textbf{The log solution:} Work in logarithmic scale (products transform into sums) and then exponentiate back to the original scale
-        \item \textbf{in R:} \texttt{lfactorial} \\
-        \scriptsize{Up to +0.2 points for the first student posting in the forum a piece of code with a function to compute the probability asked, provided the number of people}
+        \item \textbf{Optional software note:} in R, \texttt{lfactorial} computes log-factorials directly.
     \end{itemize}
     
 \end{frame}
@@ -1086,13 +1085,163 @@
 \begin{frame}{Illustrating CLT}
     \begin{itemize}
         \item Simulate Z-scores for \(n = 1000\).
-        \item Sample mean’s z-scores follows \(N(0, 1)\) distribution.
+        \item Sample mean z-scores approximately follow the \(N(0, 1)\) distribution.
     \end{itemize}
     \vspace{0.1cm}
     
     \begin{center}
         \includegraphics[width=0.9\textwidth]{../../LaTex/img/CLT.png}    
     \end{center}
+\end{frame}
+
+\section{\large Introduction to Statistical Inference}
+
+\begin{frame}{From probability to inference}
+    \begin{itemize}
+        \item Probability asks: \textbf{what kind of data should we expect if we know the process?}
+        \item Statistical inference asks: \textbf{what can we learn about the process from the data we observed?}
+        \item Examples:
+        \begin{itemize}
+            \item A survey estimates support for a policy.
+            \item A treatment group has higher average outcomes than a control group.
+            \item A sample average differs from a historical benchmark.
+        \end{itemize}
+        \item The central problem: some differences are real, but some are just sampling variation.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{A simple survey example}
+    Suppose we survey \(n=1{,}000\) students and find that \(58\%\) support a policy.
+    \vspace{0.2cm}
+
+    \begin{itemize}
+        \item The population value is unknown: maybe true support is \(55\%\), \(58\%\), or \(61\%\).
+        \item If we repeated the survey with another \(1{,}000\) students, the estimate would probably change.
+        \item The sample estimate is informative, but not exact.
+    \end{itemize}
+
+    \vspace{0.2cm}
+    \begin{coolblock}{Key idea}
+        Inference is disciplined uncertainty: use probability to say how much sampling noise is plausible.
+    \end{coolblock}
+\end{frame}
+
+\begin{frame}{Sampling distributions and standard errors}
+    \begin{itemize}
+        \item A statistic, such as a sample mean \(\bar{X}\), is random before we collect the data.
+        \item Its \textbf{sampling distribution} describes how \(\bar{X}\) would vary across repeated samples.
+        \item By the CLT, for large \(n\):
+        \[
+            \bar{X} \approx N\left(\mu, \frac{\sigma^2}{n}\right)
+        \]
+        \item The \textbf{standard error} measures the typical sampling error:
+        \[
+            \mathrm{SE}(\bar{X}) \approx \frac{s}{\sqrt{n}}
+        \]
+        \item Bigger samples reduce uncertainty, but at the slow rate \(1/\sqrt{n}\).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Hypothesis testing: the logic}
+    \begin{itemize}
+        \item Start with a benchmark claim, called the \textbf{null hypothesis}:
+        \[
+            H_0: \text{no difference, no effect, or no change.}
+        \]
+        \item State the competing claim, called the \textbf{alternative hypothesis}:
+        \[
+            H_A: \text{there is a difference, effect, or change.}
+        \]
+        \item Then ask: \textbf{if \(H_0\) were true, how surprising would our data be?}
+        \item Hypothesis tests do not prove \(H_0\) or \(H_A\). They measure evidence against \(H_0\).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Testing one mean}
+    Example: is average support for a policy different from \(50\%\)?
+    \[
+        H_0: \mu = 0.50
+        \qquad
+        H_A: \mu \neq 0.50
+    \]
+
+    \begin{itemize}
+        \item Compute how far the estimate is from the null, in standard-error units:
+        \[
+            t = \frac{\bar{x} - \mu_0}{\mathrm{SE}(\bar{x})}
+        \]
+        \item If \(t\) is close to \(0\), the data are compatible with \(H_0\).
+        \item If \(t\) is far from \(0\), the data would be unusual under \(H_0\).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Comparing two means}
+    Many social-science questions compare two groups.
+    \vspace{0.2cm}
+
+    \begin{itemize}
+        \item Example: do treated units have higher average outcomes than control units?
+        \[
+            \widehat{\tau} = \bar{Y}_{T} - \bar{Y}_{C}
+        \]
+        \item The null hypothesis is usually:
+        \[
+            H_0: \tau = 0
+        \]
+        \item With independent groups, a useful standard error is:
+        \[
+            \mathrm{SE}(\widehat{\tau}) \approx \sqrt{\frac{s_T^2}{n_T} + \frac{s_C^2}{n_C}}
+        \]
+        \item Interpretation: compare the estimated difference to the uncertainty around that difference.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{P-values}
+    \begin{itemize}
+        \item A \textbf{p-value} answers:
+        \[
+            \text{If \(H_0\) were true, how likely are results at least this extreme?}
+        \]
+        \item Small p-values mean the observed result would be surprising under \(H_0\).
+        \item A common convention is \(p < 0.05\), but it is only a convention.
+        \item A p-value is \textbf{not}:
+        \begin{itemize}
+            \item the probability that \(H_0\) is true;
+            \item the probability that the result is important;
+            \item a substitute for substantive interpretation.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Confidence intervals}
+    \begin{itemize}
+        \item A confidence interval gives a range of values compatible with the estimate and its uncertainty.
+        \item With a large sample and an approximately normal statistic:
+        \[
+            \text{Estimate} \pm 1.96 \times \mathrm{SE}
+        \]
+        \item For a difference in means:
+        \[
+            \widehat{\tau} \pm 1.96 \times \mathrm{SE}(\widehat{\tau})
+        \]
+        \item If a \(95\%\) confidence interval for \(\tau\) excludes \(0\), the two-sided test rejects \(H_0:\tau=0\) at about the \(5\%\) level.
+        \item Wider intervals mean more uncertainty.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What students should report}
+    For a mean or a difference in means, report:
+    \begin{itemize}
+        \item the \textbf{estimate}: what did the sample show?
+        \item the \textbf{standard error or confidence interval}: how uncertain is it?
+        \item the \textbf{p-value}, if testing a null hypothesis;
+        \item the \textbf{substantive interpretation}: is the size meaningful in context?
+    \end{itemize}
+
+    \vspace{0.2cm}
+    \begin{coolblock}{Bottom line}
+        Statistical significance is about evidence against a benchmark. It is not the same as practical importance.
+    \end{coolblock}
 \end{frame}
 
 \end{document}

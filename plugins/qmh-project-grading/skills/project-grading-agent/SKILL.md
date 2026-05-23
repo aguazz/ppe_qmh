@@ -25,7 +25,7 @@ For 2026-27, do not look for project datasets in `5_GROUP_PROJECT/`; the active 
 - Before starting grading, tell the user which processed folder/year was detected and ask for confirmation.
 - Grade group folders named `g001`, `g002`, etc.
 - Each group folder should contain the representative submission files chosen by the preprocessing agent.
-- For 2026-27, grade the submitted paper-exposition materials. These may be PDF reports, slide decks, DOCX files, or other instructor-approved files. Do not require `.Rmd`, `.R`, or executable code.
+- For 2026-27, grade the submitted paper-exposition materials. Expect a short report and presentation slides unless the instructor says otherwise. These may be PDF reports, slide decks, DOCX files, PPTX files, or other instructor-approved files. Do not require `.Rmd`, `.R`, executable code, datasets, or code-quality evidence.
 
 ## Rubric
 
@@ -47,7 +47,7 @@ Use the rubric bands:
 
 Reward clear, accurate exposition of the assigned paper. Penalize unsupported causal claims, unclear treatment/control framing, confusion about the estimand, weak explanation of identification assumptions, missing threats to validity, results stated without magnitude or uncertainty, or presentation choices that make the paper difficult to understand.
 
-Do not penalize students for not writing code or not submitting data-analysis files in the 2026-27 paper-exposition project.
+Do not penalize students for not writing code or not submitting data-analysis files in the 2026-27 paper-exposition project. Penalize only missing or weak exposition elements required by the active project instructions and rubric.
 
 ## Topic Expert Use
 

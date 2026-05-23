@@ -540,39 +540,39 @@ p_F_given_S
         $$
         where $n = 25$ is the number of total trials, $k = 10$ is the number of successful guesses, and $p = 0.2$ is the probability of a correct guess. Then
         $$
-        P(X = 10) = \binom{25}{10} (0.2)^{10} (0.8)^{15} \approx 0.0414.
+        P(X = 10) = \binom{25}{10} (0.2)^{10} (0.8)^{15} \approx 0.0118.
         $$
         
         \item The probability of getting 15 or more correct guesses is:
         $$
-        P(X \geq 15) = 1 - P(X \leq 14) \approx 0.0005.
+        P(X \geq 15) = 1 - P(X \leq 14) \approx 0.0000136.
         $$
 
         \item We just proved that randomly guessing 15 or more correct cards is highly unlikely. This could suggest that the subject has \textbf{some ability beyond random chance}. However, further testing would be needed to confirm this.
 
         \item Each test-taker independently has a probability of
         $
-        q = P(X \geq 15) = 0.0005
+        q = P(X \geq 15) \approx 0.0000136
         $
         of achieving $15$ or more correct guesses by chance. 
         If there are \( N = 1000 \) participants, we compute the probability that at least one of them achieves this by using the complement rule:
         \[
         P(\text{at least one person gets 15+}) = 1 - P(\text{nobody gets 15+}).
         \]
-        Since each person independently has a \( 1 - q = 0.9995 \) probability of \textbf{not} getting 15 or more correct guesses, the probability that all 1,000 fail is:
+        Since each person independently has a \( 1 - q \approx 0.9999864 \) probability of \textbf{not} getting 15 or more correct guesses, the probability that all 1,000 fail is:
         \[ 
-        P(\text{nobody gets 15+}) = (1-q)^{1000} \approx 0.6065.
+        P(\text{nobody gets 15+}) = (1-q)^{1000} \approx 0.9865.
         \]
         Thus, the probability that at least one person gets 15+ correct is:
         $$
-        P(\text{at least one gets 15+}) \approx 1 - 0.6065 = 0.3935.
+        P(\text{at least one gets 15+}) \approx 1 - 0.9865 = 0.0135.
         $$
-        So there is nearly a $40\%$ chance that at least one person in the group appears to have psychic ability purely by luck.
+        So there is about a $1.35\%$ chance that at least one person in the group appears to have psychic ability purely by luck. This is still much larger than the probability for a single test-taker, illustrating how multiple testing changes the interpretation of rare events.
 
-        \item While the probability of finding a "psychic" increases with the sample size, this does not mean that psychic ability actually exists. 
+        \item While the probability of finding at least one unusually successful test-taker increases with the sample size, this does not mean that psychic ability actually exists.
         \begin{itemize}
             \item In any large enough sample, \textbf{rare events happen by chance}.
-            \item The correct way to test the existence of psychic abilities is not to rely on a single lucky individual, but rather to analyze whether successful test-takers continue to systematically outperform chance across repeated experiments. 
+            \item The correct way to test the existence of psychic abilities is not to rely on a single lucky individual, but rather to analyze whether successful test-takers continue to systematically outperform chance across repeated experiments.
             \item True psychics should consistently perform above chance levels, while lucky individuals who guessed well should regress to the mean in future trials.
             \item When testing collective, the threshold number of people who test positive for psychic abilities to consider that psychic abilities exist should increase along with the sample size.    
         \end{itemize}
@@ -649,19 +649,156 @@ p_F_given_S
         \[
         \sigma_{\bar{Y}} = \frac{10}{\sqrt{30}} \approx 1.83, \quad Z = \frac{153 - 150}{1.83} \approx 1.6393.
         \]
-        In this case $P(Z > 1.6393) = \texttt{pnorm(1.6393, lower.tail = FALSE)} \approx 0.9494$.
+        In this case $P(Z > 1.6393) = \texttt{pnorm(1.6393, lower.tail = FALSE)} \approx 0.0506$.
         
         For \( n = 100 \):
         \[
-        \sigma_{\bar{Y}} = \frac{10}{\sqrt{100}} \approx 1.29, \quad Z = \frac{153 - 150}{1} = 3.
+        \sigma_{\bar{Y}} = \frac{10}{\sqrt{100}} = 1, \quad Z = \frac{153 - 150}{1} = 3.
         \]
         In this case $P(Z > 3) = \texttt{pnorm(3, lower.tail = FALSE)} \approx 0.0013$.
     \end{enumerate} 
         
-    \textbf{Conclusion:} While individual probabilities depend on the normal assumption, the Central Limit Theorem ensures that for large \( n \), the probability of observing an extreme sample mean remains negligible.
+    \textbf{Conclusion:} While individual probabilities depend on the normal assumption, the Central Limit Theorem lets us approximate probabilities about sample means. As \(n\) grows, the same deviation from the population mean becomes less likely.
     
     \fi \color{black}
     
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Is There Majority Support for a Housing Policy?}
+
+    A city council is considering a rent-support policy for young adults. A simple random survey of \(n = 400\) city residents finds that \(216\) support the policy.
+
+    Let \(p\) be the true proportion of residents who support the policy.
+
+    \begin{enumerate}[label=(\alph*)]
+        \item What is the sample proportion \(\hat{p}\)?
+        \item State the null and alternative hypotheses for the question: ``is support above \(50\%\)?''
+        \item Under the null hypothesis, compute the standard error
+        \[
+            \mathrm{SE}_0(\hat{p}) = \sqrt{\frac{p_0(1-p_0)}{n}},
+        \]
+        where \(p_0 = 0.50\).
+        \item Compute the test statistic
+        \[
+            z = \frac{\hat{p} - p_0}{\mathrm{SE}_0(\hat{p})}.
+        \]
+        \item The one-sided p-value is \(P(Z \geq z)\) for \(Z \sim N(0,1)\). It is approximately \(0.055\). Interpret this p-value.
+        \item Compute an approximate \(95\%\) confidence interval using
+        \[
+            \hat{p} \pm 1.96 \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}.
+        \]
+        Does this interval include \(0.50\)? What does that imply?
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item The sample proportion is
+        \[
+            \hat{p} = \frac{216}{400} = 0.54.
+        \]
+
+        \item Since the question is whether support is above a majority threshold,
+        \[
+            H_0: p = 0.50, \qquad H_A: p > 0.50.
+        \]
+
+        \item Under the null,
+        \[
+            \mathrm{SE}_0(\hat{p}) = \sqrt{\frac{0.50(1-0.50)}{400}} = \sqrt{\frac{0.25}{400}} = 0.025.
+        \]
+
+        \item The test statistic is
+        \[
+            z = \frac{0.54 - 0.50}{0.025} = 1.6.
+        \]
+
+        \item The p-value is approximately \(P(Z \geq 1.6) = 0.055\). If true support were exactly \(50\%\), a survey estimate at least as high as \(54\%\) would occur about \(5.5\%\) of the time by sampling variation. This is suggestive evidence of majority support, but it is just above the conventional \(5\%\) threshold.
+
+        \item The confidence interval uses
+        \[
+            \sqrt{\frac{0.54(1-0.54)}{400}} \approx 0.0249.
+        \]
+        Therefore,
+        \[
+            0.54 \pm 1.96(0.0249) \approx 0.54 \pm 0.0488 = [0.4912,\ 0.5888].
+        \]
+        The interval includes \(0.50\). This is consistent with the p-value: the survey points toward majority support, but the evidence is not quite strong enough to confidently rule out \(50\%\) at the \(5\%\) level.
+    \end{enumerate}
+    \fi \color{black}
+
+    %%%%
+    %% Problem
+    %%%%
+    \item \textbf{Do Fact-Checking Prompts Improve Accuracy?}
+
+    A researcher studies whether a short fact-checking prompt helps students identify misleading political headlines. Students are randomly assigned to a treatment group, which receives the prompt, or to a control group, which does not. The outcome is an accuracy score from \(0\) to \(100\).
+
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{lccc}
+            \toprule
+            \textbf{Group} & \textbf{Sample size} & \textbf{Sample mean} & \textbf{Sample standard deviation} \\
+            \midrule
+            Treatment & \(n_T = 64\) & \(\bar{Y}_T = 76\) & \(s_T = 12\) \\
+            Control & \(n_C = 64\) & \(\bar{Y}_C = 70\) & \(s_C = 14\) \\
+            \bottomrule
+        \end{tabular}
+    \end{table}
+
+    Let \(\tau = \mu_T - \mu_C\) be the difference in population means.
+
+    \begin{enumerate}[label=(\alph*)]
+        \item Compute the estimated difference in means, \(\widehat{\tau} = \bar{Y}_T - \bar{Y}_C\).
+        \item State the null and two-sided alternative hypotheses.
+        \item Compute the standard error
+        \[
+            \mathrm{SE}(\widehat{\tau}) \approx \sqrt{\frac{s_T^2}{n_T} + \frac{s_C^2}{n_C}}.
+        \]
+        \item Compute the test statistic \(z = \widehat{\tau}/\mathrm{SE}(\widehat{\tau})\).
+        \item The two-sided p-value is approximately \(0.009\). Interpret it.
+        \item Compute an approximate \(95\%\) confidence interval for \(\tau\). Does the interval include \(0\)?
+        \item Does statistical significance automatically imply that the effect is substantively important? Explain.
+    \end{enumerate}
+
+    \ifsolutions \color{blue} \textbf{Solution:} \\
+    \begin{enumerate}[label=(\alph*)]
+        \item The estimated difference in means is
+        \[
+            \widehat{\tau} = 76 - 70 = 6.
+        \]
+        The treatment group scored \(6\) points higher on average.
+
+        \item The hypotheses are
+        \[
+            H_0: \tau = 0, \qquad H_A: \tau \neq 0.
+        \]
+
+        \item The standard error is
+        \[
+            \mathrm{SE}(\widehat{\tau}) \approx \sqrt{\frac{12^2}{64} + \frac{14^2}{64}}
+            = \sqrt{2.25 + 3.0625}
+            = \sqrt{5.3125}
+            \approx 2.30.
+        \]
+
+        \item The test statistic is
+        \[
+            z = \frac{6}{2.30} \approx 2.60.
+        \]
+
+        \item The two-sided p-value is approximately \(0.009\). If the prompt had no effect on average accuracy, a difference at least as far from zero as \(6\) points would be very unlikely. This is strong evidence against \(H_0\) at the \(5\%\) level.
+
+        \item The approximate \(95\%\) confidence interval is
+        \[
+            6 \pm 1.96(2.30) \approx 6 \pm 4.51 = [1.49,\ 10.51].
+        \]
+        The interval does not include \(0\), which is consistent with rejecting \(H_0: \tau = 0\).
+
+        \item No. Statistical significance means the estimated difference is large relative to sampling uncertainty. Substantive importance asks whether a \(6\)-point increase is meaningful for the research question, the cost of the prompt, and the decision context.
+    \end{enumerate}
+    \fi \color{black}
+
     %%%%
     %% Problem
     %%%%
@@ -672,7 +809,7 @@ p_F_given_S
     \begin{enumerate}[label=(\alph*)]
         \item Compute the expected net profit per bet.
         \item Suppose a gambler plays 10 times. Could they walk away with a profit? With what probability? 
-        \item What if she plays $10,000$ times? Use the Central Limit Theorem. Is this method accurate for the previous part where the gambler payed only 10 times?
+        \item What if she plays $10{,}000$ times? Use the Central Limit Theorem. Is this method accurate for the previous part where the gambler played only 10 times?
         \item Use the Law of Large Numbers to give an approximation of the profit the casino makes after $n$ bets, for large $n$. Use this estimation to explain how the casino ensures that, over a long period, it will always make a profit, even though some individuals may win in the short run.
         \item A player has lost 5 times in a row and believes they are now ``due for a win''. Explain why this reasoning is incorrect.
     \end{enumerate}
@@ -680,7 +817,7 @@ p_F_given_S
     
     \ifsolutions \color{blue} \textbf{Solution:} \\
     \begin{enumerate}
-        \item Let the random variable $X$ represents the profit per bet, which can only takes two values. Note that $p = P(X = 1) 0.49 = 1- P(X=-1)$. The expected profit per bet is
+        \item Let the random variable $X$ represent the profit per bet, which can only take two values. Note that $P(X = 1) = 0.49 = 1- P(X=-1)$. The expected profit per bet is
         \[
         E[X] = (0.49 \times 1) + (0.51 \times (-1)) = 0.49 - 0.51 = -0.02.
         \]
@@ -692,23 +829,23 @@ p_F_given_S
         $$
         Since each bet is independent and $(X_i + 1)/2 \sim \text{Ber}(p)$, then $Y_n$ is a binomial random variable, specifically, $Y_n\sim\text{Bin}(n, p)$. Then the probability of walking away with a profit after $10$ bets is:
         \[
-        P(S_{10} > 0) = P(Y_{10} \geq 6) = \sum_{k = 6}^{10} \binom{10}{k} (0.49)^k (0.51)^{10-k} \approx = 0.347.
+        P(S_{10} > 0) = P(Y_{10} \geq 6) = \sum_{k = 6}^{10} \binom{10}{k} (0.49)^k (0.51)^{10-k} \approx 0.347.
         \]
-        This probability was computed in R using the command \texttt{1 - pbinom(5, n = 10, p = 0.49)}.
+        Numerically, this can be computed as \(\texttt{1 - pbinom(5, n = 10, p = 0.49)}\).
 
         \item Recall that $S_n = \sum_{i=1}^n X_i$, where the random variables $X_i$ are i.i.d. with mean $\mu = -0.02$ and variance $\sigma^2 = E[X^2] - \mu^2 = 1 - 0.02^2 = 0.9996$. The CLT states that, for $n$ large enough,
         $$
         \frac{\frac{1}{n}S_n - \mu}{\sigma/\sqrt{n}} \approx N(0, 1).
         $$
-        Our sample size is significantly large \( n = 10,000 \), thus, for our case
+        Our sample size is significantly large \( n = 10{,}000 \), thus, for our case
         \begin{align*}
-            P(S_n \geq 0)
+            P(S_n > 0)
             &= P\left(\frac{\frac{1}{n}S_n - \mu}{\sigma/\sqrt{n}} > \frac{ - \mu}{\sigma/\sqrt{n}}\right) 
-            \approx P\left(Z > \frac{0.02}{0.9996/\sqrt{10,000}}\right) \\
-            &\approx P(Z > 0.0008) \approx 0.0227
+            \approx P\left(Z > \frac{0.02}{\sqrt{0.9996}/\sqrt{10{,}000}}\right) \\
+            &\approx P(Z > 2.0004) \approx 0.0227
         \end{align*}
-        where the last probability was computed using the R command \texttt{pnorm(2.0008, lower.tail = FALSE)}.
-        Thus, after 10,000 bets, the chances of making any profit is only $2.28\%$.
+        where the last probability was computed using the R command \texttt{pnorm(2.0004, lower.tail = FALSE)}.
+        Thus, after \(10{,}000\) bets, the chance of making a positive profit is only about $2.27\%$.
     
         \item Let $W_n$ denote the profit of the casino after $n$ bets. By the LLN, for a large number of bets $n$, this profit is approximated as
         \begin{align*}
