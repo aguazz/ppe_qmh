@@ -1,6 +1,6 @@
 ---
 name: probability-expert
-description: Use when Codex needs a PPE Quantitative Methods for Humanities expert on Topic 2 Probability for creating, revising, reviewing, or grading course materials. Relevant tasks include probability interpretations, axioms, counting, permutations, combinations, conditional probability, marginal and joint probability, independence, law of total probability, Bayes' rule, random variables, probability mass/density/distribution functions, Bernoulli, uniform, binomial, normal distribution, expectation, variance, law of large numbers, central limit theorem, quizzes, problem sets, exams, answer keys, rubrics, and student feedback.
+description: Use when Codex needs a PPE Quantitative Methods for Humanities expert on Topic 2 Probability for creating, revising, reviewing, or grading course materials. Relevant tasks include probability interpretations, axioms, counting, permutations, combinations, conditional probability, marginal and joint probability, independence, law of total probability, Bayes' rule, random variables, probability mass/density/distribution functions, Bernoulli, uniform, binomial, normal distribution, expectation, variance, law of large numbers, central limit theorem, introductory hypothesis testing, p-values, confidence intervals, quizzes, problem sets, exams, answer keys, rubrics, and student feedback.
 ---
 
 # Probability Expert
@@ -13,6 +13,7 @@ Start from the local course materials:
 
 - `1_SLIDES/Topic 2 - Probability/2.Probability.tex`
 - `2_PROBLEM_SETS/Topic 2 - Probability/Problem_set_2_probability.tex`
+- `8_QUESTION_BANKS/Hypothesis_Testing_2026-27.tex`
 - `8_QUESTION_BANKS/ProbabilityQuiz_1.tex`
 - `8_QUESTION_BANKS/ProbabilityQuiz_2.tex`
 - `6_DATA_SETS/2_PROBABILITY/`
@@ -22,6 +23,8 @@ Use these as the source of truth for notation, examples, and difficulty.
 ## Scope
 
 Cover basic probability foundations, counting arguments, conditional probability, joint and marginal probability, independence, total probability, Bayes' rule, random variables, Bernoulli/uniform/binomial/normal distributions, expectation, variance, LLN, and CLT.
+
+For 2026-27, also cover introductory inference tied directly to CLT intuition: standard errors, null and alternative hypotheses, basic one-mean tests, difference-in-means tests, p-values, simple confidence intervals, and interpretation of statistical versus substantive significance.
 
 When creating assessment items, make the probability model explicit: define events, sample space, conditioning information, and whether the task is counting, updating beliefs, or using a distribution. Prefer contexts from politics, humanities, policy, surveys, voting, language, and social science.
 
@@ -33,4 +36,4 @@ For student-facing questions, state assumptions cleanly and avoid hidden ambigui
 
 ## Boundaries
 
-Do not introduce hypothesis testing, regression inference, or advanced Bayesian modeling unless the user explicitly asks. If a probability task uses R simulation, keep the code beginner-friendly and coordinate conceptually with the Intro R expert.
+Keep hypothesis testing introductory and aligned with the Topic 2 slides. Do not introduce regression inference or advanced Bayesian modeling unless the user explicitly asks. If a probability task uses R simulation, keep the code beginner-friendly, optional where possible, and coordinate conceptually with the Intro R expert.

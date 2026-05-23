@@ -44,7 +44,7 @@ The 2026-27 DOCX is the active syllabus source. Export a matching PDF manually w
 |-- Topic 0 - Intro Course/
 |   |-- 0.Intro.tex
 |   `-- 0.Intro.pdf
-|-- Topic 1 - Intro R/
+|-- Topic 0.5 (optional) - Intro R/
 |   |-- 1.IntroR.tex
 |   |-- 1.IntroR.pdf
 |   `-- supporting R/Rmd/data files
@@ -64,15 +64,16 @@ The 2026-27 DOCX is the active syllabus source. Export a matching PDF manually w
     `-- 5.LinearRegression.pdf
 ```
 
-`Topic 1 - Intro R/` is retained for now but should be treated as optional/enrichment for 2026-27 until the slide-deck phase rewrites or relabels it.
+`Topic 0.5 (optional) - Intro R/` is optional/enrichment material for 2026-27. It supports students who want to use R/RStudio and instructor-led demonstrations, but it is not required assessment.
 
 ```text
 2_PROBLEM_SETS/
-|-- Topic 1 - Intro R/
-|   |-- Problem_set_1_introR.tex
-|   |-- Problem_set_1_introR.pdf
-|   |-- Problem_set_1_introR_solution.tex
-|   |-- Problem_set_1_introR_solution.pdf
+|-- Topic 0.5 (optional) - Intro R/
+|   |-- introR_practice.tex
+|   |-- introR_practice.pdf
+|   |-- introR_practice_solution.tex
+|   |-- introR_practice_solution.pdf
+|   |-- introR_practice_solution.R
 |   `-- local data files
 |-- Topic 2 - Probability/
 |   |-- Problem_set_2_probability.tex
@@ -85,29 +86,23 @@ The 2026-27 DOCX is the active syllabus source. Export a matching PDF manually w
 |   |-- Problem_set_4_studies.pdf
 |   `-- local data files
 |-- Topic 5 - Linear Regression/
-|   |-- problem_set_5_linear_regression_noR.tex
-|   |-- problem_set_5_linear_regression_noR.pdf
-|   |-- Problem_set_5_linear_regression_R.tex
-|   |-- Problem_set_5_linear_regression_R.pdf
+|   |-- Problem_set_5_linear_regression.tex
+|   |-- Problem_set_5_linear_regression.pdf
 |   `-- Problem_set_prediction.tex
 `-- solution.tex
 ```
 
-`Topic 1 - Intro R/`, `Problem_set_5_linear_regression_R.tex`, and `Problem_set_prediction.tex` are active-looking legacy materials. Treat them as optional/enrichment until the problem-set phase decides what to archive, rename, or rewrite.
+`Topic 0.5 (optional) - Intro R/` and `Problem_set_prediction.tex` are optional/enrichment unless explicitly assigned. The active Topic 5 sheet is primarily no-code, with optional R-based regression exercises placed at the end.
 
 `solution.tex` is a legacy combined solution source. It has not yet been split into topic folders.
 
 ```text
 3_OPTIONAL_R_PRACTICE/
-|-- R_practice_template.Rmd
-|-- R_practice_solution.Rmd
-|-- R_practice_solution.html
-|-- R practice.pdf
-|-- turnout.csv
-|-- Rubric.docx
-`-- RPractice_2023-24/
-    |-- RPractice_2023-24.tex
-    `-- turnout.csv
+|-- optional_R_practice.tex
+|-- optional_R_practice.pdf
+|-- optional_R_practice_template.Rmd
+|-- optional_R_practice_solution.Rmd
+`-- turnout.csv
 ```
 
 This folder is optional/enrichment material for 2026-27, not a required continuous-evaluation folder.
@@ -161,6 +156,7 @@ Shared datasets and QSS chapter code live here. If an activity has a small local
 
 ```text
 8_QUESTION_BANKS/
+|-- Hypothesis_Testing_2026-27.tex
 |-- pool.tex
 |-- ProbabilityQuiz_1.tex
 |-- ProbabilityQuiz_2.tex
@@ -180,6 +176,10 @@ Shared datasets and QSS chapter code live here. If an activity has a small local
 |   |-- FinalExam.pdf
 |   `-- mock final exam sources/PDFs
 `-- 2026-27/
+    |-- Midterm1.tex
+    |-- Midterm1.pdf
+    |-- Midterm2.tex
+    |-- Midterm2.pdf
     `-- README.md
 ```
 
@@ -191,12 +191,10 @@ Shared datasets and QSS chapter code live here. If an activity has a small local
 |-- G351-QMH-Rubric-Final_exam.pdf
 |-- G351-QMH-Rubric-Midterm.docx
 |-- G351-QMH-Rubric-Midterm.pdf
-|-- G351-QMH-Rubric-Project.docx
-|-- G351-QMH-Rubric-R_practice.docx
-`-- G351-QMH-Rubric-R_practice.pdf
+`-- G351-QMH-Rubric-Project.docx
 ```
 
-The active project rubric is now the paper-exposition DOCX. Its PDF still needs manual export from Word if a committed PDF is required. The R-practice rubric remains present but should be considered legacy/optional until the rubric cleanup phase.
+The active project rubric is now the paper-exposition DOCX. Its PDF still needs manual export from Word if a committed PDF is required. The old R-practice assessment rubrics are archived under `_archive/2025-26_r_practice_assessment/`.
 
 ```text
 11_GRADES_AND_SUBMISSIONS/
@@ -227,10 +225,11 @@ _archive/
 |-- 2024-25_legacy_QuantMethdsHum/
 |-- 2025-26_active_course_snapshot/
 |-- 2025-26_data_analysis_project/
+|-- 2025-26_r_practice_assessment/
 `-- Scripts_remainder/
 ```
 
-`2025-26_active_course_snapshot/` preserves the full active course state before the 2026-27 migration. `2025-26_data_analysis_project/` preserves the former project instructions, project datasets, and project rubric that were removed from active folders during the 2026-27 migration.
+`2025-26_active_course_snapshot/` preserves the full active course state before the 2026-27 migration. `2025-26_data_analysis_project/` preserves the former project instructions, project datasets, and project rubric that were removed from active folders during the 2026-27 migration. `2025-26_r_practice_assessment/` preserves the old R-practice assessment rubrics and stale rendered outputs.
 
 ## Compile Convention
 

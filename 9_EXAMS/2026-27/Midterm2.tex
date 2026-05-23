@@ -1,0 +1,310 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+%\printanswers % Uncomment to show answers
+
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\makeatother
+\setcounter{footnote}{0}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule
+    \hspace{-\arraycolsep}%
+}
+
+\unframedsolutions
+\renewcommand{\solutiontitle}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Midterm 2}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2026/27}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{Date TBA}
+\newcommand{\university}{CUNEF Universidad}
+
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 50 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Your work must be well organized and coherent. Pay attention to notation, definitions of treatment and outcome variables, units of measurement, and interpretation.
+
+            \item \textbf{You must answer each question inside the designated box}; answers outside will not be considered.
+
+            \item The use of calculators is allowed.
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+
+        \end{enumerate}
+    }}
+\end{center}
+%--- Instructions ---%
+
+\vspace{0.3cm}
+
+The following questions are about fictional studies of education and civic participation. The exam focuses on causal designs, study assumptions, and interpretation of linear regression output. No question requires writing R code.
+
+\vspace{0.2cm}
+
+%--- Questions ---%
+\begin{questions}
+
+%========================================================
+\question[2.5]
+A regional government wants to evaluate whether smaller seminar groups improve student outcomes in a required civic-education course. Among students enrolled in the course, some are randomly assigned to a small seminar group and others remain in a regular seminar group. The outcome is the final exam score, measured from 0 to 100.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Group & Number of students & Mean final score & Standard deviation \\
+\midrule
+Small seminar ($T=1$)   & 160 & 74 & 12 \\
+Regular seminar ($T=0$) & 180 & 70 & 14 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Identify the treatment variable, treatment group, control group, and outcome variable.
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} The treatment variable is $T$, where $T=1$ if the student is assigned to a small seminar and $T=0$ if the student is assigned to a regular seminar. The treatment group is the small-seminar group. The control group is the regular-seminar group. The outcome variable is the final exam score, measured from 0 to 100.
+    \end{solutionorbox}
+
+    \item Define $Y_i(1)$, $Y_i(0)$, and the individual treatment effect $TE_i$ in this study.
+
+    \begin{solutionorbox}[6.3cm]
+    \textbf{Solution:} $Y_i(1)$ is student $i$'s final exam score if assigned to a small seminar. $Y_i(0)$ is student $i$'s final exam score if assigned to a regular seminar. The individual treatment effect is
+    \[
+    TE_i=Y_i(1)-Y_i(0).
+    \]
+    \end{solutionorbox}
+
+    \item Compute the difference-in-means estimator. Under the study design, what is its causal interpretation?
+
+    \begin{solutionorbox}[6.2cm]
+    \textbf{Solution:}
+    \[
+    \widehat{SATE}=\bar Y_1-\bar Y_0=74-70=4.
+    \]
+    The small-seminar group scored 4 points higher on average than the regular-seminar group. Because assignment was random, this difference can be interpreted as an estimate of the causal effect of small seminars on final exam scores for the study sample, assuming the treatment is well defined and there are no relevant spillovers.
+    \end{solutionorbox}
+
+    \item Name one possible violation of SUTVA in this study and explain why it matters.
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} One possible violation is interference: students in small and regular seminars may study together and share materials. Then a regular-seminar student's outcome could be affected by another student's treatment status. This matters because the observed control outcome would no longer represent what happens with no exposure to the treatment.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+The same region later introduces free after-school tutoring in the North district. The South district does not receive the program. The outcome is the average absenteeism rate, measured as missed school days per 100 student-days.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+District & 2025 absenteeism & 2026 absenteeism \\
+\midrule
+North district, tutoring program & 9.0 & 6.5 \\
+South district, no program       & 7.0 & 6.2 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Identify the treatment group, control group, before period, after period, and outcome variable.
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} The treatment group is the North district. The control group is the South district. The before period is 2025 and the after period is 2026. The outcome variable is the absenteeism rate, measured as missed school days per 100 student-days.
+    \end{solutionorbox}
+
+    \item Compute the before-and-after estimator for the North district. Why might this be a biased causal estimate?
+
+    \begin{solutionorbox}[6.3cm]
+    \textbf{Solution:}
+    \[
+    \widehat{BA}=6.5-9.0=-2.5.
+    \]
+    Absenteeism fell by 2.5 missed days per 100 student-days in the North district. This may be biased as a causal estimate because other things may have changed between 2025 and 2026, such as school leadership, local economic conditions, or district attendance rules.
+    \end{solutionorbox}
+
+    \item Compute the difference-in-differences estimator and interpret it.
+
+    \begin{solutionorbox}[6.8cm]
+    \textbf{Solution:} The North district changed by
+    \[
+    6.5-9.0=-2.5.
+    \]
+    The South district changed by
+    \[
+    6.2-7.0=-0.8.
+    \]
+    Therefore,
+    \[
+    \widehat{DiD}=(-2.5)-(-0.8)=-1.7.
+    \]
+    After adjusting for the change observed in the South district, the tutoring program is estimated to reduce absenteeism by 1.7 missed days per 100 student-days.
+    \end{solutionorbox}
+
+    \item State the key assumption behind difference-in-differences and give one possible violation in this context.
+
+    \begin{solutionorbox}[6.5cm]
+    \textbf{Solution:} The key assumption is parallel trends: without the tutoring program, absenteeism in North and South would have changed by the same amount from 2025 to 2026. A violation would occur if, for example, North also introduced a new attendance-enforcement policy in 2026, or if a shock affected only North's schools.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+A nonprofit evaluates a voluntary digital-literacy workshop. Participants choose whether to attend. The outcome is a civic-information score from 0 to 100. Before the workshop, residents are classified by prior interest in politics.
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Prior interest stratum & Workshop mean & No-workshop mean & Estimated effect & Population share \\
+\midrule
+High prior interest & 78 & 70 & 8 & 0.40 \\
+Low prior interest  & 58 & 54 & 4 & 0.60 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The unadjusted comparison in the full sample is:
+\[
+\bar Y_{\text{workshop}}-\bar Y_{\text{no workshop}}=10.5.
+\]
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Why is the unadjusted difference of 10.5 points not automatically a credible causal estimate?
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} Participation is voluntary, so workshop participants may differ systematically from non-participants before the workshop. For example, people with higher prior political interest may be more likely to attend and may also score higher even without the workshop. This creates selection bias or confounding.
+    \end{solutionorbox}
+
+    \item Compute the subclassification estimate using the population shares as weights.
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} The subclassification estimate is the weighted average of the within-stratum differences:
+    \[
+    0.40(8)+0.60(4)=3.2+2.4=5.6.
+    \]
+    The adjusted estimate is 5.6 points.
+    \end{solutionorbox}
+
+    \item Compare the unadjusted estimate to the subclassification estimate. What does the difference suggest?
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} The unadjusted estimate is 10.5 points, while the subclassification estimate is 5.6 points. The unadjusted comparison is much larger. This suggests that part of the raw difference was likely due to differences in prior interest, not only to the workshop itself.
+    \end{solutionorbox}
+
+    \item What assumption is still needed for the subclassification estimate to have a causal interpretation?
+
+    \begin{solutionorbox}[6.3cm]
+    \textbf{Solution:} We need an assumption similar to conditional independence: within each prior-interest stratum, workshop participation should be as good as random with respect to the potential outcomes. In other words, after controlling for prior interest, there should be no remaining confounders that affect both workshop participation and the civic-information score.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+A researcher studies political knowledge among 300 residents. The dependent variable $knowledge$ is a score from 0 to 100. The researcher estimates the following regression:
+\[
+\widehat{knowledge}=35+4\,workshop+3.2\,news+6\,college,\qquad R^2=0.42.
+\]
+The variables are:
+\begin{itemize}[leftmargin = 0.6cm]
+    \item $workshop=1$ if the resident attended a civic workshop and $0$ otherwise;
+    \item $news$ is the number of hours per week the resident follows political news;
+    \item $college=1$ if the resident has a university degree and $0$ otherwise.
+\end{itemize}
+In the estimation sample, $news$ ranges from 0 to 8 hours per week.
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Interpret the coefficients on $workshop$ and $news$ using the ceteris paribus idea.
+
+    \begin{solutionorbox}[6.6cm]
+    \textbf{Solution:} The coefficient on $workshop$ is 4. Holding news consumption and college degree status fixed, residents who attended the workshop are predicted to score 4 points higher than residents who did not attend. The coefficient on $news$ is 3.2. Holding workshop attendance and college degree status fixed, one additional hour per week following political news is associated with a 3.2-point higher predicted knowledge score.
+    \end{solutionorbox}
+
+    \item Compute the predicted knowledge score for a resident who attended the workshop, follows political news 5 hours per week, and does not have a university degree.
+
+    \begin{solutionorbox}[5.2cm]
+    \textbf{Solution:} For this resident, $workshop=1$, $news=5$, and $college=0$. Therefore,
+    \[
+    \widehat{knowledge}=35+4(1)+3.2(5)+6(0)=35+4+16=55.
+    \]
+    \end{solutionorbox}
+
+    \item Suppose this resident's observed score is 61. Compute and interpret the residual.
+
+    \begin{solutionorbox}[4.8cm]
+    \textbf{Solution:} The residual is
+    \[
+    \widehat u=Y-\widehat Y=61-55=6.
+    \]
+    The resident scored 6 points higher than the model predicted.
+    \end{solutionorbox}
+
+    \item Interpret $R^2=0.42$. Would you use this model to predict a resident who follows political news 15 hours per week? Explain.
+
+    \begin{solutionorbox}[6.2cm]
+    \textbf{Solution:} $R^2=0.42$ means that the regression explains 42\% of the variation in political knowledge scores in the sample. I would be cautious about predicting for $news=15$ because the observed range in the estimation sample is 0 to 8 hours. This would be extrapolation outside the data used to estimate the model.
+    \end{solutionorbox}
+
+    \item Can the coefficient on $workshop$ automatically be interpreted as the causal effect of attending the workshop? Why or why not?
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} No. The regression coefficient is an adjusted association unless the identifying assumptions are credible. Workshop attendance is not described as randomly assigned, so residents who attend may differ from non-attendees in unobserved ways, such as motivation or prior knowledge. Those unobserved differences could bias the coefficient.
+    \end{solutionorbox}
+\end{enumerate}
+
+\end{questions}
+
+\end{document}

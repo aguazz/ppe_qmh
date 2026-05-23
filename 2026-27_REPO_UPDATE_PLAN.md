@@ -20,6 +20,16 @@ Use the language "students with uneven quantitative and coding preparation" in f
 - 2026-05-22: Phase 0 completed. The 2025-26 active course was preserved in `_archive/2025-26_active_course_snapshot/` and tagged as `course-2025-26-final-active`.
 - 2026-05-22: Phase 1 source-of-truth work completed for the syllabus and group project. The active project is now the 2026-27 paper-exposition project, with the old data-analysis project preserved in `_archive/2025-26_data_analysis_project/`.
 - 2026-05-22: Phase 2 course-structure documentation completed. The optional R practice folder is now `3_OPTIONAL_R_PRACTICE/`; `README.md`, `MAP.md`, `AGENTS.md`, and affected local agent skills were updated; and `9_EXAMS/2026-27/README.md` was created as the exam skeleton.
+- 2026-05-22: Phase 3 initial cleanup completed for the intro deck and optional R materials. `0.Intro.tex` now reflects the 2026-27 assessment/R policy, and Intro R/R-practice materials have been relabeled or renamed as optional enrichment with obsolete R-practice assessment rubrics archived.
+- 2026-05-22: Phase 3 Topic 2 inference draft completed. `2.Probability.tex` now includes a concise introduction to hypothesis testing after CLT, and `2026-27_MANUAL_REVIEW_NOTES.md` tracks instructor review points.
+- 2026-05-22: Phase 3 Topic 2 problem-set inference draft completed. `Problem_set_2_probability.tex` now includes hypothesis-testing exercises and corrected tail-probability/CLT solution values, with review points recorded in `2026-27_MANUAL_REVIEW_NOTES.md`.
+- 2026-05-22: Phase 3 Topic 3/4 no-code pass completed. Topic 3 problem set had no active required R execution. Topic 4 studies problem set now uses printed summary tables for STAR, anchoring, and injury exercises, with R kept only as optional replication/enrichment.
+- 2026-05-22: Phase 3 Topic 5 primary problem-set pass completed. The active linear-regression sheet is now `Problem_set_5_linear_regression.tex/pdf`, with no-code exercises first and optional R-based regression exercises appended in a separate final section. The old standalone R sheet was moved to `_archive/2025-26_r_based_linear_regression/`.
+- 2026-05-23: Phase 3 hypothesis-testing question-bank draft completed. `8_QUESTION_BANKS/Hypothesis_Testing_2026-27.tex` now provides a small bank of Topic 2 inference questions with answers, and the probability expert skill now treats introductory hypothesis testing as part of the 2026-27 probability scope.
+- 2026-05-23: Phase 3 Midterm 1 draft completed. `9_EXAMS/2026-27/Midterm1.tex/pdf` now covers probability, CLT intuition, introductory hypothesis testing, comparison of means, and early causal-inference concepts without requiring R.
+- 2026-05-23: Phase 3 Midterm 2 draft completed. `9_EXAMS/2026-27/Midterm2.tex/pdf` now covers randomized studies, difference-in-differences, subclassification, and linear-regression interpretation without requiring R.
+- 2026-05-23: Phase 3 plugin update completed. Local topic and project-grading plugin metadata now reflects introductory hypothesis testing, optional R, and the 2026-27 paper-exposition project workflow instead of the old R/Rmd data-analysis project.
+- 2026-05-23: Phase 3 final QA audit completed. Active 2026-facing TeX materials passed a two-pass draft compile audit; unresolved references and remaining stale-reference findings are recorded in `2026-27_MANUAL_REVIEW_NOTES.md`.
 
 ## Initial Audit Findings
 
@@ -79,7 +89,7 @@ Required changes:
 
 - Rename the active course description from 2025-26 to 2026-27.
 - Replace "R practice" as an active core folder with optional/enrichment R material.
-- Update examples that compile `Topic 1 - Intro R` as if it were the first required problem set.
+- Keep examples that mention Intro R clearly tied to `Topic 0.5 (optional) - Intro R`.
 - Update the folder map after the final structure is chosen.
 - Update local-agent descriptions if project grading and probability scope change.
 
@@ -114,7 +124,7 @@ Short fix idea:
 Folders:
 
 - `1_SLIDES/Topic 0 - Intro Course/`
-- `1_SLIDES/Topic 1 - Intro R/`
+- `1_SLIDES/Topic 0.5 (optional) - Intro R/`
 - `1_SLIDES/Topic 2 - Probability/`
 - `1_SLIDES/Topic 3 - Causality/`
 - `1_SLIDES/Topic 4 - Studies/`
@@ -124,7 +134,7 @@ Required changes:
 
 - Update all deck dates from 2025/2026 to 2026/2027.
 - Update Topic 0 organizational/evaluation slides.
-- Demote Topic 1 Intro R to optional Topic 0 or an enrichment deck.
+- Keep Topic 0.5 Intro R clearly marked as optional/enrichment.
 - Update Topic 2 to include a short inference block after LLN/CLT:
   - sampling variability and the sampling distribution of a mean;
   - standard error as the standard deviation of an estimator;
@@ -145,7 +155,7 @@ Short fix idea:
 
 Folders:
 
-- `2_PROBLEM_SETS/Topic 1 - Intro R/`
+- `2_PROBLEM_SETS/Topic 0.5 (optional) - Intro R/`
 - `2_PROBLEM_SETS/Topic 2 - Probability/`
 - `2_PROBLEM_SETS/Topic 3 - Causality/`
 - `2_PROBLEM_SETS/Topic 4 - Studies/`
@@ -154,12 +164,12 @@ Folders:
 
 Required changes:
 
-- Move or label Topic 1 Intro R as optional/enrichment.
+- Keep Topic 0.5 Intro R practice as optional/enrichment.
 - Add a short hypothesis-testing problem set or subsection to Topic 2.
 - Correct Topic 2 probability/CLT solution details during the update pass.
 - Decide whether Topic 4 problems should remain R-based or become table-based/no-code tasks.
-- Make `problem_set_5_linear_regression_noR.tex` the primary Topic 5 problem set.
-- Archive, relabel, or demote `Problem_set_5_linear_regression_R.tex` and `Problem_set_prediction.tex` as optional R enrichment.
+- Make `Problem_set_5_linear_regression.tex` the primary Topic 5 problem set, with optional R-based exercises appended at the end.
+- Archive, relabel, or demote standalone R-heavy Topic 5 files; `Problem_set_prediction.tex` remains optional/enrichment unless explicitly assigned.
 - Decide whether `solution.tex` should be retired, archived, or updated. It is currently a legacy combined solution source and is easy to forget.
 
 Short fix idea:
@@ -171,15 +181,15 @@ Short fix idea:
 
 Folder:
 
-- `3_R_PRACTICE/`
+- `3_OPTIONAL_R_PRACTICE/`
 
 Required changes:
 
-- Remove this from active graded assessment.
-- Preserve it in the 2025-26 archive.
-- Either rename it to something like `3_OPTIONAL_R_ENRICHMENT/` or move it under an optional materials folder.
-- Remove language such as "DO NOT CHANGE OR REMOVE THIS (IT'LL RESULT IN A GRADE OF ZERO)" if it remains visible to students as optional practice.
-- Update the R practice rubric status in `10_RUBRICS/`.
+- Keep this out of active graded assessment.
+- Preserve the 2025-26 graded version in the archive.
+- Keep the active folder named `3_OPTIONAL_R_PRACTICE/`.
+- Keep student-facing source/template language optional and free of grading penalties unless explicitly assigned.
+- Keep old R-practice rubrics archived outside active `10_RUBRICS/`.
 
 Short fix idea:
 

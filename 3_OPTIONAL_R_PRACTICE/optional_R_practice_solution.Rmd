@@ -1,7 +1,7 @@
 ---
-title: "R Practice — Bias in Self-Reported Turnout (Solution)"
+title: "Optional R Practice - Bias in Self-Reported Turnout (Solution)"
 author: "Instructor solution"
-date: "Quantitative Methods for Humanities. PPE 2nd Year - 2025-2026"
+date: "Quantitative Methods for Humanities. PPE 2nd Year - 2026-2027"
 output:
   html_document:
     toc: true
@@ -9,10 +9,11 @@ output:
     number_sections: false
 ---
 
-> **Important**  
-> 1) Fill in `student_id` below.  
-> 2) Do **not** rename chunk labels (e.g., `ex1`, `ex2`, ...).  
-> 3) Your file must **Knit** (Compile) to HTML from a **clean session** (no manual steps).
+> **Optional enrichment**  
+> 1) This practice is optional unless the instructor explicitly assigns it.  
+> 2) Fill in `student_id` below.  
+> 3) Do **not** rename chunk labels (e.g., `ex1`, `ex2`, ...).  
+> 4) The file should **Knit** (Compile) to HTML from a **clean session** (no manual steps).
 
 # Setup
 
@@ -28,7 +29,7 @@ student_id <- 12345  # example numeric ID
 # If your instructor provides individualized datasets using a seed, this is the standard pattern:
 set.seed(student_id)
 
-# --- DO NOT CHANGE OR REMOVE THIS (IT'LL RESULT IN A GRADE OF ZERO)
+# --- Reproducibility check: keep this unless you intentionally adapt the optional practice.
 if (!is.numeric(student_id) || length(student_id) != 1) stop("student_id must be a single number.")
 ```
 
@@ -83,7 +84,7 @@ c(year_min = year_min, year_max = year_max)
 ```
 
 ```{r data-randomization, include=FALSE}
-# --- Data randomization : DO NOT CHANGE OR REMOVE THIS (IT'LL RESULT IN A GRADE OF ZERO)
+# --- Data randomization: keep this unless you intentionally adapt the optional practice.
 if (!exists("turnout") || !is.data.frame(turnout)) stop("You must load the dataset into a data frame called `turnout` before running the randomization.")
 count_cols <- c("ANES","VEP","VAP","total","felons","noncit","overseas","osvoters")
 row_jitter <- runif(nrow(turnout), 0.995, 1.005)  # ±0.5% per row (same factor for all counts)

@@ -11,9 +11,9 @@ Act as the course's optional Intro to R specialist for PPE Quantitative Methods 
 
 Start from the local course materials:
 
-- `1_SLIDES/Topic 1 - Intro R/1.IntroR.tex`
-- `2_PROBLEM_SETS/Topic 1 - Intro R/Problem_set_1_introR.tex`
-- `2_PROBLEM_SETS/Topic 1 - Intro R/Problem_set_1_introR_solution.tex`
+- `1_SLIDES/Topic 0.5 (optional) - Intro R/1.IntroR.tex`
+- `2_PROBLEM_SETS/Topic 0.5 (optional) - Intro R/introR_practice.tex`
+- `2_PROBLEM_SETS/Topic 0.5 (optional) - Intro R/introR_practice_solution.tex`
 - `3_OPTIONAL_R_PRACTICE/`
 - `6_DATA_SETS/1_INTRO_R/`
 

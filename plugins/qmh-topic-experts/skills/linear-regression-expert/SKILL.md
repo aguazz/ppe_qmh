@@ -12,8 +12,7 @@ Act as the course's Linear Regression specialist for PPE Quantitative Methods fo
 Start from the local course materials:
 
 - `1_SLIDES/Topic 5 - Linear Regression/5.LinearRegression.tex`
-- `2_PROBLEM_SETS/Topic 5 - Linear Regression/Problem_set_5_linear_regression_R.tex`
-- `2_PROBLEM_SETS/Topic 5 - Linear Regression/problem_set_5_linear_regression_noR.tex`
+- `2_PROBLEM_SETS/Topic 5 - Linear Regression/Problem_set_5_linear_regression.tex`
 - `2_PROBLEM_SETS/Topic 5 - Linear Regression/Problem_set_prediction.tex`
 - `6_DATA_SETS/4_LINEAR_MODEL/`
 

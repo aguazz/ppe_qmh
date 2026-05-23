@@ -1,0 +1,339 @@
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[11pt]{exam}
+%\printanswers % Uncomment to show answers
+
+%%%%%%%%%%%%%%
+%%% PACKAGES
+%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{bbm}
+\usepackage{enumitem}
+\usepackage{textcomp}
+\usepackage[top = 2cm, bottom = 2cm, right = 1cm, left = 1cm, paper = a4paper, headheight = 6cm]{geometry}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% MACROS AND COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\makeatletter
+\renewcommand{\@makefnmark}{\textsuperscript{\arabic{footnote}}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\makeatother
+\setcounter{footnote}{0}
+\newcommand{\BAR}{%
+    \hspace{-\arraycolsep}%
+    \strut\vrule
+    \hspace{-\arraycolsep}%
+}
+
+\unframedsolutions
+\renewcommand{\solutiontitle}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% HEADER AND FOOT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\degree}{Bachelor in Philosophy, Politics and Economics}
+\newcommand{\shortdeg}{PPE}
+\newcommand{\exam}{Midterm 1}
+\newcommand{\subject}{Quantitative Methods for Humanities}
+\newcommand{\theyear}{2026/27}
+\newcommand{\ccauthor}{A. G. Azze}
+\newcommand{\thedate}{Date TBA}
+\newcommand{\university}{CUNEF Universidad}
+
+\pagestyle{headandfoot}
+\header{\degree \\ \subject\ - \theyear}{}{\thedate \\ \ccauthor}
+\footer{\university}{}{\thepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DOCUMENT CONTENT
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%--- Instructions ---%
+\begin{center}
+
+    {\Huge \textbf{\exam{}}}
+    \vspace{0.7cm}
+
+    \begin{flushright}
+        \textbf{Time Limit:} 50 minutes
+    \end{flushright}
+    \vspace{-0.2cm}
+
+    \fbox{\parbox{\textwidth}{\centering
+        \begin{enumerate}[leftmargin = 0.5cm, label = $\bullet$, rightmargin = 0.2cm]
+
+            \item \textbf{Every non-trivial calculation and claim in the exam must be properly justified.}
+
+            \item Your work must be well organized and coherent. Pay attention to notation, definitions of events, units of measurement, and interpretation.
+
+            \item \textbf{You must answer each question inside the designated box}; answers outside will not be considered.
+
+            \item The use of calculators is allowed.
+
+            \item Digital devices such as mobile phones, tablets, and laptops, as well as internet access, are forbidden.
+
+        \end{enumerate}
+    }}
+\end{center}
+%--- Instructions ---%
+
+\vspace{0.3cm}
+
+The following questions are about a fictional city, \textit{Valverde}, which is considering a nonpartisan civic information campaign before a local election. The city first studies survey patterns, then evaluates statistical evidence about support for the campaign, and finally considers whether the campaign has a causal effect on civic knowledge.
+
+\vspace{0.2cm}
+
+%--- Questions ---%
+\begin{questions}
+
+%========================================================
+\question[2.5]
+The city surveys 500 residents. For each resident, it records whether the resident is under 30 years old and whether the resident supports sending nonpartisan election reminders by text message.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & Supports reminders ($S$) & Does not support reminders ($S^c$) \\
+\midrule
+Under 30 ($Y$)        & 132 & 68 \\
+30 or older ($Y^c$)   & 168 & 132 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Compute $P(Y)$, $P(S)$, $P(Y\cap S)$, and $P(S\mid Y)$.
+
+    \begin{solutionorbox}[5.8cm]
+    \textbf{Solution:} The total number of residents is 500. There are $132+68=200$ residents under 30 and $132+168=300$ residents who support reminders. Therefore,
+    \[
+    P(Y)=\frac{200}{500}=0.4, \qquad
+    P(S)=\frac{300}{500}=0.6,
+    \]
+    \[
+    P(Y\cap S)=\frac{132}{500}=0.264, \qquad
+    P(S\mid Y)=\frac{132}{200}=0.66.
+    \]
+    \end{solutionorbox}
+
+    \item Are $Y$ and $S$ independent? Justify your answer using probabilities.
+
+    \begin{solutionorbox}[4.8cm]
+    \textbf{Solution:} They are not independent. For independence, we would need
+    \[
+    P(Y\cap S)=P(Y)P(S).
+    \]
+    Here,
+    \[
+    P(Y)P(S)=0.4(0.6)=0.24,
+    \]
+    while $P(Y\cap S)=0.264$. Equivalently, $P(S\mid Y)=0.66\ne 0.6=P(S)$.
+    \end{solutionorbox}
+
+    \item Let $R$ be the event that a resident follows local politics closely. Suppose $P(R\mid S)=0.70$ and $P(R\mid S^c)=0.40$. Use the Law of Total Probability to compute $P(R)$.
+
+    \begin{solutionorbox}[4.8cm]
+    \textbf{Solution:} Since $S$ and $S^c$ form a partition,
+    \[
+    P(R)=P(R\mid S)P(S)+P(R\mid S^c)P(S^c).
+    \]
+    Hence,
+    \[
+    P(R)=0.70(0.60)+0.40(0.40)=0.42+0.16=0.58.
+    \]
+    \end{solutionorbox}
+
+    \item If a resident follows local politics closely, what is the probability that the resident supports reminders? Interpret this as an update from $P(S)$.
+
+    \begin{solutionorbox}[5.2cm]
+    \textbf{Solution:} By Bayes' rule,
+    \[
+    P(S\mid R)=\frac{P(R\mid S)P(S)}{P(R)}
+    =\frac{0.70(0.60)}{0.58}
+    =\frac{0.42}{0.58}\approx 0.724.
+    \]
+    The probability of supporting reminders increases from $P(S)=0.60$ to about $P(S\mid R)=0.724$ once we know the resident follows local politics closely.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+The mayor claims that a majority of residents support the election reminders. A new random sample of $n=625$ residents finds that $350$ support the reminders.
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Let $\widehat p$ be the sample proportion who support reminders. Compute $\widehat p$. What does the Law of Large Numbers say about $\widehat p$ as the sample size becomes large?
+
+    \begin{solutionorbox}[5.1cm]
+    \textbf{Solution:}
+    \[
+    \widehat p=\frac{350}{625}=0.56.
+    \]
+    The Law of Large Numbers says that, as the sample size becomes large, $\widehat p$ should get close to the true population proportion $p$.
+    \end{solutionorbox}
+
+    \item Write the null and alternative hypotheses for testing whether support is above $50\%$.
+
+    \begin{solutionorbox}[3.6cm]
+    \textbf{Solution:}
+    \[
+    H_0:p=0.50, \qquad H_A:p>0.50.
+    \]
+    This is a one-sided test.
+    \end{solutionorbox}
+
+    \item Under the null hypothesis, use
+    \[
+    SE_0=\sqrt{\frac{0.50(1-0.50)}{625}}=0.020
+    \]
+    to compute the test statistic. The one-sided p-value for this test statistic is about $0.0013$. What do you conclude at the $5\%$ level?
+
+    \begin{solutionorbox}[6.4cm]
+    \textbf{Solution:}
+    \[
+    z=\frac{\widehat p-0.50}{SE_0}
+    =\frac{0.56-0.50}{0.020}
+    =3.00.
+    \]
+    Since the p-value is about $0.0013<0.05$, we reject $H_0$ at the $5\%$ level. The sample provides strong evidence that support is above $50\%$.
+    \end{solutionorbox}
+
+    \item Use
+    \[
+    SE(\widehat p)=\sqrt{\frac{0.56(1-0.56)}{625}}\approx 0.0199
+    \]
+    to compute an approximate $95\%$ confidence interval. Does the interval agree with your test conclusion?
+
+    \begin{solutionorbox}[6.3cm]
+    \textbf{Solution:}
+    \[
+    0.56 \pm 1.96(0.0199)
+    =0.56\pm 0.0390.
+    \]
+    The approximate confidence interval is $[0.521,0.599]$. The interval is entirely above $0.50$, so it agrees with the test conclusion: the data suggest majority support.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+Valverde also runs a randomized experiment. Residents are randomly assigned to either read a short civic information message or read a neutral message. Afterward, each resident answers a short civic-knowledge quiz scored from 0 to 100.
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Group & $n$ & Mean score & Standard deviation \\
+\midrule
+Civic information message ($T=1$) & 100 & 68 & 18 \\
+Neutral message ($T=0$)           & 100 & 62 & 20 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Compute the estimated difference in means, $\bar Y_1-\bar Y_0$.
+
+    \begin{solutionorbox}[3.5cm]
+    \textbf{Solution:}
+    \[
+    \bar Y_1-\bar Y_0=68-62=6.
+    \]
+    The treatment-group average is 6 points higher than the control-group average.
+    \end{solutionorbox}
+
+    \item Use
+    \[
+    SE=\sqrt{\frac{18^2}{100}+\frac{20^2}{100}}\approx 2.69
+    \]
+    to test $H_0:\mu_1-\mu_0=0$ against $H_A:\mu_1-\mu_0\ne 0$. The two-sided p-value is about $0.026$.
+
+    \begin{solutionorbox}[6.3cm]
+    \textbf{Solution:}
+    \[
+    z=\frac{6-0}{2.69}\approx 2.23.
+    \]
+    Since the p-value is about $0.026<0.05$, we reject the null at the $5\%$ level. The data provide evidence that average quiz scores differ between the two groups.
+    \end{solutionorbox}
+
+    \item Compute an approximate $95\%$ confidence interval for the difference in means and interpret it.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:}
+    \[
+    6 \pm 1.96(2.69)=6\pm 5.27.
+    \]
+    The interval is approximately $[0.73,11.27]$. We estimate that the civic information message increases average quiz scores by 6 points, and the interval suggests a plausible increase of about 0.7 to 11.3 points.
+    \end{solutionorbox}
+
+    \item Why does random assignment matter for interpreting this difference as a causal effect?
+
+    \begin{solutionorbox}[4.8cm]
+    \textbf{Solution:} Random assignment makes the treatment and control groups comparable on average before the message is shown. Therefore, the difference in average outcomes is less likely to be due to pre-existing differences between residents, and it is more credible to interpret it as the causal effect of the civic information message.
+    \end{solutionorbox}
+\end{enumerate}
+
+%========================================================
+\newpage
+\question[2.5]
+The city is also interested in a voluntary online civic workshop. Residents choose whether to take the workshop. The outcome $Y_i$ equals 1 if resident $i$ says they are very likely to vote, and 0 otherwise.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Group & Number of residents & Mean of $Y_i$ \\
+\midrule
+Took the workshop ($T=1$)     & 120 & 0.72 \\
+Did not take the workshop ($T=0$) & 180 & 0.58 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}[leftmargin = 0.5cm, label = (\alph*), rightmargin = 0.2cm]
+    \item Define $Y_i(1)$, $Y_i(0)$, and the individual treatment effect $TE_i$ in this study.
+
+    \begin{solutionorbox}[7cm]
+    \textbf{Solution:}
+    \begin{itemize}[leftmargin = 0.6cm]
+        \item $Y_i(1)$ is resident $i$'s outcome if the resident takes the online civic workshop.
+        \item $Y_i(0)$ is resident $i$'s outcome if the resident does not take the online civic workshop.
+        \item The individual treatment effect is
+        \[
+        TE_i=Y_i(1)-Y_i(0).
+        \]
+    \end{itemize}
+    \end{solutionorbox}
+
+    \item State the fundamental problem of causal inference in this example.
+
+    \begin{solutionorbox}[5.2cm]
+    \textbf{Solution:} For each resident, we observe only one potential outcome: either the outcome after taking the workshop or the outcome after not taking the workshop. We never observe both $Y_i(1)$ and $Y_i(0)$ for the same resident, so we cannot directly observe the individual treatment effect.
+    \end{solutionorbox}
+
+    \item Compute the difference in means between workshop participants and non-participants. Should we automatically interpret this as the causal effect of the workshop? Explain.
+
+    \begin{solutionorbox}[6.8cm]
+    \textbf{Solution:}
+    \[
+    \bar Y_1-\bar Y_0=0.72-0.58=0.14.
+    \]
+    The observed difference is 14 percentage points. We should not automatically interpret it as the causal effect of the workshop because residents chose whether to participate. People who are already more interested in politics or more likely to vote may be more likely to take the workshop. This selection bias could explain some or all of the difference.
+    \end{solutionorbox}
+
+    \item Propose one design change that would make the causal interpretation more credible. Mention one assumption that would still matter.
+
+    \begin{solutionorbox}[6cm]
+    \textbf{Solution:} A better design would randomly assign interested residents to either receive access to the workshop or not receive access yet, for example using a lottery if there are limited places. Random assignment would make the groups more comparable on average. One assumption that would still matter is no interference: one resident's workshop assignment should not affect another resident's voting intention. Another relevant assumption is no hidden variants: the workshop should be a clearly defined treatment.
+    \end{solutionorbox}
+\end{enumerate}
+
+\end{questions}
+
+\end{document}
