@@ -1,5 +1,11 @@
 # Quantitative Methods for Humanities (2026-27)
 
+**Author:** Abel Guada Azze, Department of Quantitative Methods, CUNEF Universidad, Madrid, Spain  
+**Course:** Quantitative Methods for Humanities — Bachelor in Philosophy, Politics and Economics, CUNEF Universidad  
+**Taught:** 2024-25 to 2026-27  
+**Licence:** CC BY 4.0 — see [LICENSE](LICENSE)  
+**Cite as:** Guada Azze, A. (2024-25 to 2026-27). Quantitative Methods for Humanities: teaching materials. CUNEF Universidad. https://github.com/aguazz/ppe_qmh
+
 Course repository for **Quantitative Methods for Humanities**, PPE 2nd year.
 
 The active course version is **2026-27**. The 2025-26 course has been preserved under `_archive/2025-26_active_course_snapshot/`, and the former 2025-26 data-analysis project has been preserved under `_archive/2025-26_data_analysis_project/`.
