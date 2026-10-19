@@ -2,6 +2,9 @@
 /11_GRADES_AND_SUBMISSIONS/*
 !/11_GRADES_AND_SUBMISSIONS/README.md
 
+# Copyrighted bibliography PDFs: never commit, kept locally only.
+/7_BIBLIOGRAPHY/
+
 # Local R session history can contain paths, credentials, or scratch work.
 .Rhistory
 
