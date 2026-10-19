@@ -4,6 +4,7 @@
 
 # Copyrighted bibliography PDFs: never commit, kept locally only.
 /7_BIBLIOGRAPHY/
+_archive/**/7_BIBLIOGRAPHY/
 
 # Local R session history can contain paths, credentials, or scratch work.
 .Rhistory
